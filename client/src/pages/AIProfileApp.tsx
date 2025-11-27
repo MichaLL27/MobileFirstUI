@@ -116,7 +116,21 @@ export default function AIProfileApp() {
       <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl shadow-slate-200/50 flex flex-col relative overflow-hidden pb-20">
         
         <AnimatePresence mode="wait">
-          {activeScreen === "home" && (
+          {activeTab === "settings" && (
+            <SettingsScreen 
+              key="settings" 
+              onBack={() => setActiveTab("directory")}
+            />
+          )}
+
+          {activeTab === "profile" && (
+            <MyProfileScreen 
+              key="myProfile"
+              demoProfile={MOCK_PROFILES[0]}
+            />
+          )}
+
+          {activeTab === "directory" && activeScreen === "home" && (
             <HomeScreen 
               key="home"
               searchTerm={searchTerm}
@@ -127,7 +141,7 @@ export default function AIProfileApp() {
             />
           )}
 
-          {activeScreen === "profile" && selectedProfile && (
+          {activeTab === "directory" && activeScreen === "profile" && selectedProfile && (
             <ProfileScreen 
               key="profile"
               profile={selectedProfile}
@@ -135,33 +149,19 @@ export default function AIProfileApp() {
             />
           )}
 
-          {activeScreen === "join" && (
+          {activeTab === "create" && (
             <JoinScreen 
               key="join"
               onBack={handleBack}
             />
           )}
 
-          {activeScreen === "searchResults" && (
+          {activeTab === "directory" && activeScreen === "searchResults" && (
             <SearchResultsScreen
               key="searchResults"
               searchQuery={searchQuery}
               onBack={handleBack}
               onProfileClick={handleProfileClick}
-            />
-          )}
-
-          {activeTab === "profile" && activeScreen !== "profile" && (
-            <MyProfileScreen 
-              key="myProfile"
-              demoProfile={MOCK_PROFILES[0]}
-            />
-          )}
-
-          {activeTab === "settings" && (
-            <SettingsScreen 
-              key="settings" 
-              onBack={() => setActiveTab("directory")}
             />
           )}
         </AnimatePresence>
