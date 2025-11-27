@@ -1,0 +1,55 @@
+You are a senior React + Tailwind CSS frontend developer.
+
+Design a MOBILE-FIRST web app UI called “AI Profile Directory”.
+This is NOT a marketing site, but an app-like interface.
+
+General style:
+- Mobile-first layout (max-width around 420–480px, centered).
+- Soft light background, white cards, rounded-xl, subtle shadow.
+- Clean, modern SaaS style, similar to the existing hero I already have.
+- Use only React components and Tailwind classes. 
+- Do NOT use React Router or <Link> at all. Use simple divs/buttons with onClick placeholders.
+
+Create the following UI screens INSIDE ONE COMPONENT for now, with conditional rendering based on a simple state (e.g. "screen: 'home' | 'profile' | 'join'").
+
+1) Home / Search Screen:
+- Top bar with:
+  - App name on the left: “AI Profile Directory”
+  - “Join” button on the right (small, rounded, filled button) that switches to the Join screen.
+- Below, add a large search input:
+  - Placeholder: “Search profiles by full name”
+  - Full-width, rounded-2xl, slight shadow.
+- Under the search input, show a vertical list of 3–5 example user cards.
+  Each user card:
+  - Circular avatar with initials (e.g., “DA” for Dor Aharonoff).
+  - Full name (bold).
+  - Role / Title (smaller text).
+  - One-line summary.
+  - Entire card is clickable (onClick -> open Profile View for that example user).
+
+2) Profile View Screen:
+- Back button at the top (“← Back”) that returns to Home.
+- Large circular avatar at the top center with initials.
+- Full name in big, bold text.
+- Role / Title below.
+- Section titled “About” with a paragraph of example text.
+- Section titled “Skills” with pill-style tags (chips).
+- At the bottom, a primary button: “Share profile” (no logic, just a button).
+
+3) Join / Create Profile Screen:
+- Back button at the top (“← Back”) that returns to Home.
+- Title: “Join the directory”
+- Short description: “Create your public professional profile so others can find you.”
+- Form fields:
+  - Full Name (text input)
+  - Current Role / Title (text input)
+  - About you (textarea)
+  - Skills (text input with placeholder: “Product Manager, React, Cyber Security…”)
+- At the bottom, a wide primary button: “Create my profile”.
+- Below the button, small helper text: “In the future, AI will generate your profile text automatically.”
+
+Implementation details:
+- Use React useState to manage which screen is active and to store a small list of example profiles.
+- For now, profiles can be hard-coded demo data.
+- Focus on clean design, spacing, and mobile usability.
+- Make sure everything looks good on a small mobile viewport.
