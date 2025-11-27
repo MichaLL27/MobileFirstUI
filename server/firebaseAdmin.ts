@@ -7,13 +7,22 @@ let isConfigured = false;
 if (!admin.apps.length) {
   if (serviceAccountJson) {
     try {
-      const serviceAccount = JSON.parse(serviceAccountJson);
+      // Handle potential double-stringified JSON or newline issues
+      let cleanJson = serviceAccountJson;
+      if (cleanJson.startsWith('"') && cleanJson.endsWith('"')) {
+        cleanJson = JSON.parse(cleanJson);
+      }
+      
+      const serviceAccount = JSON.parse(cleanJson);
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
       });
+      console.log("Firebase Admin initialized successfully");
       isConfigured = true;
     } catch (error) {
       console.error("Error parsing Firebase service account:", error);
+      console.error("Raw key length:", serviceAccountJson.length);
+      console.error("First 20 chars:", serviceAccountJson.substring(0, 20));
     }
   } else {
     console.warn("FIREBASE_SERVICE_ACCOUNT_KEY not set. Firebase Admin features are disabled.");

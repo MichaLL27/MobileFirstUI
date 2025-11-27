@@ -20,8 +20,15 @@ let routesInitialized = false;
 
 export default async function handler(req: any, res: any) {
   if (!routesInitialized) {
-    await registerRoutes(httpServer, app);
-    routesInitialized = true;
+    console.log("Initializing routes...");
+    try {
+      await registerRoutes(httpServer, app);
+      routesInitialized = true;
+      console.log("Routes initialized successfully");
+    } catch (error) {
+      console.error("Failed to initialize routes:", error);
+      return res.status(500).json({ message: "Failed to initialize server" });
+    }
   }
   
   return app(req, res);

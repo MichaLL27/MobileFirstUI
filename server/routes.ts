@@ -136,12 +136,18 @@ export async function registerRoutes(
         userId,
       });
       res.status(201).json(profile);
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid profile data", errors: error.errors });
       }
+      
       console.error("Error creating profile:", error);
-      res.status(500).json({ message: "Failed to create profile" });
+      
+      if (error.message === "Firebase not configured") {
+        return res.status(503).json({ message: "Database service unavailable. Please check server configuration." });
+      }
+      
+      res.status(500).json({ message: "Failed to create profile", error: error.message });
     }
   });
 
