@@ -260,7 +260,7 @@ function AppHeader({
   rightAction?: () => void;
 }) {
   return (
-    <div className="fixed top-0 left-0 right-0 max-w-[480px] mx-auto bg-white border-b border-slate-100 shadow-sm z-30">
+    <div className="fixed top-0 left-0 right-0 max-w-[480px] mx-auto bg-white/90 backdrop-blur-md border-b border-slate-100/50 shadow-sm z-30">
       <div className="flex items-center justify-between px-4 py-4 h-16">
         {/* Left Icon */}
         <button
@@ -531,7 +531,7 @@ export default function AIProfileApp() {
   return (
     <div dir="rtl" className="min-h-screen bg-slate-50/50 flex justify-center font-sans text-slate-900">
       {/* Mobile Container */}
-      <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl shadow-slate-200/50 flex flex-col relative overflow-hidden pb-20">
+      <div className="w-full max-w-[480px] bg-[#F2F7FF] min-h-screen shadow-2xl shadow-slate-200/50 flex flex-col relative overflow-hidden pb-20">
         
         {/* Error Banner */}
         {errorState === "noInternet" && (
@@ -621,75 +621,79 @@ export default function AIProfileApp() {
         </AnimatePresence>
 
         {/* Bottom Navigation */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 shadow-lg max-w-[480px] mx-auto w-full">
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 shadow-lg max-w-[480px] mx-auto w-full z-50">
           <div className="flex justify-around items-center h-20">
             {/* Directory Tab */}
-            <button
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               onClick={() => handleTabChange("directory")}
-              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-colors relative ${
+              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-all duration-200 relative ${
                 activeTab === "directory"
-                  ? "text-primary"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "text-primary scale-105"
+                  : "text-[#BFC5D2] hover:text-slate-600"
               }`}
               data-testid="tab-directory"
             >
               {activeTab === "directory" && (
-                <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                <motion.div layoutId="nav-indicator" className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
               )}
-              <span className="text-lg">👥</span>
-              <span className="text-[11px] font-medium">חיפוש</span>
-            </button>
+              <span className="text-2xl">👥</span>
+              <span className="text-[10px] font-bold tracking-wide">חיפוש</span>
+            </motion.button>
 
             {/* Create Tab */}
-            <button
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               onClick={() => handleTabChange("create")}
-              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-colors relative ${
+              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-all duration-200 relative ${
                 activeTab === "create"
-                  ? "text-primary"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "text-primary scale-105"
+                  : "text-[#BFC5D2] hover:text-slate-600"
               }`}
               data-testid="tab-create"
             >
               {activeTab === "create" && (
-                <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                <motion.div layoutId="nav-indicator" className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
               )}
-              <span className="text-lg">✨</span>
-              <span className="text-[11px] font-medium">יצירה</span>
-            </button>
+              <span className="text-2xl">✨</span>
+              <span className="text-[10px] font-bold tracking-wide">יצירה</span>
+            </motion.button>
 
             {/* My Profile Tab */}
-            <button
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               onClick={() => handleTabChange("profile")}
-              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-colors relative ${
+              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-all duration-200 relative ${
                 activeTab === "profile"
-                  ? "text-primary"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "text-primary scale-105"
+                  : "text-[#BFC5D2] hover:text-slate-600"
               }`}
               data-testid="tab-profile"
             >
               {activeTab === "profile" && (
-                <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                <motion.div layoutId="nav-indicator" className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
               )}
-              <span className="text-lg">👤</span>
-              <span className="text-[11px] font-medium">הפרופיל שלי</span>
-            </button>
+              <span className="text-2xl">👤</span>
+              <span className="text-[10px] font-bold tracking-wide">הפרופיל שלי</span>
+            </motion.button>
 
             {/* Settings Tab */}
-            <button
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               onClick={() => handleTabChange("settings")}
-              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-colors relative ${
+              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-all duration-200 relative ${
                 activeTab === "settings"
-                  ? "text-primary"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "text-primary scale-105"
+                  : "text-[#BFC5D2] hover:text-slate-600"
               }`}
               data-testid="tab-settings"
             >
               {activeTab === "settings" && (
-                <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                <motion.div layoutId="nav-indicator" className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
               )}
-              <span className="text-lg">⚙️</span>
-              <span className="text-[11px] font-medium">הגדרות</span>
-            </button>
+              <span className="text-2xl">⚙️</span>
+              <span className="text-[10px] font-bold tracking-wide">הגדרות</span>
+            </motion.button>
           </div>
         </div>
         
@@ -751,7 +755,7 @@ function HomeScreen({
   setSearchTerm, 
   profiles, 
   onProfileClick, 
-  onJoinClick,
+  onJoinClick, 
   onClearFilters
 }: { 
   searchTerm: string;
@@ -837,7 +841,7 @@ function HomeScreen({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="חיפוש עובד לפי שם מלא"
-            className="pl-10 h-12 rounded-2xl border-slate-200 bg-slate-50/50 shadow-sm focus-visible:ring-primary/20 focus-visible:border-primary text-sm"
+            className="pl-10 h-12 rounded-2xl border-slate-200 bg-white shadow-sm focus-visible:ring-primary/20 focus-visible:border-primary text-sm"
             data-testid="input-search"
           />
         </div>
@@ -846,7 +850,7 @@ function HomeScreen({
           className={`p-3 rounded-full border transition-all h-12 w-12 flex items-center justify-center ${
             hasActiveFilters
               ? "bg-primary text-white border-primary shadow-lg shadow-primary/20"
-              : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+              : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50 shadow-sm"
           }`}
           data-testid="button-filters"
         >
@@ -857,7 +861,7 @@ function HomeScreen({
       {/* Show Empty State if No Profiles */}
       {profiles.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center">
-          <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-6">
+          <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mb-6 shadow-sm">
             <Search className="h-10 w-10 text-slate-400" />
           </div>
           <h3 className="text-xl font-bold text-slate-900 mb-2 text-right">לא נמצאו בעלי מקצוע</h3>
@@ -880,10 +884,10 @@ function HomeScreen({
           <button
             key={category}
             onClick={() => handleToggleQuickFilter(category)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap shadow-sm ${
               selectedQuickFilters.includes(category)
                 ? "bg-primary text-white shadow-lg shadow-primary/20"
-                : "bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-50"
+                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
             }`}
             data-testid={`chip-filter-${category}`}
           >
@@ -895,33 +899,35 @@ function HomeScreen({
       {/* Profile List */}
       <div className="flex-1 overflow-y-auto space-y-4 pb-8 -mx-2 px-2">
         {profiles.map((profile) => (
-          <div 
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
             key={profile.id}
             onClick={() => onProfileClick(profile)}
-            className="group cursor-pointer bg-white rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:border-primary/10 transition-all duration-200 active:scale-[0.98]"
+            className="group cursor-pointer bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md hover:border-primary/10 transition-all duration-200 active:scale-[0.98]"
             data-testid={`card-profile-${profile.id}`}
           >
-            <div className="flex items-start gap-4">
-              <Avatar className="h-14 w-14 border-2 border-white shadow-sm">
-                <AvatarFallback className="bg-slate-100 text-slate-600 font-semibold text-lg">
+            <div className="flex items-center gap-4">
+              <Avatar className="h-12 w-12 border-2 border-white shadow-sm shrink-0">
+                <AvatarFallback className="bg-slate-100 text-slate-600 font-bold text-base">
                   {profile.initials}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-start">
+                <div className="flex justify-between items-start mb-1">
                   <h3 className="font-bold text-slate-900 text-lg leading-tight group-hover:text-primary transition-colors">
                     {profile.firstName} {profile.lastName}
                   </h3>
                 </div>
-                <p className="text-sm font-medium text-slate-500 mb-1">
+                <p className="text-sm font-semibold text-primary mb-1.5">
                   {profile.role}
                 </p>
-                <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">
+                <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed">
                   {profile.summary}
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
 
         {profiles.length === 0 && (
@@ -1071,9 +1077,7 @@ function HomeScreen({
       )}
     </motion.div>
   );
-}
-
-function ProfileScreen({ 
+}function ProfileScreen({ 
   profile, 
   onBack 
 }: { 
@@ -1088,7 +1092,7 @@ function ProfileScreen({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-white overflow-y-auto"
+      className="flex flex-col h-full bg-[#F2F7FF] overflow-y-auto"
     >
       <AppHeader
         title="פרופיל"
@@ -1100,7 +1104,7 @@ function ProfileScreen({
 
       <div className="px-6 pb-8 pt-24">
         {/* Hero Profile Block */}
-        <div className="flex flex-col items-center text-center mb-8">
+        <div className="flex flex-col items-center text-center mb-8 bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
           <div className="mb-5">
             <ProfileAvatar
               initials={profile.initials}
@@ -1138,24 +1142,24 @@ function ProfileScreen({
 
         {/* About Section */}
         <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right px-1">
             עליי
           </h3>
-          <div className={`relative rounded-xl border border-slate-100 bg-[#F9FBFF] p-5 overflow-hidden ${!expandedAbout ? 'max-h-40' : ''}`}>
-            <div className="space-y-3">
+          <div className={`relative rounded-2xl border border-slate-100 bg-white p-6 overflow-hidden shadow-sm ${!expandedAbout ? 'max-h-48' : ''}`}>
+            <div className="space-y-4">
               {profile.about.split('\n').map((paragraph, idx) => (
-                <p key={idx} className="text-sm text-slate-700 leading-relaxed text-right">
+                <p key={idx} className="text-[15px] text-slate-700 leading-relaxed text-right">
                   {paragraph}
                 </p>
               ))}
             </div>
             {!expandedAbout && (
-              <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#F9FBFF] to-transparent pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 h-20 bg-linear-to-t from-white to-transparent pointer-events-none" />
             )}
           </div>
           <button
             onClick={() => setExpandedAbout(!expandedAbout)}
-            className="mt-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            className="mt-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors px-1"
             data-testid="button-toggle-about"
           >
             {expandedAbout ? "הצג פחות" : "קרא עוד"}
@@ -1164,17 +1168,19 @@ function ProfileScreen({
 
         {/* Skills Section */}
         <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right px-1">
             שירותים עיקריים
           </h3>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2.5">
             {profile.skills.map((skill) => (
-              <span 
+              <motion.span 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 key={skill} 
-                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700"
+                className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium bg-white text-slate-800 border border-slate-200 shadow-sm"
               >
                 {skill}
-              </span>
+              </motion.span>
             ))}
           </div>
         </section>
@@ -1296,7 +1302,7 @@ function JoinScreen({ onBack, onSuccess, onError }: {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-white overflow-y-auto pt-20"
+      className="flex flex-col h-full bg-[#F2F7FF] overflow-y-auto pt-20"
     >
       <AppHeader
         title="יצירת פרופיל"
@@ -1304,149 +1310,154 @@ function JoinScreen({ onBack, onSuccess, onError }: {
         leftAction={onBack}
       />
 
-      <div className="px-6 py-8 flex-1 flex flex-col">
+      <div className="px-6 py-6 flex-1 flex flex-col">
         <form className="space-y-6 flex-1 flex flex-col" onSubmit={(e) => e.preventDefault()}>
           {/* Profile Picture Section - At Top */}
-          <div className="flex justify-center pt-4 pb-2">
-            <ProfileAvatar
-              initials={getInitials()}
-              imageUrl={photoUrl}
-              onChangePhoto={handlePhotoUpload}
-              size="md"
-            />
+          <div className="flex justify-center pb-2">
+            <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 w-full flex flex-col items-center">
+              <ProfileAvatar
+                initials={getInitials()}
+                imageUrl={photoUrl}
+                onChangePhoto={handlePhotoUpload}
+                size="md"
+              />
+            </div>
           </div>
 
-          {/* Form Fields */}
-          <div className="space-y-5">
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 text-right block">שם מלא</label>
-              <Input 
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="לדוגמה: רוני לוי" 
-                className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
-                data-testid="input-join-name"
-              />
-            </div>
+          {/* Personal Info Group */}
+          <section className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-4">
+            <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 text-right">
+              פרטים אישיים
+            </h3>
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700 text-right block">שם מלא</label>
+                <Input 
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="לדוגמה: רוני לוי" 
+                  className="h-11 rounded-xl border-slate-200 focus:border-primary bg-slate-50/50"
+                  data-testid="input-join-name"
+                />
+              </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 text-right block">תחום עבודה / תפקיד</label>
-              <Input 
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                placeholder="לדוגמה: חשמלאי, אינסטלטור, עוזרת בית" 
-                className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
-                data-testid="input-join-role"
-              />
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700 text-right block">תחום עבודה / תפקיד</label>
+                <Input 
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  placeholder="לדוגמה: חשמלאי, אינסטלטור" 
+                  className="h-11 rounded-xl border-slate-200 focus:border-primary bg-slate-50/50"
+                  data-testid="input-join-role"
+                />
+              </div>
             </div>
+          </section>
 
+          {/* Professional Info Group */}
+          <section className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-4">
+            <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 text-right">
+              פרטים מקצועיים
+            </h3>
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 text-right block">אזור עבודה <span className="text-slate-400 font-normal">(לא חובה)</span></label>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700 text-right block">אזור עבודה</label>
                 <Input 
                   value={workArea}
                   onChange={(e) => setWorkArea(e.target.value)}
-                  placeholder="לדוגמה: אזור תל אביב" 
-                  className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
+                  placeholder="תל אביב והמרכז" 
+                  className="h-11 rounded-xl border-slate-200 focus:border-primary bg-slate-50/50"
                   data-testid="input-join-location"
                 />
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700 text-right block">שם העסק <span className="text-slate-400 font-normal">(לא חובה)</span></label>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-700 text-right block">שם העסק</label>
                 <Input 
                   value={businessName}
                   onChange={(e) => setBusinessName(e.target.value)}
-                  placeholder="לדוגמה: רוני חשמל בע״מ" 
-                  className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
+                  placeholder="רוני חשמל" 
+                  className="h-11 rounded-xl border-slate-200 focus:border-primary bg-slate-50/50"
                   data-testid="input-join-company"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 text-right block">שירותים / כישורים</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-700 text-right block">שירותים / כישורים</label>
               <Input 
                 value={skills}
                 onChange={(e) => setSkills(e.target.value)}
-                placeholder="לדוגמה: תיקוני חשמל לבית, התקנת מזגנים, טיפול בתקלות חירום" 
-                className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
+                placeholder="לדוגמה: תיקוני חשמל, התקנת גופים, איתור תקלות" 
+                className="h-11 rounded-xl border-slate-200 focus:border-primary bg-slate-50/50"
                 data-testid="input-join-skills"
               />
             </div>
+          </section>
 
-            {/* Background Notes */}
-            <div className="space-y-2">
-              <label className="text-xs font-medium text-slate-600 text-right block">רקע עליך (לא חובה)</label>
+          {/* AI Section */}
+          <section className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+              <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-100">AI Assistant</Badge>
+              <h3 className="text-sm font-bold text-slate-900 text-right">
+                קצת עליך
+              </h3>
+            </div>
+            
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-600 text-right block">
+                ספר לנו בקצרה על הניסיון שלך, וה-AI יכתוב את השאר
+              </label>
               <textarea
                 value={backgroundNotes}
                 onChange={(e) => setBackgroundNotes(e.target.value)}
-                placeholder="כתוב כמה משפטים או נקודות על הניסיון שלך, סוגי עבודות שאתה עושה, והאזור שבו אתה עובד. הבינה המלאכותית תהפוך את זה לתיאור מסודר בפרופיל שלך."
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary resize-none min-h-24"
+                placeholder="אני עובד בתחום כבר 10 שנים, מתמחה בתיקונים לבית..."
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none min-h-[100px]"
                 data-testid="textarea-join-background"
               />
-              <p className="text-xs text-slate-500 text-right">
-                כל מה שתכתוב כאן ישמש את הבינה המלאכותית לכתוב עבורך את אזור 'עליי' בצורה פשוטה וברורה.
-              </p>
             </div>
-          </div>
 
-          {/* AI Preview Card */}
-          <div className="mt-6 mb-4">
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right">
-              תצוגת פרופיל שנוצרה בעזרת AI
-            </h3>
-            <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 shadow-sm relative overflow-hidden">
-               {/* Skeleton UI */}
-               <div className="flex items-center gap-4 mb-4">
-                 <div className="h-12 w-12 rounded-full bg-slate-200/70 animate-pulse" />
+            {/* AI Preview Card */}
+            <div className="bg-linear-to-br from-slate-50 to-white rounded-2xl p-5 border border-slate-200/60 shadow-sm relative overflow-hidden mt-2">
+               <div className="flex items-center gap-3 mb-4">
+                 <div className="h-10 w-10 rounded-full bg-slate-200/70 animate-pulse" />
                  <div className="space-y-2">
-                   <div className="h-4 w-32 bg-slate-200/70 rounded animate-pulse" />
-                   <div className="h-3 w-24 bg-slate-200/50 rounded animate-pulse" />
+                   <div className="h-3 w-24 bg-slate-200/70 rounded animate-pulse" />
+                   <div className="h-2 w-16 bg-slate-200/50 rounded animate-pulse" />
                  </div>
                </div>
-               <div className="space-y-2 mb-4">
-                 <div className="h-3 w-full bg-slate-200/50 rounded animate-pulse" />
-                 <div className="h-3 w-[90%] bg-slate-200/50 rounded animate-pulse" />
-                 <div className="h-3 w-[80%] bg-slate-200/50 rounded animate-pulse" />
-               </div>
-               <div className="flex gap-2">
-                 <div className="h-6 w-16 bg-slate-200/60 rounded-lg animate-pulse" />
-                 <div className="h-6 w-20 bg-slate-200/60 rounded-lg animate-pulse" />
+               <div className="space-y-2 mb-3">
+                 <div className="h-2 w-full bg-slate-200/50 rounded animate-pulse" />
+                 <div className="h-2 w-[90%] bg-slate-200/50 rounded animate-pulse" />
                </div>
                
-               {/* Overlay Badge */}
                <div className="absolute top-3 right-3">
-                 <Badge variant="secondary" className="bg-white/80 backdrop-blur text-slate-500 text-[10px] border-slate-100">
-                   AI Preview
-                 </Badge>
+                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">AI Preview</span>
                </div>
             </div>
-          </div>
+          </section>
 
           {/* Bottom CTA */}
-          <div className="pt-4 mt-auto space-y-3">
-            <Button 
+          <div className="pt-4 mt-auto space-y-3 pb-8">
+            <motion.button
+              whileTap={{ scale: 0.98 }}
               onClick={handleSubmit}
               disabled={isSubmitting || isGeneratingAI}
-              className="w-full h-14 text-lg font-semibold rounded-xl shadow-xl shadow-primary/25 hover:shadow-primary/35 transition-all active:scale-[0.99] bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-none disabled:opacity-50"
+              className="w-full h-14 text-lg font-bold text-white rounded-xl shadow-xl shadow-primary/25 hover:shadow-primary/35 transition-all bg-primary disabled:opacity-50 flex items-center justify-center gap-2"
               type="button"
               data-testid="button-generate-profile"
             >
               {isSubmitting || isGeneratingAI ? (
-                <span className="flex items-center gap-2">
+                <>
                   <Loader className="h-5 w-5 animate-spin" />
-                  {isGeneratingAI ? "יוצר פרופיל עם AI..." : "שומר..."}
-                </span>
+                  {isGeneratingAI ? "יוצר פרופיל..." : "שומר..."}
+                </>
               ) : (
                 <>
-                  <span className="mr-2 text-xl">✨</span>
-                  צור לי פרופיל בעזרת AI
+                  <span className="text-xl">✨</span>
+                  צור פרופיל עם AI
                 </>
               )}
-            </Button>
-            <p className="text-center text-xs text-slate-400">
-              המערכת תיצור עבורך תיאור מקצועי ברור לפי מה שמילאת בטופס.
-            </p>
+            </motion.button>
           </div>
         </form>
       </div>
@@ -1479,7 +1490,7 @@ function SearchResultsScreen({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-white overflow-y-auto pt-20"
+      className="flex flex-col h-full bg-[#F2F7FF] overflow-y-auto pt-20"
     >
       <AppHeader
         title="תוצאות חיפוש"
@@ -1489,19 +1500,19 @@ function SearchResultsScreen({
 
       <div className="px-6 pb-6 flex-1 flex flex-col pt-2">
         {/* Search Summary */}
-        <p className="text-xs text-slate-500 mb-4">
-          Showing {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'} for '{searchQuery}'
+        <p className="text-xs text-slate-500 mb-4 text-right">
+          נמצאו {searchResults.length} תוצאות עבור '{searchQuery}'
         </p>
 
         {/* Filter Bar */}
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-200/60">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-slate-600">Sort by</span>
+            <span className="text-xs font-medium text-slate-600">מיון לפי</span>
             <button
-              className="flex items-center gap-1 text-sm text-slate-700 hover:text-slate-900 transition-colors"
+              className="flex items-center gap-1 text-sm text-slate-700 hover:text-slate-900 transition-colors font-medium"
               data-testid="button-sort"
             >
-              {sortBy}
+              רלוונטיות
               <ChevronDown className="h-4 w-4" />
             </button>
           </div>
@@ -1510,7 +1521,7 @@ function SearchResultsScreen({
             className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
             data-testid="button-clear-search"
           >
-            Clear search
+            נקה חיפוש
           </button>
         </div>
 
@@ -1521,28 +1532,28 @@ function SearchResultsScreen({
               <div
                 key={profile.id}
                 onClick={() => onProfileClick(profile)}
-                className="group cursor-pointer bg-white rounded-xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:border-primary/10 transition-all duration-200 active:scale-[0.98]"
+                className="group cursor-pointer bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md hover:border-primary/10 transition-all duration-200 active:scale-[0.98]"
                 data-testid={`card-search-result-${profile.id}`}
               >
                 <div className="flex items-start gap-4">
                   <Avatar className="h-12 w-12 border-2 border-white shadow-sm shrink-0">
-                    <AvatarFallback className="bg-slate-100 text-slate-600 font-semibold text-sm">
+                    <AvatarFallback className="bg-slate-100 text-slate-600 font-bold text-base">
                       {profile.initials}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-slate-900 text-base leading-tight group-hover:text-primary transition-colors">
+                    <h3 className="font-bold text-slate-900 text-lg leading-tight group-hover:text-primary transition-colors text-right">
                       {profile.firstName} {profile.lastName}
                     </h3>
-                    <p className="text-sm font-medium text-slate-500 mb-1">
+                    <p className="text-sm font-medium text-primary mb-1 text-right">
                       {profile.role}
                     </p>
-                    <p className="text-sm text-slate-600 mb-2 line-clamp-1">
+                    <p className="text-sm text-slate-600 mb-2 line-clamp-1 text-right">
                       {profile.summary}
                     </p>
-                    <p className="text-xs text-slate-500 flex items-center gap-1">
+                    <p className="text-xs text-slate-500 flex items-center gap-1 justify-end">
+                      <span>תל אביב, ישראל</span>
                       <span>📍</span>
-                      <span>Tel Aviv, Israel</span>
                     </p>
                   </div>
                 </div>
@@ -1551,14 +1562,14 @@ function SearchResultsScreen({
           </div>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center">
-            <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+            <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mb-4 shadow-sm">
               <Search className="h-8 w-8 text-slate-400" />
             </div>
             <h3 className="text-lg font-bold text-slate-900 mb-1">
-              No profiles found
+              לא נמצאו תוצאות
             </h3>
             <p className="text-sm text-slate-500">
-              Try a different name or adjust your filters.
+              נסה לחפש שם אחר או לשנות את הסינון.
             </p>
           </div>
         )}
@@ -1604,7 +1615,7 @@ function MyProfileScreen({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-white overflow-y-auto pt-20"
+      className="flex flex-col h-full bg-[#F2F7FF] overflow-y-auto pt-20"
     >
       <AppHeader
         title="הפרופיל שלי"
@@ -1616,7 +1627,7 @@ function MyProfileScreen({
 
       {!hasProfile ? (
         <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
-          <div className="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center mb-6">
+          <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-6 shadow-sm">
             <UserPlus className="h-12 w-12 text-slate-400" />
           </div>
           <h3 className="text-xl font-bold text-slate-900 mb-2 text-right">עדיין לא יצרת פרופיל</h3>
@@ -1635,7 +1646,7 @@ function MyProfileScreen({
         <>
       <div className="px-6 pb-8 pt-6">
         {/* Hero Profile Block */}
-        <div className="flex flex-col items-center text-center mb-8">
+        <div className="flex flex-col items-center text-center mb-8 bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
           <Avatar className="h-28 w-28 mb-5 shadow-xl shadow-slate-200/80">
             {profile?.avatarUrl ? (
               <AvatarImage src={profile.avatarUrl} />
@@ -1679,23 +1690,23 @@ function MyProfileScreen({
 
         {/* About Section */}
         <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right px-1">
             עליי
           </h3>
-          <div className={`relative rounded-xl border border-slate-100 bg-[#F9FBFF] p-5 overflow-hidden ${!expandedAbout ? 'max-h-40' : ''}`}>
-            <div className="space-y-3">
-              <p className="text-sm text-slate-700 leading-relaxed text-right">
+          <div className={`relative rounded-2xl border border-slate-100 bg-white p-6 overflow-hidden shadow-sm ${!expandedAbout ? 'max-h-48' : ''}`}>
+            <div className="space-y-4">
+              <p className="text-[15px] text-slate-700 leading-relaxed text-right whitespace-pre-line">
                 {profile?.aboutText || profile?.backgroundText || "לא נוסף תיאור עדיין"}
               </p>
             </div>
             {!expandedAbout && profile?.aboutText && profile.aboutText.length > 200 && (
-              <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#F9FBFF] to-transparent pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 h-20 bg-linear-to-t from-white to-transparent pointer-events-none" />
             )}
           </div>
           {profile?.aboutText && profile.aboutText.length > 200 && (
             <button
               onClick={() => setExpandedAbout(!expandedAbout)}
-              className="mt-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+              className="mt-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors px-1"
             >
               {expandedAbout ? "הצג פחות" : "קרא עוד"}
             </button>
@@ -1704,17 +1715,19 @@ function MyProfileScreen({
 
         {/* Skills Section */}
         <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right px-1">
             שירותים עיקריים
           </h3>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2.5">
             {(profile?.skills || []).map((skill: string) => (
-              <span 
+              <motion.span 
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 key={skill} 
-                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700"
+                className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium bg-white text-slate-800 border border-slate-200 shadow-sm"
               >
                 {skill}
-              </span>
+              </motion.span>
             ))}
           </div>
         </section>
@@ -1753,7 +1766,7 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-white overflow-y-auto pt-20"
+      className="flex flex-col h-full bg-[#F2F7FF] overflow-y-auto pt-20"
     >
       <AppHeader
         title="הגדרות"
@@ -1766,8 +1779,8 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
           
           {/* Section 1: Account */}
           <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right">חשבון</h3>
-            <div className="bg-white rounded-xl border border-slate-100 px-4 py-3 space-y-1">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right px-1">חשבון</h3>
+            <div className="bg-white rounded-3xl border border-slate-100 px-6 py-5 space-y-2 shadow-sm">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-slate-800 font-medium text-right">מצב פרופיל</p>
                 <button 
@@ -1784,8 +1797,8 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
 
           {/* Section 2: Profile & AI */}
           <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right">פרופיל ו-AI</h3>
-            <div className="bg-white rounded-xl border border-slate-100 p-4 space-y-4">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right px-1">פרופיל ו-AI</h3>
+            <div className="bg-white rounded-3xl border border-slate-100 p-6 space-y-5 shadow-sm">
               
               {/* Language Selection */}
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
@@ -1795,8 +1808,8 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
                     onClick={() => setSelectedLanguage("english")}
                     className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                       selectedLanguage === "english"
-                        ? "bg-primary text-white"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        ? "bg-primary text-white shadow-md shadow-primary/20"
+                        : "bg-slate-50 text-slate-700 hover:bg-slate-100"
                     }`}
                     data-testid="button-language-english"
                   >
@@ -1806,8 +1819,8 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
                     onClick={() => setSelectedLanguage("hebrew")}
                     className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                       selectedLanguage === "hebrew"
-                        ? "bg-primary text-white"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        ? "bg-primary text-white shadow-md shadow-primary/20"
+                        : "bg-slate-50 text-slate-700 hover:bg-slate-100"
                     }`}
                     data-testid="button-language-hebrew"
                   >
@@ -1822,10 +1835,10 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
                 <div className="flex gap-2 flex-wrap">
                   <button
                     onClick={() => setSelectedStyle("professional")}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
+                    className={`px-4 py-2 text-xs font-medium rounded-xl transition-colors ${
                       selectedStyle === "professional"
-                        ? "bg-primary text-white"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        ? "bg-primary text-white shadow-md shadow-primary/20"
+                        : "bg-slate-50 text-slate-700 hover:bg-slate-100"
                     }`}
                     data-testid="button-style-simple"
                   >
@@ -1833,10 +1846,10 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
                   </button>
                   <button
                     onClick={() => setSelectedStyle("friendly")}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
+                    className={`px-4 py-2 text-xs font-medium rounded-xl transition-colors ${
                       selectedStyle === "friendly"
-                        ? "bg-primary text-white"
-                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        ? "bg-primary text-white shadow-md shadow-primary/20"
+                        : "bg-slate-50 text-slate-700 hover:bg-slate-100"
                     }`}
                     data-testid="button-style-detailed"
                   >
@@ -1847,7 +1860,7 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
 
               {/* Regenerate Button */}
               <button 
-                className="w-full px-4 py-2.5 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-blue-50 transition-colors"
+                className="w-full px-4 py-3 text-sm font-medium text-primary bg-blue-50/50 border border-blue-100 rounded-xl hover:bg-blue-50 transition-colors"
                 data-testid="button-regenerate-profile"
               >
                 צור מחדש את הפרופיל שלי בעזרת AI
@@ -1857,8 +1870,8 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
 
           {/* Section 3: Privacy */}
           <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right">פרטיות ותצוגה</h3>
-            <div className="bg-white rounded-xl border border-slate-100 p-4 space-y-3">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right px-1">פרטיות ותצוגה</h3>
+            <div className="bg-white rounded-3xl border border-slate-100 p-6 space-y-3 shadow-sm">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-slate-900 text-right">הצג את הפרופיל שלי בחיפוש הציבורי</label>
                 <Switch 
@@ -1873,8 +1886,8 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
 
           {/* Section 4: Notifications */}
           <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right">התראות</h3>
-            <div className="bg-white rounded-xl border border-slate-100 p-4 space-y-4">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right px-1">התראות</h3>
+            <div className="bg-white rounded-3xl border border-slate-100 p-6 space-y-4 shadow-sm">
               <div className="flex items-center justify-between py-2">
                 <label className="text-sm font-medium text-slate-900 text-right">שלח לי דוא״ל כאשר מישהו צופה בפרופיל שלי</label>
                 <Switch 
@@ -1896,7 +1909,7 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
 
           {/* Section 5: About the app */}
           <section>
-            <div className="bg-slate-50 rounded-xl border border-slate-100 p-4 space-y-3">
+            <div className="bg-slate-50 rounded-3xl border border-slate-100 p-6 space-y-3">
               <h3 className="text-sm font-semibold text-slate-900 text-right">על האפליקציה</h3>
               <p className="text-xs text-slate-600 leading-relaxed text-right">
                 האפליקציה עוזרת לעובדים במקצועות יומיומיים ליצור פרופיל פשוט וברור, כדי שלקוחות יוכלו למצוא אותם בקלות.
@@ -1915,7 +1928,7 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
           <section className="pt-4 pb-8 text-center">
             <button 
               onClick={onDeleteClick}
-              className="text-sm font-medium text-red-600 hover:text-red-700 transition-colors"
+              className="text-sm font-medium text-red-600 hover:text-red-700 transition-colors bg-red-50 px-6 py-3 rounded-xl"
               data-testid="button-delete-profile"
             >
               מחק את הפרופיל שלי
