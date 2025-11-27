@@ -28,43 +28,43 @@ interface Profile {
 const MOCK_PROFILES: Profile[] = [
   {
     id: "1",
-    firstName: "Dor",
-    lastName: "Aharonoff",
-    role: "Senior Product Designer",
-    summary: "Crafting intuitive digital experiences for enterprise SaaS.",
-    about: "I am a product designer with over 10 years of experience in building user-centric interfaces. My passion lies in simplifying complex workflows and creating design systems that scale. Currently leading design at a stealth AI startup.\n\nThroughout my career, I've worked with teams at companies like Figma and Stripe, where I learned the art of balancing aesthetic beauty with functional precision. I'm particularly interested in how design systems can empower teams to move faster while maintaining consistency across products. I believe great design is invisible—it should feel natural and intuitive to the user.\n\nOutside of work, I'm passionate about mentoring junior designers and contributing to the design community. I regularly speak at conferences and maintain a design blog where I share my thoughts on emerging trends in product design, accessibility, and design thinking methodologies.",
-    skills: ["Product Design", "Figma", "Design Systems", "Prototyping", "UX Research"],
-    initials: "DA",
+    firstName: "Roni",
+    lastName: "Levi",
+    role: "Certified Electrician",
+    summary: "Specializing in home electrical repairs and small installations.",
+    about: "I've been working as an electrician for 15 years. I handle all types of home electrical repairs, from fixing short circuits to installing new lights and power outlets. I also work with small offices and shops.\n\nI'm based in Holon and I cover all nearby areas. My customers say I'm reliable, honest, and I always give clear prices before starting any work. I handle emergency calls too if there are any dangerous situations.\n\nI'm certified and I always follow safety rules. I work carefully and clean up after myself. Whether it's a small repair or a bigger job, I treat every customer the same—with respect and quality work.",
+    skills: ["Home electrical repairs", "Short-circuit fixing", "Lighting installation", "Electric panel upgrades", "Emergency calls"],
+    initials: "RL",
   },
   {
     id: "2",
-    firstName: "Sarah",
-    lastName: "Chen",
-    role: "Frontend Engineer",
-    summary: "Specializing in React, TypeScript, and performance optimization.",
-    about: "Full-stack developer turned frontend specialist. I love building buttery smooth UIs and obsessing over web performance metrics. Contributor to several open source UI libraries and passionate about accessibility.\n\nI've spent the last 5 years shipping features at scale, learning that great frontend engineering is about more than just writing clean code—it's about understanding user behavior, optimizing for performance, and building with accessibility in mind. My approach combines technical excellence with pragmatism: I believe in shipping quickly but not compromising on quality.\n\nI'm particularly interested in React's future and am actively involved in the React community. I've given talks on performance optimization and web performance best practices. When I'm not coding, I contribute to open source projects and help junior developers navigate their careers in frontend development.",
-    skills: ["React", "TypeScript", "Tailwind CSS", "Next.js", "Web Performance"],
+    firstName: "Sara",
+    lastName: "Cohen",
+    role: "Home Cleaner",
+    summary: "Reliable weekly cleaning for families and offices.",
+    about: "I've been a professional cleaner for 12 years. I do deep cleaning and regular maintenance for homes, small offices, and shops. I work carefully and make sure everything is spotless.\n\nI'm based in Tel Aviv and I cover the surrounding areas. I work on a regular schedule—weekly or monthly—so your space is always clean. I use good cleaning products and I'm happy to use what you prefer if you have allergies.\n\nMy customers trust me with their keys because I'm professional and respectful. I finish on time, I pay attention to details, and I'm very honest. I can work with your schedule and I'm flexible with timing.",
+    skills: ["Deep cleaning", "Weekly maintenance", "Office cleaning", "Home organization", "Eco-friendly products"],
     initials: "SC",
   },
   {
     id: "3",
-    firstName: "Marcus",
-    lastName: "Johnson",
-    role: "AI Researcher",
-    summary: "Exploring the intersection of LLMs and human-computer interaction.",
-    about: "PhD in Computer Science focused on Natural Language Processing. I'm working on making AI agents more helpful and reliable for everyday tasks. Currently focused on improving interpretability and alignment of large language models.\n\nMy research bridges the gap between cutting-edge NLP research and practical applications. I believe AI should augment human capabilities, not replace them. I've published papers on prompt engineering, fine-tuning strategies, and human-AI collaboration patterns that have been adopted by teams at leading AI companies.\n\nI'm excited about the future of generative interfaces and how they'll reshape the way we interact with technology. I'm actively mentoring PhD students and collaborating with industry partners to turn research into real-world solutions. In my spare time, I tinker with new model architectures and explore how AI can be more accessible to developers.",
-    skills: ["Python", "PyTorch", "NLP", "Machine Learning", "LLMs"],
-    initials: "MJ",
+    firstName: "Ahmed",
+    lastName: "Nassar",
+    role: "Delivery Driver",
+    summary: "Same-day deliveries around Tel Aviv and nearby cities.",
+    about: "I'm a delivery driver with 8 years of experience. I deliver packages, furniture, groceries, and more. I know the Tel Aviv area very well and I'm fast and reliable.\n\nI take good care of packages—they arrive safe and on time. My customers appreciate that I'm professional, I'm on time, and I handle everything carefully. I have a large van and I can carry most things.\n\nI work flexible hours, so I can often make same-day deliveries. I'm friendly with customers and I always keep them updated about delivery times. I've had many repeat customers because they know they can rely on me.",
+    skills: ["Local deliveries", "Same-day service", "Furniture moving", "Package handling", "Route knowledge"],
+    initials: "AN",
   },
   {
     id: "4",
-    firstName: "Elena",
-    lastName: "Rodriguez",
-    role: "Marketing Lead",
-    summary: "Growth hacking and brand storytelling for tech startups.",
-    about: "I help technical founders translate their complex products into compelling narratives that resonate with their target audience. With 8+ years of B2B SaaS marketing experience, I've built communities from zero to thousands and led campaigns that drove millions in ARR.\n\nMy approach combines data-driven insights with creative storytelling. I believe the best marketing starts with truly understanding your users—their pain points, aspirations, and language. I specialize in positioning, content strategy, and community building for developer-focused products and enterprise solutions.\n\nI'm passionate about building authentic relationships with customers and creating marketing that doesn't feel like marketing. I've successfully led GTM strategies for multiple successful exits and currently advise several early-stage startups on growth. I love mentoring marketers and sharing what I've learned about building sustainable, human-centered growth.",
-    skills: ["Growth Marketing", "Content Strategy", "SEO", "Brand Identity"],
-    initials: "ER",
+    firstName: "Miriam",
+    lastName: "Goldman",
+    role: "Hairdresser & Stylist",
+    summary: "Professional hair cutting and styling services.",
+    about: "I'm a professional hairdresser with 10 years of experience. I do cuts, styling, coloring, and treatments. I work with all hair types and I always listen to what my customers want.\n\nI have a small salon in Ramat Gan and I create a friendly, relaxed atmosphere. I care about my customers' comfort and I take time to understand their style needs. I use good quality products for all treatments.\n\nMany of my customers are regulars because they know I do quality work at fair prices. I can also do hair for special events like weddings and parties. I'm passionate about making people feel good about how they look.",
+    skills: ["Hair cutting", "Styling & coloring", "Treatments", "Special events", "Perms & treatments"],
+    initials: "MG",
   }
 ];
 
@@ -266,10 +266,10 @@ function HomeScreen({
   const [selectedSeniority, setSelectedSeniority] = useState<string | null>(null);
   const [selectedWorkStyle, setSelectedWorkStyle] = useState<string[]>([]);
 
-  const quickFilterCategories = ["Design", "Engineering", "Product", "Data / AI"];
-  const roleOptions = ["Product", "Design", "Engineering", "Data/AI", "Marketing", "Sales", "Other"];
-  const seniorityOptions = ["Junior", "Mid-level", "Senior", "Lead / Manager"];
-  const workStyleOptions = ["On-site", "Hybrid", "Remote"];
+  const quickFilterCategories = ["Electrician", "Plumber", "Cleaning", "Deliveries"];
+  const roleOptions = ["Electrician", "Plumber", "Cleaning", "Driving", "Construction", "Food service", "Child care", "Other"];
+  const seniorityOptions = ["Years 1-5", "Years 5-10", "Years 10+"];
+  const workStyleOptions = ["Comes to your home", "Works on-site", "Both"];
 
   const handleToggleQuickFilter = (filter: string) => {
     setSelectedQuickFilters((prev) =>
@@ -319,7 +319,7 @@ function HomeScreen({
       {/* Top Bar */}
       <header className="flex items-center justify-between mb-6 pt-2">
         <h1 className="text-xl font-bold tracking-tight text-slate-900">
-          AI Profile Directory
+          Job Profiles
         </h1>
         <Button 
           onClick={onJoinClick}
@@ -340,7 +340,7 @@ function HomeScreen({
           <Input 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search profiles by full name"
+            placeholder="Search workers by name"
             className="pl-10 h-12 rounded-2xl border-slate-200 bg-slate-50/50 shadow-sm focus-visible:ring-primary/20 focus-visible:border-primary text-sm"
             data-testid="input-search"
           />
@@ -489,7 +489,7 @@ function HomeScreen({
 
                 {/* Seniority Filter */}
                 <section className="mb-6">
-                  <h3 className="text-sm font-semibold text-slate-900 mb-3">Seniority</h3>
+                  <h3 className="text-sm font-semibold text-slate-900 mb-3">Experience</h3>
                   <div className="flex flex-wrap gap-2">
                     {seniorityOptions.map((level) => (
                       <button
@@ -601,7 +601,7 @@ function ProfileScreen({
           </div>
           
           <Badge className="mb-3 bg-blue-50 text-blue-700 border-blue-200 text-xs font-medium">
-            ✨ AI-generated profile
+            ✨ Profile written with AI
           </Badge>
           
           <p className="text-base text-primary font-medium mb-4">
@@ -723,7 +723,7 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Current Role / Title</label>
               <Input 
-                placeholder="e.g. Senior Engineer" 
+                placeholder="e.g. Electrician, Plumber, House Cleaner" 
                 className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                 data-testid="input-join-role"
               />
@@ -733,15 +733,15 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700">Location <span className="text-slate-400 font-normal">(Optional)</span></label>
                 <Input 
-                  placeholder="City, Country" 
+                  placeholder="e.g. Tel Aviv area" 
                   className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                   data-testid="input-join-location"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Company <span className="text-slate-400 font-normal">(Optional)</span></label>
+                <label className="text-sm font-semibold text-slate-700">Business name <span className="text-slate-400 font-normal">(Optional)</span></label>
                 <Input 
-                  placeholder="Company Name" 
+                  placeholder="e.g. Roni Electric Services" 
                   className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                   data-testid="input-join-company"
                 />
@@ -749,9 +749,9 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700">Skills</label>
+              <label className="text-sm font-semibold text-slate-700">Skills / Services</label>
               <Input 
-                placeholder="e.g. Product Manager, React, Cyber Security..." 
+                placeholder="e.g. Electrical repairs, AC installation, Emergency calls..." 
                 className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                 data-testid="input-join-skills"
               />
@@ -763,12 +763,12 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
               <textarea
                 value={backgroundNotes}
                 onChange={(e) => setBackgroundNotes(e.target.value)}
-                placeholder="Write a few sentences or bullet points about your experience, key achievements, and what you're looking for. The AI will use this to create a richer profile."
+                placeholder="Write a few sentences about what you do, how many years you've been working, and what services you offer. The AI will turn it into a clear description for your profile."
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary resize-none min-h-24"
                 data-testid="textarea-join-background"
               />
               <p className="text-xs text-slate-500">
-                Optional: Anything you write here will be used by AI to personalize your About section.
+                Anything you write here will be used by AI to explain your work in simple, professional words.
               </p>
             </div>
           </div>
@@ -963,32 +963,32 @@ function MyProfileScreen({
         <div className="flex flex-col items-center text-center mb-8">
           <Avatar className="h-28 w-28 mb-5 shadow-xl shadow-slate-200/80">
             <AvatarFallback className="bg-slate-100 text-slate-700 text-3xl font-bold tracking-tight">
-              {demoProfile.initials}
+              RL
             </AvatarFallback>
           </Avatar>
           
           <div className="flex items-center justify-center gap-2 mb-2">
             <h2 className="text-2xl font-bold text-slate-900">
-              {demoProfile.firstName} {demoProfile.lastName}
+              Roni Levi
             </h2>
           </div>
           
           <Badge className="mb-3 bg-blue-50 text-blue-700 border-blue-200 text-xs font-medium">
-            ✨ AI-generated profile
+            ✨ Profile written with AI
           </Badge>
           
           <p className="text-base text-primary font-medium mb-4">
-            {demoProfile.role}
+            Certified Electrician
           </p>
 
           <div className="flex flex-col items-center gap-1.5 text-sm text-slate-500">
             <div className="flex items-center gap-1.5">
               <span>📍</span>
-              <span>Tel Aviv, Israel</span>
+              <span>Holon, Israel</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span>💼</span>
-              <span>Independent / Freelance</span>
+              <span>Roni Electric Services</span>
             </div>
           </div>
         </div>
@@ -1000,11 +1000,9 @@ function MyProfileScreen({
           </h3>
           <div className={`relative rounded-xl border border-slate-100 bg-[#F9FBFF] p-5 overflow-hidden ${!expandedAbout ? 'max-h-40' : ''}`}>
             <div className="space-y-3">
-              {demoProfile.about.split('\n').map((paragraph, idx) => (
-                <p key={idx} className="text-sm text-slate-700 leading-relaxed text-left">
-                  {paragraph}
-                </p>
-              ))}
+              <p className="text-sm text-slate-700 leading-relaxed text-left">I've been working as an electrician for 15 years. I handle all types of home electrical repairs, from fixing short circuits to installing new lights and power outlets. I also work with small offices and shops.</p>
+              <p className="text-sm text-slate-700 leading-relaxed text-left">I'm based in Holon and I cover all nearby areas. My customers say I'm reliable, honest, and I always give clear prices before starting any work. I handle emergency calls too if there are any dangerous situations.</p>
+              <p className="text-sm text-slate-700 leading-relaxed text-left">I'm certified and I always follow safety rules. I work carefully and clean up after myself. Whether it's a small repair or a bigger job, I treat every customer the same—with respect and quality work.</p>
             </div>
             {!expandedAbout && (
               <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#F9FBFF] to-transparent pointer-events-none" />
@@ -1021,10 +1019,10 @@ function MyProfileScreen({
         {/* Skills Section */}
         <section className="mb-8">
           <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4">
-            Skills
+            Services
           </h3>
           <div className="flex flex-wrap gap-2">
-            {demoProfile.skills.map((skill) => (
+            {["Home electrical repairs", "Short-circuit fixing", "Lighting installation", "Electric panel upgrades", "Emergency calls"].map((skill) => (
               <span 
                 key={skill} 
                 className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700"
@@ -1092,7 +1090,7 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <p className="text-sm font-medium text-slate-900">Profile status</p>
-                  <p className="text-sm text-slate-600">Profile: Dor Aharonoff</p>
+                  <p className="text-sm text-slate-600">Profile: Roni Levi</p>
                 </div>
                 <button 
                   className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
@@ -1129,24 +1127,32 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
                 </div>
               </div>
 
-              {/* AI Writing Style */}
+              {/* Writing Style */}
               <div className="pb-4 border-b border-slate-100">
-                <label className="text-sm font-medium text-slate-900 block mb-3">AI writing style</label>
+                <label className="text-sm font-medium text-slate-900 block mb-3">Profile style</label>
                 <div className="flex gap-2 flex-wrap">
-                  {styles.map((style) => (
-                    <button
-                      key={style}
-                      onClick={() => setSelectedStyle(style)}
-                      className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors capitalize ${
-                        selectedStyle === style
-                          ? "bg-primary text-white"
-                          : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                      }`}
-                      data-testid={`button-style-${style}`}
-                    >
-                      {style}
-                    </button>
-                  ))}
+                  <button
+                    onClick={() => setSelectedStyle("professional")}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
+                      selectedStyle === "professional"
+                        ? "bg-primary text-white"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    }`}
+                    data-testid="button-style-simple"
+                  >
+                    Simple
+                  </button>
+                  <button
+                    onClick={() => setSelectedStyle("friendly")}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors ${
+                      selectedStyle === "friendly"
+                        ? "bg-primary text-white"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    }`}
+                    data-testid="button-style-detailed"
+                  >
+                    More detailed
+                  </button>
                 </div>
               </div>
 
@@ -1202,9 +1208,9 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
           {/* Section 5: About */}
           <section>
             <div className="bg-slate-50 rounded-xl border border-slate-100 p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-slate-900">About AI Profile Directory</h3>
+              <h3 className="text-sm font-semibold text-slate-900">About Job Profiles</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                An AI-powered directory where professionals create beautiful profiles in seconds.
+                This app helps workers in everyday jobs create a clear profile so people can find and contact them.
               </p>
               <p className="text-xs text-slate-400">Version 0.1.0</p>
               <button 

@@ -1,0 +1,119 @@
+You are a senior React + Tailwind CSS frontend developer and UX writer.
+
+I already have a working mobile-first app called “AI Profile Directory” with these screens:
+- Directory (home search screen with filters and profile cards)
+- Create Your Profile (form + AI-generated preview)
+- Profile View (public profile page)
+- Filters bottom sheet
+- Bottom navigation (Directory / Create / My Profile / Settings)
+- Settings screen
+
+Right now, all example content is focused on high-tech roles (Product Designer, Engineer, AI researcher, etc.).
+
+I want you to KEEP the same layout, components, and overall visual style,
+but CHANGE all the copy, placeholder text, examples, and filter options
+so the app is clearly aimed at **low-tech / practical professions** such as:
+- Electrician
+- Plumber
+- Delivery driver
+- Taxi driver
+- Baker / Cook
+- Hairdresser / Barber
+- Cleaner
+- Caregiver
+- Construction worker
+- Store clerk / Cashier
+- Kindergarten assistant
+- Security guard
+and similar jobs.
+
+Make the wording SIMPLE, CLEAR, and friendly.
+Assume many users are not tech-savvy.
+
+Update the UI as follows:
+
+1) App concept
+- Keep the app name “AI Profile Directory” or change it to something more simple like “Job Profiles” if needed in the UI.
+- Main message: “Find and create simple professional profiles for real-world jobs.”
+
+2) Directory / Home screen
+- Change the example profiles to low-tech jobs.
+  Example cards:
+    - “Roni Levi – Certified Electrician”
+      Subtitle: “Specializing in home electrical repairs and small installations.”
+    - “Sara Cohen – Home Cleaner”
+      Subtitle: “Reliable weekly cleaning for families and offices.”
+    - “Ahmed Nassar – Delivery Driver”
+      Subtitle: “Same-day deliveries around Tel Aviv and nearby cities.”
+- Search placeholder: “Search workers by full name”.
+- Quick filter chips:
+  - “Electrician”
+  - “Plumber”
+  - “Cleaning”
+  - “Deliveries”
+  - “Construction”
+  - “Child care”
+- Filter bottom sheet:
+  - Role options: Electrician, Plumber, Cleaning, Driving, Construction, Food service, Child care, Other.
+  - Work style: “Comes to your home”, “Works on-site”, “Remote not relevant” (or keep On-site/Hybrid/Remote but adapt text to make sense).
+
+3) Create Your Profile screen
+- Keep the same fields, but adapt labels & placeholders:
+  - Full Name → keep as is.
+  - Current Role / Title → example: “e.g. Electrician”, “e.g. House Cleaner”.
+  - Location → “City / Area where you work” with example: “e.g. Tel Aviv area”.
+  - Company → “Business name (optional)” with example: “e.g. Roni Electric Services”.
+  - Skills → examples like:
+    “e.g. Electrical repairs, AC installation, small renovations, emergency calls”.
+
+- Free-text background textarea:
+  - Title: “Your background (optional)”
+  - Placeholder text more simple:
+    “Write a few sentences about what you do, how many years you work, and what services you offer. The AI will turn it into a clear description for your profile.”
+
+- Helper text under textarea:
+  - “Anything you write here will be used by AI to explain your work in simple, professional words.”
+
+4) Profile View screen
+- Example profile content should be for a low-tech job, not a product designer.
+  For example:
+    Name: “Roni Levi”
+    Title: “Certified Electrician”
+    Location: “📍 Holon, Israel”
+    Company: “💼 Roni Electric Services”
+    About: 2–4 short paragraphs explaining:
+      - Years of experience
+      - Types of jobs he usually does (home repairs, short calls, small businesses)
+      - Service areas (cities/regions)
+      - Approach: reliable, honest, clear prices.
+    Skills chips:
+      - “Home electrical repairs”
+      - “Short-circuit fixing”
+      - “Lighting installation”
+      - “Electric panel upgrades”
+      - “Emergency calls”
+
+- Keep the AI badge, but make it simple:
+  - “This profile text was written with AI.”
+
+5) Settings screen
+- Update texts to match the low-tech audience:
+  - Use simpler language, e.g.:
+    - “Profile language” → keep.
+    - “AI writing style” → maybe only “Simple” and “More detailed”.
+  - For explanations, avoid heavy tech terms.
+  - In “About the app”, explain:
+    “This app helps workers in everyday jobs create a clear profile so people can find and contact them.”
+
+6) General tone changes across all screens
+- Avoid words like “SaaS”, “enterprise”, “LLMs”, “optimization”, “stealth startup”.
+- Use simple words:
+  - “What job do you do?”
+  - “Where do you work?”
+  - “What services do you offer?”
+- Make sure all dummy names, roles, sample texts and helper strings are updated to low-tech professions.
+
+Implementation:
+- Go through all components and replace the old high-tech demo content with new low-tech examples.
+- Do NOT change the structure, Tailwind classes, or state logic unless required by the text.
+- The goal is the same app, but for blue-collar / practical workers.
