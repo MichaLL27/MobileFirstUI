@@ -15,6 +15,11 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Health check endpoint - defined BEFORE routes registration
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Initialize routes lazily
 let routesInitialized = false;
 
