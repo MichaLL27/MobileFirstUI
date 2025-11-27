@@ -46,7 +46,7 @@ export default async function handler(req: any, res: any) {
       console.log("Initializing routes dynamically...");
       
       // Dynamic import to catch initialization errors
-      const routeModule = await import("../server/routes");
+      const routeModule = await import("./_lib/routes");
       await routeModule.registerRoutes(httpServer, app);
       
       routesInitialized = true;
