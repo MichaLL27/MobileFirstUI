@@ -110,7 +110,8 @@ export async function registerRoutes(
       const userId = req.firebaseUser!.uid;
       const profile = await storage.getProfileByUserId(userId);
       if (!profile) {
-        return res.status(404).json({ message: "Profile not found" });
+        // Return null instead of 404 to avoid console errors for new users
+        return res.json(null);
       }
       res.json(profile);
     } catch (error) {

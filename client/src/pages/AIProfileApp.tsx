@@ -400,7 +400,7 @@ function ConfigurationErrorScreen() {
 }
 
 export default function AIProfileApp() {
-  const { user, isAuthenticated, isLoading: authLoading, login, isConfigured: firebaseConfigured } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading, login, isConfigured: firebaseConfigured, getIdToken } = useAuth();
   const queryClient = useQueryClient();
   
   const [activeTab, setActiveTab] = useState<"directory" | "create" | "profile" | "settings">("directory");
@@ -433,10 +433,14 @@ export default function AIProfileApp() {
   const { data: myProfile, isLoading: myProfileLoading } = useQuery({
     queryKey: ["/api/my-profile"],
     queryFn: async () => {
-      const res = await fetch("/api/my-profile");
+      const token = await getIdToken();
+      const res = await fetch("/api/my-profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (res.status === 404) return null;
       if (!res.ok) throw new Error("Failed to fetch profile");
-      return res.json();
+      const data = await res.json();
+      return data;
     },
     enabled: isAuthenticated,
   });
@@ -696,7 +700,11 @@ export default function AIProfileApp() {
               onConfirm={async () => {
                 if (myProfile?.id) {
                   try {
-                    await fetch(`/api/profiles/${myProfile.id}`, { method: "DELETE" });
+                    const token = await getIdToken();
+                    await fetch(`/api/profiles/${myProfile.id}`, { 
+                      method: "DELETE",
+                      headers: { Authorization: `Bearer ${token}` },
+                    });
                     queryClient.invalidateQueries({ queryKey: ["/api/my-profile"] });
                     setToast({ message: "הפרופיל נמחק בהצלחה", type: "success" });
                   } catch (error) {
@@ -1196,6 +1204,7 @@ function JoinScreen({ onBack, onSuccess, onError }: {
   onSuccess?: () => void; 
   onError?: (msg: string) => void;
 }) {
+  const { getIdToken } = useAuth();
   const [backgroundNotes, setBackgroundNotes] = useState("");
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [fullName, setFullName] = useState("");
@@ -1219,9 +1228,13 @@ function JoinScreen({ onBack, onSuccess, onError }: {
 
     setIsSubmitting(true);
     try {
+      const token = await getIdToken();
       const res = await fetch("/api/profiles", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           firstName,
           lastName,
@@ -1240,7 +1253,10 @@ function JoinScreen({ onBack, onSuccess, onError }: {
       }
 
       setIsGeneratingAI(true);
-      const aiRes = await fetch("/api/profiles/generate-ai", { method: "POST" });
+      const aiRes = await fetch("/api/profiles/generate-ai", { 
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setIsGeneratingAI(false);
 
       onSuccess?.();
@@ -1562,13 +1578,18 @@ function MyProfileScreen({
   onCreateClick: () => void;
   onRefresh?: () => void;
 }) {
+  const { getIdToken } = useAuth();
   const [expandedAbout, setExpandedAbout] = useState(false);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
   const handleRegenerateAI = async () => {
     setIsGeneratingAI(true);
     try {
-      await fetch("/api/profiles/generate-ai", { method: "POST" });
+      const token = await getIdToken();
+      await fetch("/api/profiles/generate-ai", { 
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       onRefresh?.();
     } catch (error) {
       console.error("Failed to regenerate AI profile");

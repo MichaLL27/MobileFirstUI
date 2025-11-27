@@ -60,8 +60,9 @@ ${stylePrompt}
 
   try {
     const openai = getOpenAIClient();
+    console.log("Sending request to OpenAI with model: gpt-4.1");
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4.1",
       messages: [{ role: "user", content: prompt }],
       response_format: { type: "json_object" },
       max_tokens: 1024,
