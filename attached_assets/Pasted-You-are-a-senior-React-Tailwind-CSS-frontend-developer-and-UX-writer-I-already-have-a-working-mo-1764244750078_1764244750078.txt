@@ -1,0 +1,203 @@
+You are a senior React + Tailwind CSS frontend developer and UX writer.
+
+I already have a working mobile-first React + Tailwind app called “AI Profile Directory” for low-tech jobs.
+The app includes these screens:
+- Directory (home search screen with filters and profile cards)
+- Filters bottom sheet
+- Create Your Profile (form + AI preview)
+- Profile View (public profile page)
+- My Profile (can be similar to Profile View)
+- Settings
+- Bottom navigation (Directory / Create / My Profile / Settings)
+
+GOAL:
+Create a full HEBREW version of the app, including:
+- All texts (titles, labels, placeholders, helper text, buttons)
+- Right-to-left layout (RTL)
+- Keeping the same structure and component layout, only adapting alignment and copy.
+
+Implementation requirements:
+
+1) RTL & global layout
+- On the main root container, set `dir="rtl"` and align content to the right.
+  Example: `<div dir="rtl" className="...">`
+- Use `text-right` on titles, labels and paragraphs where appropriate.
+- Keep the same spacing and card design, just flipped logically for RTL.
+- Do NOT change routes/state logic, only UI and text/alignment.
+
+2) Directory / Home screen (low-tech jobs)
+Change all text to Hebrew, simple and friendly:
+
+- App title: “פרופילים לעבודה”
+- Search placeholder: “חיפוש עובד לפי שם מלא”
+- “Join” button → “צור פרופיל”
+- Quick filter chips examples:
+  - “חשמלאי”
+  - “אינסטלטור”
+  - “ניקיון”
+  - “שליחויות”
+  - “בנייה”
+  - “טיפול בילדים”
+
+Example profile cards (in Hebrew):
+- Name: “רוני לוי”
+  Title: “חשמלאי מוסמך”
+  Subtitle: “תיקוני חשמל לבית ולעסק באזור המרכז.”
+- Name: “שרה כהן”
+  Title: “עוזרת בית”
+  Subtitle: “ניקיון קבוע למשפחות ומשרדים בתל אביב.”
+- Name: “אחמד נסאר”
+  Title: “נהג משלוחים”
+  Subtitle: “משלוחים באותו יום בתל אביב והסביבה.”
+
+Filters button:
+- Icon + label: “סינון”
+
+3) Filters bottom sheet
+All section titles and options should be in Hebrew:
+
+- Sheet title (if there is one): “סינון תוצאות”
+- Role → “תחום עבודה”
+  Chips:
+    - “חשמלאי”
+    - “אינסטלטור”
+    - “ניקיון”
+    - “נהג / שליח”
+    - “בנייה”
+    - “מטפל/ת בילדים”
+    - “אחר”
+
+- Location → label: “אזור עבודה”
+  Placeholder: “לדוגמה: תל אביב, חיפה, דרום הארץ”
+
+- Seniority → “ניסיון”
+  Chips:
+    - “עד שנה”
+    - “1–3 שנים”
+    - “3–5 שנים”
+    - “5+ שנים”
+
+- Work style → “אופן עבודה”
+  Chips:
+    - “הגעה לבית הלקוח”
+    - “במקום קבוע”
+    - “גמיש”
+
+Buttons:
+- “Clear all” → “נקה הכל”
+- “Apply filters” → “החלת סינון”
+
+4) Create Your Profile screen
+Translate all labels and placeholders, keep form structure:
+
+- Page title: “יצירת פרופיל”
+- Full Name:
+  Label: “שם מלא”
+  Placeholder: “לדוגמה: רוני לוי”
+
+- Current Role / Title:
+  Label: “תחום עבודה / תפקיד”
+  Placeholder: “לדוגמה: חשמלאי, אינסטלטור, עוזרת בית”
+
+- Location (Optional):
+  Label: “אזור עבודה (לא חובה)”
+  Placeholder: “לדוגמה: אזור תל אביב”
+
+- Business name (Optional):
+  Label: “שם העסק (לא חובה)”
+  Placeholder: “לדוגמה: רוני חשמל בע״מ”
+
+- Skills / Services:
+  Label: “שירותים / כישורים”
+  Placeholder:
+    “לדוגמה: תיקוני חשמל לבית, התקנת מזגנים, טיפול בתקלות חירום”
+
+- Background textarea:
+  Label: “רקע עליך (לא חובה)”
+  Placeholder:
+    “כתוב כמה משפטים או נקודות על הניסיון שלך, סוגי עבודות שאתה עושה, והאזור שבו אתה עובד. הבינה המלאכותית תהפוך את זה לתיאור מסודר בפרופיל שלך.”
+
+  Helper text under textarea:
+    “כל מה שתכתוב כאן ישמש את הבינה המלאכותית לכתוב עבורך את אזור 'עליי' בצורה פשוטה וברורה.”
+
+- AI preview title:
+  “תצוגת פרופיל שנוצרה בעזרת AI”
+
+- Generate button:
+  “✨ צור לי פרופיל בעזרת AI”
+
+- Helper text under button:
+  “המערכת תיצור עבורך תיאור מקצועי ברור לפי מה שמילאת בטופס.”
+
+5) Profile View screen (public profile)
+All text in Hebrew, RTL, right-aligned:
+
+- Top title: “פרופיל”
+- Name: e.g. “רוני לוי”
+- Role: “חשמלאי מוסמך”
+- Location line: “📍 חולון, ישראל”
+- Company line: “💼 רוני שירותי חשמל”
+
+- Small AI badge:
+  “הטקסט נכתב בעזרת בינה מלאכותית”
+
+- ABOUT title:
+  “עליי”
+- About paragraphs: use Hebrew demo text describing a low-tech worker, for example:
+  “אני חשמלאי מוסמך עם יותר מ-10 שנות ניסיון בתיקוני חשמל לבית ולעסק. מתמחה באיתור ותיקון תקלות, החלפת לוחות חשמל, התקנת גופי תאורה ועוד.
+   אני עובד בעיקר באזור המרכז, זמין לקריאות חירום במקרים דחופים, ושם דגש על יחס אישי והסבר ברור ללקוח.
+   חשוב לי להגיע בזמן, לעבוד בצורה בטוחה ומסודרת, ולהשאיר את המקום נקי אחרי העבודה.”
+
+- Skills title:
+  “שירותים עיקריים”
+- Skills chips examples:
+  - “תיקוני חשמל לבית”
+  - “החלפת לוחות חשמל”
+  - “התקנת תאורה”
+  - “קריאות חירום”
+  - “בדיקות תקינות”
+
+- Bottom primary button:
+  “שיתוף פרופיל”
+
+6) Settings screen
+Make the language simple Hebrew:
+
+- Screen title: “הגדרות”
+- Section titles:
+  - “חשבון”
+  - “פרופיל ו-AI”
+  - “פרטיות ותצוגה”
+  - “התראות”
+  - “על האפליקציה”
+
+- Example rows:
+  - “מצב פרופיל” → value: “אין לך עדיין פרופיל” + button “צור פרופיל”
+  - “שפת הפרופיל” → options: “עברית”, “אנגלית”
+  - “סגנון כתיבה של AI” → options: “פשוט”, “מפורט יותר”
+  - Privacy toggle label:
+    “הצג את הפרופיל שלי בחיפוש הציבורי”
+    Helper: “כשזה כבוי, הפרופיל שלך לא יופיע בתוצאות חיפוש.”
+
+- About app text:
+  “האפליקציה עוזרת לעובדים במקצועות יומיומיים ליצור פרופיל פשוט וברור, כדי שלקוחות יוכלו למצוא אותם בקלות.”
+
+- Danger zone button:
+  “מחיקת פרופיל”
+
+7) Bottom navigation labels
+Change tab labels to Hebrew:
+
+- “Directory” → “חיפוש”
+- “Create” → “יצירה”
+- “My Profile” → “הפרופיל שלי”
+- “Settings” → “הגדרות”
+
+Make sure icons stay the same, just RTL alignment and Hebrew labels.
+
+GENERAL:
+- Do not change component structure or logic.
+- Only:
+  - Add `dir="rtl"` and `text-right` where needed.
+  - Update all visible strings, placeholders, helper texts, and section titles into Hebrew as specified.
+  - Keep the low-tech professions examples everywhere.

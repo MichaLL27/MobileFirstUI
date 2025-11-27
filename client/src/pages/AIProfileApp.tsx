@@ -111,7 +111,7 @@ export default function AIProfileApp() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 flex justify-center font-sans text-slate-900">
+    <div dir="rtl" className="min-h-screen bg-slate-50/50 flex justify-center font-sans text-slate-900">
       {/* Mobile Container */}
       <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl shadow-slate-200/50 flex flex-col relative overflow-hidden pb-20">
         
@@ -183,7 +183,7 @@ export default function AIProfileApp() {
                 <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
               )}
               <span className="text-lg">👥</span>
-              <span className="text-[11px] font-medium">Directory</span>
+              <span className="text-[11px] font-medium">חיפוש</span>
             </button>
 
             {/* Create Tab */}
@@ -200,7 +200,7 @@ export default function AIProfileApp() {
                 <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
               )}
               <span className="text-lg">✨</span>
-              <span className="text-[11px] font-medium">Create</span>
+              <span className="text-[11px] font-medium">יצירה</span>
             </button>
 
             {/* My Profile Tab */}
@@ -217,7 +217,7 @@ export default function AIProfileApp() {
                 <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
               )}
               <span className="text-lg">👤</span>
-              <span className="text-[11px] font-medium">My Profile</span>
+              <span className="text-[11px] font-medium">הפרופיל שלי</span>
             </button>
 
             {/* Settings Tab */}
@@ -234,7 +234,7 @@ export default function AIProfileApp() {
                 <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
               )}
               <span className="text-lg">⚙️</span>
-              <span className="text-[11px] font-medium">Settings</span>
+              <span className="text-[11px] font-medium">הגדרות</span>
             </button>
           </div>
         </div>
@@ -266,10 +266,10 @@ function HomeScreen({
   const [selectedSeniority, setSelectedSeniority] = useState<string | null>(null);
   const [selectedWorkStyle, setSelectedWorkStyle] = useState<string[]>([]);
 
-  const quickFilterCategories = ["Electrician", "Plumber", "Cleaning", "Deliveries"];
-  const roleOptions = ["Electrician", "Plumber", "Cleaning", "Driving", "Construction", "Food service", "Child care", "Other"];
-  const seniorityOptions = ["Years 1-5", "Years 5-10", "Years 10+"];
-  const workStyleOptions = ["Comes to your home", "Works on-site", "Both"];
+  const quickFilterCategories = ["חשמלאי", "אינסטלטור", "ניקיון", "שליחויות"];
+  const roleOptions = ["חשמלאי", "אינסטלטור", "ניקיון", "נהג / שליח", "בנייה", "טיפול בילדים", "אחר"];
+  const seniorityOptions = ["עד שנה", "1–3 שנים", "3–5 שנים", "5+ שנים"];
+  const workStyleOptions = ["הגעה לבית הלקוח", "במקום קבוע", "גמיש"];
 
   const handleToggleQuickFilter = (filter: string) => {
     setSelectedQuickFilters((prev) =>
@@ -318,8 +318,8 @@ function HomeScreen({
     >
       {/* Top Bar */}
       <header className="flex items-center justify-between mb-6 pt-2">
-        <h1 className="text-xl font-bold tracking-tight text-slate-900">
-          Job Profiles
+        <h1 className="text-xl font-bold tracking-tight text-slate-900 text-right">
+          פרופילים לעבודה
         </h1>
         <Button 
           onClick={onJoinClick}
@@ -327,7 +327,7 @@ function HomeScreen({
           className="rounded-full px-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20"
           data-testid="button-join"
         >
-          Join
+          צור פרופיל
         </Button>
       </header>
 
@@ -340,7 +340,7 @@ function HomeScreen({
           <Input 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search workers by name"
+            placeholder="חיפוש עובד לפי שם מלא"
             className="pl-10 h-12 rounded-2xl border-slate-200 bg-slate-50/50 shadow-sm focus-visible:ring-primary/20 focus-visible:border-primary text-sm"
             data-testid="input-search"
           />
@@ -456,7 +456,7 @@ function HomeScreen({
 
                 {/* Role Filter */}
                 <section className="mb-6">
-                  <h3 className="text-sm font-semibold text-slate-900 mb-3">Role</h3>
+                  <h3 className="text-sm font-semibold text-slate-900 mb-3 text-right">תחום עבודה</h3>
                   <div className="flex flex-wrap gap-2">
                     {roleOptions.map((role) => (
                       <button
@@ -477,11 +477,11 @@ function HomeScreen({
 
                 {/* Location Filter */}
                 <section className="mb-6">
-                  <label className="text-sm font-semibold text-slate-900 mb-2 block">Location</label>
+                  <label className="text-sm font-semibold text-slate-900 mb-2 block text-right">אזור עבודה</label>
                   <Input
                     value={filterLocation}
                     onChange={(e) => setFilterLocation(e.target.value)}
-                    placeholder="e.g. Tel Aviv, Remote, Europe"
+                    placeholder="לדוגמה: תל אביב, חיפה, דרום הארץ"
                     className="h-10 rounded-lg border-slate-200 bg-slate-50 text-sm"
                     data-testid="filter-location"
                   />
@@ -489,7 +489,7 @@ function HomeScreen({
 
                 {/* Seniority Filter */}
                 <section className="mb-6">
-                  <h3 className="text-sm font-semibold text-slate-900 mb-3">Experience</h3>
+                  <h3 className="text-sm font-semibold text-slate-900 mb-3 text-right">ניסיון</h3>
                   <div className="flex flex-wrap gap-2">
                     {seniorityOptions.map((level) => (
                       <button
@@ -510,7 +510,7 @@ function HomeScreen({
 
                 {/* Work Style Filter */}
                 <section className="mb-8">
-                  <h3 className="text-sm font-semibold text-slate-900 mb-3">Work style</h3>
+                  <h3 className="text-sm font-semibold text-slate-900 mb-3 text-right">אופן עבודה</h3>
                   <div className="flex flex-wrap gap-2">
                     {workStyleOptions.map((style) => (
                       <button
@@ -536,14 +536,14 @@ function HomeScreen({
                     className="flex-1 px-4 py-3 rounded-lg text-sm font-semibold text-slate-700 bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-all"
                     data-testid="button-clear-filters"
                   >
-                    Clear all
+                    נקה הכל
                   </button>
                   <button
                     onClick={() => setShowFilters(false)}
                     className="flex-1 px-4 py-3 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all"
                     data-testid="button-apply-filters"
                   >
-                    Apply filters
+                    החלת סינון
                   </button>
                 </div>
               </div>
@@ -623,8 +623,8 @@ function ProfileScreen({
 
         {/* About Section */}
         <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4">
-            About
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right">
+            עליי
           </h3>
           <div className={`relative rounded-xl border border-slate-100 bg-[#F9FBFF] p-5 overflow-hidden ${!expandedAbout ? 'max-h-40' : ''}`}>
             <div className="space-y-3">
@@ -704,7 +704,7 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
         >
           <ArrowLeft className="h-6 w-6" />
         </button>
-        <span className="ml-2 font-medium text-slate-900">Create Your Profile</span>
+        <span className="ml-2 font-medium text-slate-900 text-right">יצירת פרופיל</span>
       </div>
 
       <div className="px-6 py-8 flex-1 flex flex-col">
@@ -712,18 +712,18 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
           {/* Form Fields */}
           <div className="space-y-5">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700">Full Name</label>
+              <label className="text-sm font-semibold text-slate-700 text-right block">שם מלא</label>
               <Input 
-                placeholder="e.g. Alex Morgan" 
+                placeholder="לדוגמה: רוני לוי" 
                 className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                 data-testid="input-join-name"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700">Current Role / Title</label>
+              <label className="text-sm font-semibold text-slate-700 text-right block">תחום עבודה / תפקיד</label>
               <Input 
-                placeholder="e.g. Electrician, Plumber, House Cleaner" 
+                placeholder="לדוגמה: חשמלאי, אינסטלטור, עוזרת בית" 
                 className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                 data-testid="input-join-role"
               />
@@ -731,17 +731,17 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Location <span className="text-slate-400 font-normal">(Optional)</span></label>
+                <label className="text-sm font-semibold text-slate-700 text-right block">אזור עבודה <span className="text-slate-400 font-normal">(לא חובה)</span></label>
                 <Input 
-                  placeholder="e.g. Tel Aviv area" 
+                  placeholder="לדוגמה: אזור תל אביב" 
                   className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                   data-testid="input-join-location"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Business name <span className="text-slate-400 font-normal">(Optional)</span></label>
+                <label className="text-sm font-semibold text-slate-700 text-right block">שם העסק <span className="text-slate-400 font-normal">(לא חובה)</span></label>
                 <Input 
-                  placeholder="e.g. Roni Electric Services" 
+                  placeholder="לדוגמה: רוני חשמל בע״מ" 
                   className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                   data-testid="input-join-company"
                 />
@@ -749,9 +749,9 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700">Skills / Services</label>
+              <label className="text-sm font-semibold text-slate-700 text-right block">שירותים / כישורים</label>
               <Input 
-                placeholder="e.g. Electrical repairs, AC installation, Emergency calls..." 
+                placeholder="לדוגמה: תיקוני חשמל לבית, התקנת מזגנים, טיפול בתקלות חירום" 
                 className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                 data-testid="input-join-skills"
               />
@@ -759,24 +759,24 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
 
             {/* Background Notes */}
             <div className="space-y-2">
-              <label className="text-xs font-medium text-slate-600">Your background (optional)</label>
+              <label className="text-xs font-medium text-slate-600 text-right block">רקע עליך (לא חובה)</label>
               <textarea
                 value={backgroundNotes}
                 onChange={(e) => setBackgroundNotes(e.target.value)}
-                placeholder="Write a few sentences about what you do, how many years you've been working, and what services you offer. The AI will turn it into a clear description for your profile."
+                placeholder="כתוב כמה משפטים או נקודות על הניסיון שלך, סוגי עבודות שאתה עושה, והאזור שבו אתה עובד. הבינה המלאכותית תהפוך את זה לתיאור מסודר בפרופיל שלך."
                 className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary resize-none min-h-24"
                 data-testid="textarea-join-background"
               />
-              <p className="text-xs text-slate-500">
-                Anything you write here will be used by AI to explain your work in simple, professional words.
+              <p className="text-xs text-slate-500 text-right">
+                כל מה שתכתוב כאן ישמש את הבינה המלאכותית לכתוב עבורך את אזור 'עליי' בצורה פשוטה וברורה.
               </p>
             </div>
           </div>
 
           {/* AI Preview Card */}
           <div className="mt-6 mb-4">
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">
-              AI-Generated Profile Preview
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right">
+              תצוגת פרופיל שנוצרה בעזרת AI
             </h3>
             <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 shadow-sm relative overflow-hidden">
                {/* Skeleton UI */}
@@ -814,10 +814,10 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
               data-testid="button-generate-profile"
             >
               <span className="mr-2 text-xl">✨</span>
-              Generate My Profile with AI
+              צור לי פרופיל בעזרת AI
             </Button>
             <p className="text-center text-xs text-slate-400">
-              AI will instantly generate a polished professional profile for you.
+              המערכת תיצור עבורך תיאור מקצועי ברור לפי מה שמילאת בטופס.
             </p>
           </div>
         </form>
@@ -995,8 +995,8 @@ function MyProfileScreen({
 
         {/* About Section */}
         <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4">
-            About
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right">
+            עליי
           </h3>
           <div className={`relative rounded-xl border border-slate-100 bg-[#F9FBFF] p-5 overflow-hidden ${!expandedAbout ? 'max-h-40' : ''}`}>
             <div className="space-y-3">
@@ -1018,8 +1018,8 @@ function MyProfileScreen({
 
         {/* Skills Section */}
         <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4">
-            Services
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right">
+            שירותים עיקריים
           </h3>
           <div className="flex flex-wrap gap-2">
             {["Home electrical repairs", "Short-circuit fixing", "Lighting installation", "Electric panel upgrades", "Emergency calls"].map((skill) => (
@@ -1084,10 +1084,10 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
           
           {/* Section 1: Account */}
           <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">Account</h3>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right">חשבון</h3>
             <div className="bg-white rounded-xl border border-slate-100 px-4 py-3 space-y-1">
               <div className="flex items-center justify-between">
-                <p className="text-sm text-slate-800 font-medium">Profile status</p>
+                <p className="text-sm text-slate-800 font-medium text-right">מצב פרופיל</p>
                 <button 
                   className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
                   data-testid="button-create-profile"
