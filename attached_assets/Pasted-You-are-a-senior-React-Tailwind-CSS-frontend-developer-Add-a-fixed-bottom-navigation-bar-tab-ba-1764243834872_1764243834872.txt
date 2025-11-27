@@ -1,0 +1,49 @@
+You are a senior React + Tailwind CSS frontend developer.
+
+Add a fixed bottom navigation bar (tab bar) to the AI Profile Directory app.
+
+Tech:
+- React + Tailwind CSS
+- Mobile-first layout (max-width around 420–480px, centered)
+- Do NOT use <Link> or React Router. Use simple buttons/divs and React state to switch screens.
+
+Requirements:
+
+1) Bottom Nav Layout
+- Fixed to the bottom of the viewport on mobile.
+- Full-width bar with a light background (e.g. white with subtle top border).
+- Inside, use a 3-tab or 4-tab layout (flex, space-between).
+
+Tabs:
+- Tab 1: "Directory" with an icon (e.g. 👥 or a simple SVG).
+- Tab 2: "Create" with an icon (e.g. ✨ or ➕).
+- Tab 3: "My Profile" with an icon (👤).
+- Optional Tab 4: "Settings" with an icon (⚙️).
+
+2) Visual Style
+- Each tab should be:
+  - A vertical stack: icon on top, label below.
+  - Small, clean font: `text-[11px] text-slate-600`.
+- The active tab should be clearly highlighted:
+  - Icon and label in blue (`text-blue-600`).
+  - Optional small rounded indicator above the icon (a 3–4px blue dot).
+
+3) Interaction
+- Use React state like:
+  `const [activeTab, setActiveTab] = useState<'directory' | 'create' | 'profile' | 'settings'>('directory');`
+- When a tab is pressed:
+  - Update `activeTab`.
+  - Conditionally render the corresponding screen above the bottom nav:
+    - 'directory' → existing home/search screen
+    - 'create' → existing "Create Your Profile" screen
+    - 'profile' → existing Profile View (for now, can show a demo profile or “You don’t have a profile yet”)
+    - 'settings' → simple placeholder screen with “Settings coming soon”
+
+4) Layout integration
+- Wrap the whole app content in a container that has bottom padding so the content does not go under the nav bar (e.g. `pb-20`).
+- Make sure the bottom nav stays visible while scrolling.
+
+Focus on:
+- Clean, minimal mobile app feeling.
+- Smooth tab switching using state (no routing).
+- Re-using the existing screens for Directory, Create Profile, and Profile View.

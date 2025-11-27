@@ -68,6 +68,7 @@ const MOCK_PROFILES: Profile[] = [
 ];
 
 export default function AIProfileApp() {
+  const [activeTab, setActiveTab] = useState<"directory" | "create" | "profile" | "settings">("directory");
   const [activeScreen, setActiveScreen] = useState<Screen>("home");
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -99,10 +100,19 @@ export default function AIProfileApp() {
     setActiveScreen("searchResults");
   };
 
+  const handleTabChange = (tab: "directory" | "create" | "profile" | "settings") => {
+    setActiveTab(tab);
+    if (tab === "directory") {
+      setActiveScreen("home");
+    } else if (tab === "create") {
+      setActiveScreen("join");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50/50 flex justify-center font-sans text-slate-900">
       {/* Mobile Container */}
-      <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl shadow-slate-200/50 flex flex-col relative overflow-hidden">
+      <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl shadow-slate-200/50 flex flex-col relative overflow-hidden pb-20">
         
         <AnimatePresence mode="wait">
           {activeScreen === "home" && (
@@ -139,8 +149,91 @@ export default function AIProfileApp() {
               onProfileClick={handleProfileClick}
             />
           )}
+
+          {activeTab === "profile" && activeScreen !== "profile" && (
+            <MyProfileScreen 
+              key="myProfile"
+              demoProfile={MOCK_PROFILES[0]}
+            />
+          )}
+
+          {activeTab === "settings" && (
+            <SettingsScreen key="settings" />
+          )}
         </AnimatePresence>
 
+        {/* Bottom Navigation */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 shadow-lg max-w-[480px] mx-auto w-full">
+          <div className="flex justify-around items-center h-20">
+            {/* Directory Tab */}
+            <button
+              onClick={() => handleTabChange("directory")}
+              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-colors relative ${
+                activeTab === "directory"
+                  ? "text-primary"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+              data-testid="tab-directory"
+            >
+              {activeTab === "directory" && (
+                <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
+              )}
+              <span className="text-lg">👥</span>
+              <span className="text-[11px] font-medium">Directory</span>
+            </button>
+
+            {/* Create Tab */}
+            <button
+              onClick={() => handleTabChange("create")}
+              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-colors relative ${
+                activeTab === "create"
+                  ? "text-primary"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+              data-testid="tab-create"
+            >
+              {activeTab === "create" && (
+                <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
+              )}
+              <span className="text-lg">✨</span>
+              <span className="text-[11px] font-medium">Create</span>
+            </button>
+
+            {/* My Profile Tab */}
+            <button
+              onClick={() => handleTabChange("profile")}
+              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-colors relative ${
+                activeTab === "profile"
+                  ? "text-primary"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+              data-testid="tab-profile"
+            >
+              {activeTab === "profile" && (
+                <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
+              )}
+              <span className="text-lg">👤</span>
+              <span className="text-[11px] font-medium">My Profile</span>
+            </button>
+
+            {/* Settings Tab */}
+            <button
+              onClick={() => handleTabChange("settings")}
+              className={`flex flex-col items-center justify-center gap-1 flex-1 py-3 transition-colors relative ${
+                activeTab === "settings"
+                  ? "text-primary"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+              data-testid="tab-settings"
+            >
+              {activeTab === "settings" && (
+                <div className="absolute top-1 w-1.5 h-1.5 rounded-full bg-primary" />
+              )}
+              <span className="text-lg">⚙️</span>
+              <span className="text-[11px] font-medium">Settings</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -841,6 +934,137 @@ function SearchResultsScreen({
             </p>
           </div>
         )}
+      </div>
+    </motion.div>
+  );
+}
+
+function MyProfileScreen({
+  demoProfile,
+}: {
+  demoProfile: Profile;
+}) {
+  const [expandedAbout, setExpandedAbout] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.2 }}
+      className="flex flex-col h-full bg-white overflow-y-auto"
+    >
+      <div className="px-6 pb-8 pt-6">
+        {/* Hero Profile Block */}
+        <div className="flex flex-col items-center text-center mb-8">
+          <Avatar className="h-28 w-28 mb-5 shadow-xl shadow-slate-200/80">
+            <AvatarFallback className="bg-slate-100 text-slate-700 text-3xl font-bold tracking-tight">
+              {demoProfile.initials}
+            </AvatarFallback>
+          </Avatar>
+          
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <h2 className="text-2xl font-bold text-slate-900">
+              {demoProfile.firstName} {demoProfile.lastName}
+            </h2>
+          </div>
+          
+          <Badge className="mb-3 bg-blue-50 text-blue-700 border-blue-200 text-xs font-medium">
+            ✨ AI-generated profile
+          </Badge>
+          
+          <p className="text-base text-primary font-medium mb-4">
+            {demoProfile.role}
+          </p>
+
+          <div className="flex flex-col items-center gap-1.5 text-sm text-slate-500">
+            <div className="flex items-center gap-1.5">
+              <span>📍</span>
+              <span>Tel Aviv, Israel</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span>💼</span>
+              <span>Independent / Freelance</span>
+            </div>
+          </div>
+        </div>
+
+        {/* About Section */}
+        <section className="mb-8">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4">
+            About
+          </h3>
+          <div className={`relative rounded-xl border border-slate-100 bg-[#F9FBFF] p-5 overflow-hidden ${!expandedAbout ? 'max-h-40' : ''}`}>
+            <div className="space-y-3">
+              {demoProfile.about.split('\n').map((paragraph, idx) => (
+                <p key={idx} className="text-sm text-slate-700 leading-relaxed text-left">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            {!expandedAbout && (
+              <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#F9FBFF] to-transparent pointer-events-none" />
+            )}
+          </div>
+          <button
+            onClick={() => setExpandedAbout(!expandedAbout)}
+            className="mt-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+          >
+            {expandedAbout ? "Show less" : "Read more"}
+          </button>
+        </section>
+
+        {/* Skills Section */}
+        <section className="mb-8">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4">
+            Skills
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {demoProfile.skills.map((skill) => (
+              <span 
+                key={skill} 
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        {/* Action Buttons */}
+        <div className="mt-auto pt-6 space-y-3">
+          <Button 
+            className="w-full h-12 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
+          >
+            Share profile
+          </Button>
+          <button
+            className="w-full h-10 text-sm font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-all"
+          >
+            Edit profile
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function SettingsScreen() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.2 }}
+      className="flex flex-col h-full bg-white overflow-y-auto"
+    >
+      <div className="px-6 py-8 flex-1 flex flex-col items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">⚙️</div>
+          <h2 className="text-2xl font-bold text-slate-900 mb-2">Settings</h2>
+          <p className="text-slate-500">Coming soon</p>
+          <p className="text-sm text-slate-400 mt-4">Settings and preferences will be available soon.</p>
+        </div>
       </div>
     </motion.div>
   );
