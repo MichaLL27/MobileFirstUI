@@ -20,21 +20,59 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Debug endpoint to check configuration (without exposing secrets)
+app.get('/api/debug-config', (req, res) => {
+  try {
+    const fbKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
+    let parsedKey: any = null;
+    let parseError = null;
+    
+    if (fbKey) {
+      try {
+        let cleanJson = fbKey;
+        if (cleanJson.startsWith('"') && cleanJson.endsWith('"')) {
+          cleanJson = JSON.parse(cleanJson);
+        }
+        parsedKey = JSON.parse(cleanJson);
+      } catch (e: any) {
+        parseError = e.message;
+      }
+    }
+
+    res.json({
+      env: process.env.NODE_ENV,
+      hasFirebaseKey: !!fbKey,
+      keyLength: fbKey?.length || 0,
+      keyParseError: parseError,
+      hasPrivateKey: !!parsedKey?.private_key,
+      hasClientEmail: !!parsedKey?.client_email,
+      hasOpenAIKey: !!process.env.OPENAI_API_KEY,
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Initialize routes lazily
 let routesInitialized = false;
 
 export default async function handler(req: any, res: any) {
-  if (!routesInitialized) {
-    console.log("Initializing routes...");
-    try {
+  try {
+    if (!routesInitialized) {
+      console.log("Initializing routes...");
       await registerRoutes(httpServer, app);
       routesInitialized = true;
       console.log("Routes initialized successfully");
-    } catch (error) {
-      console.error("Failed to initialize routes:", error);
-      return res.status(500).json({ message: "Failed to initialize server" });
     }
+    
+    return app(req, res);
+  } catch (error: any) {
+    console.error("Top-level server error:", error);
+    // Return JSON error instead of crashing to avoid "Unexpected token A"
+    res.status(500).json({ 
+      message: "Internal Server Error", 
+      details: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
-  
-  return app(req, res);
 }
