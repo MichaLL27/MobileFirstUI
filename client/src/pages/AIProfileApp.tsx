@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ArrowLeft, Share2, UserPlus, CheckCircle2, Filter, X, ChevronDown, Bell, Edit2, AlertCircle } from "lucide-react";
+import { Search, ArrowLeft, Share2, UserPlus, CheckCircle2, Filter, X, ChevronDown, Bell, Edit2, AlertCircle, Wifi, WifiOff, AlertTriangle, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,6 +22,132 @@ interface Profile {
   skills: string[];
   avatarUrl?: string;
   initials: string;
+}
+
+// --- Loading Spinner Component ---
+function LoadingSpinner({ message }: { message: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+        className="mb-4"
+      >
+        <Loader className="h-10 w-10 text-primary" />
+      </motion.div>
+      <p className="text-sm text-slate-600 text-right">{message}</p>
+    </div>
+  );
+}
+
+// --- Skeleton Loading Component ---
+function SkeletonCard() {
+  return (
+    <div className="bg-slate-100 rounded-xl p-4 space-y-3 animate-pulse">
+      <div className="flex gap-4">
+        <div className="h-12 w-12 rounded-full bg-slate-200" />
+        <div className="flex-1 space-y-2">
+          <div className="h-4 w-24 bg-slate-200 rounded" />
+          <div className="h-3 w-32 bg-slate-200 rounded" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- Error State Component ---
+function ErrorState({ 
+  icon: Icon, 
+  title, 
+  subtitle, 
+  onRetry 
+}: { 
+  icon: React.ReactNode; 
+  title: string; 
+  subtitle: string; 
+  onRetry?: () => void;
+}) {
+  return (
+    <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center">
+      <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-6">
+        {Icon}
+      </div>
+      <h3 className="text-lg font-bold text-slate-900 mb-2 text-right">{title}</h3>
+      <p className="text-sm text-slate-500 mb-6 text-right">{subtitle}</p>
+      {onRetry && (
+        <button
+          onClick={onRetry}
+          className="px-6 py-2.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors"
+          data-testid="button-retry"
+        >
+          נסה שוב
+        </button>
+      )}
+    </div>
+  );
+}
+
+// --- Authentication Screen Component ---
+function AuthScreen({ onContinue }: { onContinue: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="w-full max-w-[480px] h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col items-center justify-center p-6 text-center pt-12"
+    >
+      <div className="flex-1 flex flex-col items-center justify-center space-y-8">
+        {/* Logo / Branding */}
+        <div className="space-y-4">
+          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
+            <span className="text-4xl">👥</span>
+          </div>
+          <h1 className="text-3xl font-bold text-slate-900 text-right">פרופילים לעבודה</h1>
+          <p className="text-sm text-slate-600 text-right">
+            מצא עובדים מוכשרים או הציג את הפרופיל שלך
+          </p>
+        </div>
+
+        {/* Features List */}
+        <div className="space-y-3 w-full">
+          <div className="flex gap-3 items-start text-right">
+            <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <span className="text-sm text-slate-700">חיפוש קל של עובדים בכל תחום</span>
+          </div>
+          <div className="flex gap-3 items-start text-right">
+            <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <span className="text-sm text-slate-700">יצירת פרופיל בדקות ספורות</span>
+          </div>
+          <div className="flex gap-3 items-start text-right">
+            <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+            <span className="text-sm text-slate-700">AI עוזר בכתיבת הפרופיל שלך</span>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Buttons */}
+      <div className="w-full space-y-3 pb-8">
+        <button
+          onClick={onContinue}
+          className="w-full py-3 px-4 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+          data-testid="button-continue-google"
+        >
+          המשך עם Google
+        </button>
+        <button
+          onClick={onContinue}
+          className="w-full py-3 px-4 bg-black text-white font-semibold rounded-lg hover:bg-slate-900 transition-colors"
+          data-testid="button-continue-apple"
+        >
+          המשך עם Apple
+        </button>
+        <p className="text-xs text-slate-500 text-right pt-2">
+          בהמשך, אתה מסכים לתנאי השימוש שלנו
+        </p>
+      </div>
+    </motion.div>
+  );
 }
 
 // --- Toast Component ---
@@ -271,6 +397,10 @@ export default function AIProfileApp() {
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [hasProfile, setHasProfile] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasInternet, setHasInternet] = useState(true);
+  const [errorState, setErrorState] = useState<"none" | "noInternet" | "serverError">("none");
 
   // Derived state
   const filteredProfiles = MOCK_PROFILES.filter((p) => {
@@ -307,10 +437,43 @@ export default function AIProfileApp() {
     }
   };
 
+  // Show auth screen if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div dir="rtl" className="min-h-screen bg-slate-50 flex justify-center font-sans text-slate-900">
+        <AuthScreen onContinue={() => setIsAuthenticated(true)} />
+      </div>
+    );
+  }
+
   return (
     <div dir="rtl" className="min-h-screen bg-slate-50/50 flex justify-center font-sans text-slate-900">
       {/* Mobile Container */}
       <div className="w-full max-w-[480px] bg-white min-h-screen shadow-2xl shadow-slate-200/50 flex flex-col relative overflow-hidden pb-20">
+        
+        {/* Error Banner */}
+        {errorState === "noInternet" && (
+          <motion.div
+            initial={{ y: -100 }}
+            animate={{ y: 0 }}
+            className="fixed top-0 left-0 right-0 max-w-[480px] mx-auto bg-red-50 border-b border-red-200 px-4 py-3 flex items-center gap-2 z-50"
+            data-testid="banner-no-internet"
+          >
+            <WifiOff className="h-5 w-5 text-red-600 flex-shrink-0" />
+            <span className="text-sm font-medium text-red-700 text-right flex-1">אין חיבור לאינטרנט</span>
+          </motion.div>
+        )}
+        {errorState === "serverError" && (
+          <motion.div
+            initial={{ y: -100 }}
+            animate={{ y: 0 }}
+            className="fixed top-0 left-0 right-0 max-w-[480px] mx-auto bg-yellow-50 border-b border-yellow-200 px-4 py-3 flex items-center gap-2 z-50"
+            data-testid="banner-server-error"
+          >
+            <AlertTriangle className="h-5 w-5 text-yellow-600 flex-shrink-0" />
+            <span className="text-sm font-medium text-yellow-700 text-right flex-1">בעיה בטעינה, נסה שוב</span>
+          </motion.div>
+        )}
         
         <AnimatePresence mode="wait">
           {activeTab === "settings" && (
@@ -354,6 +517,13 @@ export default function AIProfileApp() {
             <JoinScreen 
               key="join"
               onBack={handleBack}
+              onSaveClick={() => {
+                setIsLoading(true);
+                setTimeout(() => {
+                  setIsLoading(false);
+                  setToast({ message: "הפרופיל נשמר בהצלחה", type: "success" });
+                }, 2000);
+              }}
             />
           )}
 
@@ -458,6 +628,21 @@ export default function AIProfileApp() {
         <AnimatePresence>
           {toast && (
             <Toast message={toast.message} type={toast.type} />
+          )}
+        </AnimatePresence>
+
+        {/* Global Loading Overlay */}
+        <AnimatePresence>
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/10 flex items-center justify-center z-40 max-w-[480px]"
+              data-testid="loading-overlay"
+            >
+              <LoadingSpinner message="יוצר את הפרופיל שלך..." />
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
@@ -920,7 +1105,7 @@ function ProfileScreen({
   );
 }
 
-function JoinScreen({ onBack }: { onBack: () => void }) {
+function JoinScreen({ onBack, onSaveClick }: { onBack: () => void; onSaveClick?: () => void; }) {
   const [backgroundNotes, setBackgroundNotes] = useState("");
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [fullName, setFullName] = useState("");
