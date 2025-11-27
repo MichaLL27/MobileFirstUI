@@ -1,0 +1,81 @@
+You are a senior React + Tailwind CSS frontend developer.
+
+Design a MOBILE-FIRST “Settings” screen for my app (AI Profile Directory for low-tech jobs).
+
+Tech:
+- React + Tailwind CSS
+- Mobile-first layout (max-width around 420–480px, centered)
+- Do NOT use <Link> or React Router. Use simple buttons/divs with onClick placeholders.
+- There is already a bottom navigation bar (Directory / Create / My Profile / Settings), so add enough bottom padding so content doesn’t hide behind it.
+
+Screen layout:
+
+1) Top Bar
+- At the top, add a simple header:
+  - Left: back button “←” with onClick placeholder.
+  - Center/Right: title “Settings”.
+- Light background, no heavy border.
+
+2) Section 1: Account
+- Card-style block with title “Account”.
+- Inside the card:
+  - Row with:
+    - Left: label “Profile status”
+    - Middle: value text, e.g. “No profile yet” (for now, hard-coded).
+    - Right: small primary text button “Create profile”.
+  - Small helper text under row:
+    - “Manage your profile and account details.”
+- Use `rounded-xl bg-white shadow-sm px-4 py-3 space-y-1`.
+
+3) Section 2: Profile & AI
+- Title: “Profile & AI”.
+- Card with:
+  - Row: “Profile language”
+    - Right side: simple segmented control with two options: “English”, “Hebrew”.
+    - Use state to highlight the selected one (blue background, white text).
+  - Row: “AI writing style”
+    - Small pills: “Simple” and “More detailed”.
+    - Tapping a pill selects it (state, blue highlight).
+  - At the bottom of this card, add a full-width outline button:
+    - Label: “Regenerate my profile with AI”
+    - Just a button with onClick placeholder, no logic.
+
+4) Section 3: Privacy & visibility
+- Title: “Privacy & visibility”.
+- Card with:
+  - Row:
+    - Left: label “Show my profile in public directory”.
+    - Right: toggle switch (use a rounded div with a circle inside, controlled by state).
+  - Small helper text below:
+    - “When this is off, your profile will not appear in search results.”
+
+5) Section 4: Notifications (placeholder)
+- Title: “Notifications”.
+- Card with two rows, each with label + toggle:
+  - “Email me when someone views my profile”
+  - “Send tips to improve my profile”
+- Toggles are UI only (local state).
+
+6) Section 5: About the app
+- Small card at the bottom:
+  - Title: “About this app”
+  - Short description (2–3 lines), e.g.:
+    “This app helps workers in everyday jobs create a simple profile so people can find and contact them.”
+  - Small muted text line: “Version 0.1.0”
+  - Text button: “Send feedback”.
+
+7) Danger zone
+- At the very bottom of the screen, centered:
+  - Small red text button: “Delete my profile” (no real functionality yet).
+
+Styling:
+- Use vertical spacing between sections: `className="space-y-6"` or `mt-6`.
+- Cards: `rounded-xl bg-white shadow-sm border border-slate-100`.
+- Labels: `text-sm text-slate-800`.
+- Helper text: `text-xs text-slate-500`.
+- Add `className="pb-24"` to the main container so content doesn’t hide behind the bottom nav.
+
+Focus on:
+- Clean, simple, friendly design for low-tech users.
+- Safe, readable spacing and typography on mobile.
+- Only UI and local state for toggles and selected options, no real backend logic.

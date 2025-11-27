@@ -1053,12 +1053,11 @@ function MyProfileScreen({
 
 function SettingsScreen({ onBack }: { onBack: () => void }) {
   // State management
-  const [selectedStyle, setSelectedStyle] = useState<"professional" | "friendly" | "short">("professional");
+  const [selectedLanguage, setSelectedLanguage] = useState<"english" | "hebrew">("english");
+  const [selectedStyle, setSelectedStyle] = useState<"professional" | "friendly">("professional");
   const [isPublic, setIsPublic] = useState(true);
   const [emailViews, setEmailViews] = useState(false);
   const [emailTips, setEmailTips] = useState(true);
-
-  const styles = ["professional", "friendly", "short"] as const;
 
   return (
     <motion.div
@@ -1080,26 +1079,24 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
         <span className="ml-2 font-medium text-slate-900">Settings</span>
       </div>
 
-      <div className="px-6 py-6 flex-1 flex flex-col pb-8">
+      <div className="px-6 py-6 flex-1 flex flex-col pb-24">
         <div className="space-y-6">
           
           {/* Section 1: Account */}
           <section>
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">Account</h3>
-            <div className="bg-white rounded-xl border border-slate-100 p-4 space-y-4">
+            <div className="bg-white rounded-xl border border-slate-100 px-4 py-3 space-y-1">
               <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-slate-900">Profile status</p>
-                  <p className="text-sm text-slate-600">Profile: Roni Levi</p>
-                </div>
+                <p className="text-sm text-slate-800 font-medium">Profile status</p>
                 <button 
                   className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-                  data-testid="button-view-profile"
+                  data-testid="button-create-profile"
                 >
-                  View
+                  Create profile
                 </button>
               </div>
-              <p className="text-xs text-slate-500">Manage your profile and account details.</p>
+              <p className="text-sm text-slate-600">No profile yet</p>
+              <p className="text-xs text-slate-500 pt-1">Manage your profile and account details.</p>
             </div>
           </section>
 
@@ -1113,13 +1110,23 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
                 <label className="text-sm font-medium text-slate-900">Profile language</label>
                 <div className="flex gap-2">
                   <button 
-                    className="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+                    onClick={() => setSelectedLanguage("english")}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      selectedLanguage === "english"
+                        ? "bg-primary text-white"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    }`}
                     data-testid="button-language-english"
                   >
                     English
                   </button>
                   <button 
-                    className="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+                    onClick={() => setSelectedLanguage("hebrew")}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      selectedLanguage === "hebrew"
+                        ? "bg-primary text-white"
+                        : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    }`}
                     data-testid="button-language-hebrew"
                   >
                     Hebrew
@@ -1205,14 +1212,14 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
             </div>
           </section>
 
-          {/* Section 5: About */}
+          {/* Section 5: About the app */}
           <section>
             <div className="bg-slate-50 rounded-xl border border-slate-100 p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-slate-900">About Job Profiles</h3>
+              <h3 className="text-sm font-semibold text-slate-900">About this app</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                This app helps workers in everyday jobs create a clear profile so people can find and contact them.
+                This app helps workers in everyday jobs create a simple profile so people can find and contact them.
               </p>
-              <p className="text-xs text-slate-400">Version 0.1.0</p>
+              <p className="text-xs text-slate-500">Version 0.1.0</p>
               <button 
                 className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
                 data-testid="button-send-feedback"
@@ -1223,7 +1230,7 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
           </section>
 
           {/* Danger Zone */}
-          <section className="pt-4">
+          <section className="pt-4 pb-8 text-center">
             <button 
               className="text-sm font-medium text-red-600 hover:text-red-700 transition-colors"
               data-testid="button-delete-profile"
