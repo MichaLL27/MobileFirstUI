@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import { createServer } from "http";
 
+import { registerRoutes } from "./_lib/routes";
+
 // NOTE: We do NOT import registerRoutes here statically.
 // We import it dynamically inside the handler to prevent top-level crashes
 // from taking down the entire function without logs.
@@ -43,11 +45,9 @@ let routesInitialized = false;
 export default async function handler(req: any, res: any) {
   try {
     if (!routesInitialized) {
-      console.log("Initializing routes dynamically...");
+      console.log("Initializing routes...");
       
-      // Dynamic import to catch initialization errors
-      const routeModule = await import("./_lib/routes");
-      await routeModule.registerRoutes(httpServer, app);
+      await registerRoutes(httpServer, app);
       
       routesInitialized = true;
       console.log("Routes initialized successfully");
