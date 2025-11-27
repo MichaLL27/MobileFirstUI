@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ArrowLeft, Share2, UserPlus, CheckCircle2, Filter, X } from "lucide-react";
+import { Search, ArrowLeft, Share2, UserPlus, CheckCircle2, Filter, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 
 // --- Types ---
-type Screen = "home" | "profile" | "join";
+type Screen = "home" | "profile" | "join" | "searchResults";
 
 interface Profile {
   id: string;
@@ -71,6 +71,7 @@ export default function AIProfileApp() {
   const [activeScreen, setActiveScreen] = useState<Screen>("home");
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Derived state
   const filteredProfiles = MOCK_PROFILES.filter((p) => {
@@ -91,6 +92,11 @@ export default function AIProfileApp() {
 
   const handleJoinClick = () => {
     setActiveScreen("join");
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setActiveScreen("searchResults");
   };
 
   return (
@@ -122,6 +128,15 @@ export default function AIProfileApp() {
             <JoinScreen 
               key="join"
               onBack={handleBack}
+            />
+          )}
+
+          {activeScreen === "searchResults" && (
+            <SearchResultsScreen
+              key="searchResults"
+              searchQuery={searchQuery}
+              onBack={handleBack}
+              onProfileClick={handleProfileClick}
             />
           )}
         </AnimatePresence>
@@ -680,6 +695,123 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
             </p>
           </div>
         </form>
+      </div>
+    </motion.div>
+  );
+}
+
+function SearchResultsScreen({
+  searchQuery,
+  onBack,
+  onProfileClick,
+}: {
+  searchQuery: string;
+  onBack: () => void;
+  onProfileClick: (profile: Profile) => void;
+}) {
+  const [sortBy, setSortBy] = useState("Relevance");
+
+  // Filter results by search query
+  const searchResults = MOCK_PROFILES.filter((p) => {
+    const fullName = `${p.firstName} ${p.lastName}`.toLowerCase();
+    return fullName.includes(searchQuery.toLowerCase());
+  });
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.2 }}
+      className="flex flex-col h-full bg-white overflow-y-auto"
+    >
+      {/* Header */}
+      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md px-6 py-4 flex items-center gap-3">
+        <button
+          onClick={onBack}
+          className="p-2 -ml-2 rounded-full hover:bg-slate-50 text-slate-600 transition-colors"
+          data-testid="button-back-search"
+        >
+          <ArrowLeft className="h-6 w-6" />
+        </button>
+        <span className="font-semibold text-slate-900">Search results</span>
+      </div>
+
+      <div className="px-6 pb-6 flex-1 flex flex-col">
+        {/* Search Summary */}
+        <p className="text-xs text-slate-500 mb-4">
+          Showing {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'} for '{searchQuery}'
+        </p>
+
+        {/* Filter Bar */}
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-slate-600">Sort by</span>
+            <button
+              className="flex items-center gap-1 text-sm text-slate-700 hover:text-slate-900 transition-colors"
+              data-testid="button-sort"
+            >
+              {sortBy}
+              <ChevronDown className="h-4 w-4" />
+            </button>
+          </div>
+          <button
+            onClick={onBack}
+            className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+            data-testid="button-clear-search"
+          >
+            Clear search
+          </button>
+        </div>
+
+        {/* Results List */}
+        {searchResults.length > 0 ? (
+          <div className="space-y-4 flex-1">
+            {searchResults.map((profile) => (
+              <div
+                key={profile.id}
+                onClick={() => onProfileClick(profile)}
+                className="group cursor-pointer bg-white rounded-xl p-4 border border-slate-100 shadow-sm hover:shadow-md hover:border-primary/10 transition-all duration-200 active:scale-[0.98]"
+                data-testid={`card-search-result-${profile.id}`}
+              >
+                <div className="flex items-start gap-4">
+                  <Avatar className="h-12 w-12 border-2 border-white shadow-sm flex-shrink-0">
+                    <AvatarFallback className="bg-slate-100 text-slate-600 font-semibold text-sm">
+                      {profile.initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-bold text-slate-900 text-base leading-tight group-hover:text-primary transition-colors">
+                      {profile.firstName} {profile.lastName}
+                    </h3>
+                    <p className="text-sm font-medium text-slate-500 mb-1">
+                      {profile.role}
+                    </p>
+                    <p className="text-sm text-slate-600 mb-2 line-clamp-1">
+                      {profile.summary}
+                    </p>
+                    <p className="text-xs text-slate-500 flex items-center gap-1">
+                      <span>📍</span>
+                      <span>Tel Aviv, Israel</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center">
+            <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+              <Search className="h-8 w-8 text-slate-400" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 mb-1">
+              No profiles found
+            </h3>
+            <p className="text-sm text-slate-500">
+              Try a different name or adjust your filters.
+            </p>
+          </div>
+        )}
       </div>
     </motion.div>
   );

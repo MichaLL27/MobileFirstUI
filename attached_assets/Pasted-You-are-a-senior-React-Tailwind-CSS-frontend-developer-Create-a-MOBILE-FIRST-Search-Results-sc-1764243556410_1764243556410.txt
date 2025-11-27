@@ -1,0 +1,55 @@
+You are a senior React + Tailwind CSS frontend developer.
+
+Create a MOBILE-FIRST "Search Results" screen for the AI Profile Directory app.
+
+Tech:
+- React + Tailwind CSS
+- Mobile-first layout (max-width around 420–480px, centered)
+- Do NOT use <Link> or React Router. Use buttons/divs with onClick placeholders only.
+- Assume this screen will be shown after a search on the home screen.
+
+Design requirements:
+
+1) Header Row
+- At the top, create a small header bar with:
+  - A back button on the left (“←”) to go back to the main search screen (use onClick placeholder).
+  - A title: “Search results”.
+- Keep it minimal, no heavy borders.
+
+2) Search Summary
+- Below the header, show a small summary line:
+  - Example: “Showing 8 results for ‘dor’”
+- This should use small, muted text: `text-xs text-slate-500`.
+
+3) Results Filter Bar
+- Under the summary, add a horizontal bar with:
+  - On the left: “Sort by” small label.
+  - A simple dropdown-style button (no real dropdown needed yet) with:
+    - “Relevance” as default.
+    - Down arrow icon (▼).
+  - On the right side, a text button: “Clear search”.
+- Make it compact and mobile-friendly.
+
+4) Results List
+- Under the bar, show a vertical list of user profile cards.
+- Re-use the same style as the cards on the home screen, but slightly more detailed:
+  - Circular avatar with initials.
+  - Full name (bold).
+  - Role / Title.
+  - One-line summary/tagline.
+  - Small muted line for location (e.g. “📍 Tel Aviv, Israel”).
+- Each card should look like a tappable element:
+  - White background, rounded-xl, soft shadow or border, padding.
+  - Entire card clickable with an onClick placeholder that will open the Profile View screen.
+
+5) Empty State
+- If there are no results (e.g. list is empty), show an empty state in the center:
+  - Icon (e.g. a magnifying glass or a simple circle placeholder).
+  - Title: “No profiles found”
+  - Subtitle: “Try a different name or adjust your filters.”
+
+Implementation notes:
+- Use hard-coded demo data for now: an array of 4–6 example profiles.
+- Use React state to simulate the selected sort option (even if it doesn’t change much).
+- Focus on clean spacing, readable typography, and a modern mobile directory feel.
+- All content should scroll vertically.
