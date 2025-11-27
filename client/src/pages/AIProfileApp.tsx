@@ -342,68 +342,105 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
         >
           <ArrowLeft className="h-6 w-6" />
         </button>
-        <span className="ml-2 font-medium text-slate-900">Join Directory</span>
+        <span className="ml-2 font-medium text-slate-900">Create Your Profile</span>
       </div>
 
       <div className="px-6 py-8 flex-1 flex flex-col">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">
-            Join the directory
-          </h2>
-          <p className="text-slate-500 text-lg">
-            Create your public professional profile so others can find you.
-          </p>
-        </div>
+        <form className="space-y-6 flex-1 flex flex-col" onSubmit={(e) => e.preventDefault()}>
+          {/* Form Fields */}
+          <div className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700">Full Name</label>
+              <Input 
+                placeholder="e.g. Alex Morgan" 
+                className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
+                data-testid="input-join-name"
+              />
+            </div>
 
-        <form className="space-y-6 flex-1" onSubmit={(e) => e.preventDefault()}>
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-700">Full Name</label>
-            <Input 
-              placeholder="e.g. Alex Morgan" 
-              className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
-              data-testid="input-join-name"
-            />
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700">Current Role / Title</label>
+              <Input 
+                placeholder="e.g. Senior Engineer" 
+                className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
+                data-testid="input-join-role"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700">Location <span className="text-slate-400 font-normal">(Optional)</span></label>
+                <Input 
+                  placeholder="City, Country" 
+                  className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
+                  data-testid="input-join-location"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-slate-700">Company <span className="text-slate-400 font-normal">(Optional)</span></label>
+                <Input 
+                  placeholder="Company Name" 
+                  className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
+                  data-testid="input-join-company"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-slate-700">Skills</label>
+              <Input 
+                placeholder="e.g. Product Manager, React, Cyber Security..." 
+                className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
+                data-testid="input-join-skills"
+              />
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-700">Current Role / Title</label>
-            <Input 
-              placeholder="e.g. Senior Engineer" 
-              className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
-              data-testid="input-join-role"
-            />
+          {/* AI Preview Card */}
+          <div className="mt-8 mb-4">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">
+              AI-Generated Profile Preview
+            </h3>
+            <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 shadow-sm relative overflow-hidden">
+               {/* Skeleton UI */}
+               <div className="flex items-center gap-4 mb-4">
+                 <div className="h-12 w-12 rounded-full bg-slate-200/70 animate-pulse" />
+                 <div className="space-y-2">
+                   <div className="h-4 w-32 bg-slate-200/70 rounded animate-pulse" />
+                   <div className="h-3 w-24 bg-slate-200/50 rounded animate-pulse" />
+                 </div>
+               </div>
+               <div className="space-y-2 mb-4">
+                 <div className="h-3 w-full bg-slate-200/50 rounded animate-pulse" />
+                 <div className="h-3 w-[90%] bg-slate-200/50 rounded animate-pulse" />
+                 <div className="h-3 w-[80%] bg-slate-200/50 rounded animate-pulse" />
+               </div>
+               <div className="flex gap-2">
+                 <div className="h-6 w-16 bg-slate-200/60 rounded-lg animate-pulse" />
+                 <div className="h-6 w-20 bg-slate-200/60 rounded-lg animate-pulse" />
+               </div>
+               
+               {/* Overlay Badge */}
+               <div className="absolute top-3 right-3">
+                 <Badge variant="secondary" className="bg-white/80 backdrop-blur text-slate-500 text-[10px] border-slate-100">
+                   AI Preview
+                 </Badge>
+               </div>
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-700">About you</label>
-            <Textarea 
-              placeholder="Tell us a bit about your background..." 
-              className="min-h-[120px] rounded-xl border-slate-200 focus:border-primary bg-slate-50 resize-none p-3"
-              data-testid="input-join-about"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-semibold text-slate-700">Skills</label>
-            <Input 
-              placeholder="Product Manager, React, Cyber Security..." 
-              className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
-              data-testid="input-join-skills"
-            />
-            <p className="text-xs text-slate-400 px-1">Separate skills with commas</p>
-          </div>
-
-          <div className="pt-4 mt-auto">
+          {/* Bottom CTA */}
+          <div className="pt-4 mt-auto space-y-3">
             <Button 
-              className="w-full h-14 text-lg font-semibold rounded-xl shadow-xl shadow-primary/25 transition-transform active:scale-[0.99]"
+              className="w-full h-14 text-lg font-semibold rounded-xl shadow-xl shadow-primary/25 hover:shadow-primary/35 transition-all active:scale-[0.99] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-none"
               type="submit"
-              data-testid="button-create-profile"
+              data-testid="button-generate-profile"
             >
-              Create my profile
+              <span className="mr-2 text-xl">✨</span>
+              Generate My Profile with AI
             </Button>
-            <p className="text-center text-xs text-slate-400 mt-4 flex items-center justify-center gap-1.5">
-              <span className="inline-block w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
-              In the future, AI will generate your profile text automatically.
+            <p className="text-center text-xs text-slate-400">
+              AI will instantly generate a polished professional profile for you.
             </p>
           </div>
         </form>

@@ -1,0 +1,73 @@
+You are a senior React + Tailwind CSS frontend developer.
+
+Extend the existing mobile-first “AI Profile Directory” home/search screen with FILTERS, for a large database of users.
+
+Tech:
+- React + Tailwind CSS
+- No routing, no backend logic
+- Do NOT use <Link> (only buttons/divs with onClick placeholders)
+
+Update the UI as follows:
+
+1) Top Search + Filters Row
+- Keep the existing search input: “Search profiles by full name”.
+- On the right side of the search input (or below it on small screens), add a “Filters” button:
+  - Rounded-full button
+  - Icon + label: e.g. a funnel icon + “Filters”
+  - When clicked, it should open a bottom sheet (use a state flag like `showFilters`).
+
+2) Quick Filter Chips (optional, under search)
+- Add a horizontal scrollable row of pill-style quick filters, for example:
+  - “Design”
+  - “Engineering”
+  - “Product”
+  - “Data / AI”
+- Selected chip state: bold text and slightly darker background.
+- Non-selected: light gray background, subtle border.
+
+3) Filters Bottom Sheet (Modal)
+- When `showFilters` is true, show a bottom sheet overlay:
+  - Full-width panel anchored to the bottom of the screen.
+  - Rounded-t corners, white background, soft shadow.
+  - Dimmed dark overlay behind it.
+
+Inside the bottom sheet, include sections with filters:
+
+(a) Role / Function
+- Label: “Role”
+- Use pill-style multi-select chips:
+  - Product, Design, Engineering, Data/AI, Marketing, Sales, Other
+
+(b) Location
+- Label: “Location”
+- Simple text input with placeholder: “e.g. Tel Aviv, Remote, Europe”
+
+(c) Seniority
+- Label: “Seniority”
+- Use radio buttons or pill chips:
+  - Junior
+  - Mid-level
+  - Senior
+  - Lead / Manager
+
+(d) Work Style
+- Label: “Work style”
+- Toggle or chips:
+  - On-site
+  - Hybrid
+  - Remote
+
+4) Bottom Sheet Actions
+- At the bottom of the sheet, add two buttons:
+  - Ghost text button on the left: “Clear all”
+  - Primary full-width button on the right (or below): “Apply filters”
+- For now, the buttons only update local state (no real filtering logic required, just UI).
+
+5) General Design Notes
+- Keep everything mobile-first with max-width ~420–480px centered on larger screens.
+- Use consistent paddings (px-4, py-3 etc.).
+- Maintain the same font sizes, colors, and rounded cards style as the existing directory and profile screens.
+- The list of example profiles can stay static for now, but visually it should feel like filters are ready to work.
+
+Focus on clean, intuitive UX: the user can type a name, tap quick filter chips, and open the Filters bottom sheet to refine results by role, location, seniority, and work style.
+Only implement the UI and state handling for showing/hiding and selecting filters.

@@ -1,0 +1,55 @@
+Update the “Join / Create Profile” screen design to support AI-generated profiles.
+
+Goal:
+The user should NOT manually write their About section anymore. 
+Instead, the UI should clearly show that the profile will be written automatically by AI.
+
+General style:
+Same clean, mobile-first design as the existing profile and directory screens. 
+Use React + Tailwind CSS. No routing, no backend logic.
+
+Make the following UI changes:
+
+1) Header
+- Keep the back button (“←”) on the left.
+- Title: “Create Your Profile”.
+
+2) Replace manual text fields with a minimal data collection form:
+The user only enters:
+- Full Name (text input)
+- Current Role / Title (text input)
+- Optional: Location (text input)
+- Optional: Company (text input)
+- Skills (text input with placeholder “e.g. Product Manager, React, Cyber Security…”)
+
+3) Remove the “About you” textarea entirely.
+AI will generate the About section automatically.
+
+4) Add an “AI Preview Card”
+Below the form fields, add a small preview section showing a placeholder profile card:
+- Title: “AI-Generated Profile Preview”
+- A small card with:
+  • Name placeholder (e.g., “John Doe”)
+  • Title placeholder
+  • A short gray paragraph representing the About text (3 gray lines as skeleton)
+  • Skills shown as faded chips
+
+This card should look like an empty skeleton UI, indicating that AI will fill it soon.
+
+5) Add a primary CTA button:
+- Full-width button: “Generate My Profile with AI”
+- Add a small AI sparkles icon if possible (✨)
+
+6) Add helper text under the button:
+- Small, muted text:
+  “AI will instantly generate a polished professional profile for you.”
+
+7) Important interaction notes (for design only):
+- The AI button does not need to work now — only the UI layout.
+- Use a clean visual hierarchy and plenty of vertical spacing.
+- All components should remain mobile-first, centered layout, max-width ~420–480px.
+
+8) Do NOT use <Link>. Use only buttons or divs with onClick placeholders.
+Do NOT add project timelines or extra sections.
+
+Create the final UI in React + Tailwind CSS with the updated fields and AI preview card.
