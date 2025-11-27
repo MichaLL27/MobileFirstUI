@@ -240,69 +240,82 @@ function ProfileScreen({
       transition={{ duration: 0.2 }}
       className="flex flex-col h-full bg-white overflow-y-auto"
     >
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center">
+      {/* Header - Clean, no border */}
+      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md px-4 py-4 flex items-center justify-between">
         <button 
           onClick={onBack}
-          className="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors"
+          className="p-2 -ml-2 rounded-full hover:bg-slate-50 text-slate-600 transition-colors"
           data-testid="button-back"
         >
           <ArrowLeft className="h-6 w-6" />
         </button>
-        <span className="ml-2 font-medium text-slate-900">Profile</span>
+        <span className="font-semibold text-slate-900">Profile</span>
+        <div className="w-10" /> {/* Spacer to balance the header */}
       </div>
 
-      <div className="px-6 pb-8 pt-6">
-        {/* Profile Header */}
-        <div className="flex flex-col items-center text-center mb-8">
-          <Avatar className="h-32 w-32 mb-6 border-4 border-slate-50 shadow-xl shadow-slate-200">
-            <AvatarFallback className="bg-slate-100 text-slate-700 text-4xl font-bold">
+      <div className="px-6 pb-8 pt-2">
+        {/* Hero Profile Block */}
+        <div className="flex flex-col items-center text-center mb-10">
+          <Avatar className="h-28 w-28 mb-5 shadow-xl shadow-slate-200/80">
+            <AvatarFallback className="bg-slate-100 text-slate-700 text-3xl font-bold tracking-tight">
               {profile.initials}
             </AvatarFallback>
           </Avatar>
           
-          <h2 className="text-2xl font-bold text-slate-900 mb-2" data-testid="text-profile-name">
+          <h2 className="text-2xl font-bold text-slate-900 mb-1" data-testid="text-profile-name">
             {profile.firstName} {profile.lastName}
           </h2>
-          <p className="text-lg text-primary font-medium mb-2">
+          
+          <p className="text-base text-primary font-medium mb-3">
             {profile.role}
           </p>
-          <p className="text-slate-500 max-w-xs mx-auto leading-relaxed">
-            {profile.summary}
-          </p>
+
+          {/* Metadata Lines */}
+          <div className="flex flex-col items-center gap-1.5 text-sm text-slate-500">
+            <div className="flex items-center gap-1.5">
+              <span>📍</span>
+              <span>Tel Aviv, Israel</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span>💼</span>
+              <span>Independent / Freelance</span>
+            </div>
+          </div>
         </div>
 
         {/* About Section */}
-        <section className="mb-8">
-          <h3 className="text-sm uppercase tracking-wider font-bold text-slate-400 mb-3">About</h3>
-          <p className="text-slate-700 leading-relaxed text-base">
+        <section className="mb-10">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4">
+            About
+          </h3>
+          <p className="text-slate-700 leading-relaxed text-base text-left">
             {profile.about}
           </p>
         </section>
 
         {/* Skills Section */}
-        <section className="mb-10">
-          <h3 className="text-sm uppercase tracking-wider font-bold text-slate-400 mb-3">Skills</h3>
-          <div className="flex flex-wrap gap-2">
+        <section className="mb-12">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4">
+            Skills
+          </h3>
+          <div className="flex flex-wrap gap-2.5">
             {profile.skills.map((skill) => (
-              <Badge 
+              <span 
                 key={skill} 
-                variant="secondary" 
-                className="px-3 py-1.5 text-sm font-medium bg-slate-100 text-slate-700 hover:bg-slate-200"
+                className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium bg-[#F2F4F7] text-slate-700"
               >
                 {skill}
-              </Badge>
+              </span>
             ))}
           </div>
         </section>
 
         {/* Action Button */}
-        <div className="mt-auto">
+        <div className="mt-auto pt-4">
           <Button 
-            className="w-full h-12 text-base rounded-xl shadow-lg shadow-primary/20"
+            className="w-full h-12 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
             data-testid="button-share-profile"
           >
-            <Share2 className="mr-2 h-5 w-5" />
             Share Profile
           </Button>
         </div>
