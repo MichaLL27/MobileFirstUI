@@ -8,6 +8,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { useAuth } from "@/hooks/useAuth";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 // --- Types ---
 type Screen = "home" | "profile" | "join" | "searchResults";
@@ -88,7 +91,11 @@ function ErrorState({
 }
 
 // --- Authentication Screen Component ---
-function AuthScreen({ onContinue }: { onContinue: () => void }) {
+function AuthScreen() {
+  const handleLogin = () => {
+    window.location.href = "/api/login";
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -129,18 +136,11 @@ function AuthScreen({ onContinue }: { onContinue: () => void }) {
       {/* CTA Buttons */}
       <div className="w-full space-y-3 pb-8">
         <button
-          onClick={onContinue}
+          onClick={handleLogin}
           className="w-full py-3 px-4 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
           data-testid="button-continue-google"
         >
-          המשך עם Google
-        </button>
-        <button
-          onClick={onContinue}
-          className="w-full py-3 px-4 bg-black text-white font-semibold rounded-lg hover:bg-slate-900 transition-colors"
-          data-testid="button-continue-apple"
-        >
-          המשך עם Apple
+          התחבר כדי להתחיל
         </button>
         <p className="text-xs text-slate-500 text-right pt-2">
           בהמשך, אתה מסכים לתנאי השימוש שלנו
@@ -344,51 +344,32 @@ function ProfileAvatar({
   );
 }
 
-// --- Mock Data ---
-const MOCK_PROFILES: Profile[] = [
-  {
-    id: "1",
-    firstName: "רוני",
-    lastName: "לוי",
-    role: "חשמלאי מוסמך",
-    summary: "מתמחה בתיקוני חשמל לבית וקטן התקנות.",
-    about: "אני עובד כחשמלאי למעלה מ-15 שנים. אני מטפל בכל סוגי תיקוני חשמל ביתיים, מתיקון קצרים להתקנת אורות ושקעים. אני עובד גם עם משרדים וחנויות קטנים.\n\nאני מבוסס בחולון וכיסוי את כל האזור. הלקוחות שלי אומרים שאני אמין, כנה וכמו תמיד נותן מחיר ברור לפני תחילת העבודה. אני גם טוען שיחות חירום אם יש מצבים מסוכנים.\n\nאני מוסמך ותמיד עוקב אחרי כללי הבטיחות. אני עובד בזהירות ומנקה אחריי עצמי. בין אם זה תיקון קטן או עבודה גדולה יותר, אני מתייחס לכל לקוח באותה דרך - בכבוד ובעבודה איכותית.",
-    skills: ["תיקוני חשמל לבית", "תיקון קצרים", "התקנת תאורה", "החלפת לוחות חשמל", "קריאות חירום"],
-    initials: "RL",
-  },
-  {
-    id: "2",
-    firstName: "שרה",
-    lastName: "כהן",
-    role: "עוזרת בית",
-    summary: "ניקיון קבוע ואמין למשפחות וממשרדים.",
-    about: "אני עוזרת בית מקצועית במשך 12 שנה. אני מבצעת ניקיון עמוק וטיפול קבוע לבתים, משרדים קטנים וחנויות. אני עובדת בזהירות והודא משהו היא נקי לחלוטין.\n\nאני מבוססת בתל אביב וכיסוי את האזור סביב. אני עובדת בלוח זמנים קבוע - כל שבוע או חודשי - כדי שהמקום שלך יהיה תמיד נקי. אני משתמשת בתכשירי ניקוי טובים ואני שמחה להשתמש במה שאתה מעדיף אם יש לך אלרגיות.\n\nהלקוחות שלי סומכים עלי עם המפתחות שלהם כי אני מקצועית וכבודי. אני סיימת בזמן, אני שמה דגש על פרטים וכן כנה מאוד. אני יכולה לעבוד לפי לוח הזמנים שלך ואני גמישה במשך העבודה.",
-    skills: ["ניקיון עמוק", "טיפול שבועי", "ניקיון משרדים", "ארגון בית", "מוצרים ידידותיים לסביבה"],
-    initials: "SC",
-  },
-  {
-    id: "3",
-    firstName: "אחמד",
-    lastName: "נסאר",
-    role: "נהג משלוחים",
-    summary: "משלוחים באותו יום בתל אביב והסביבה.",
-    about: "אני נהג משלוחים עם 8 שנות ניסיון. אני מספק חבילות, רהיטים, מזון ועוד. אני מכיר את אזור תל אביב היטב ואני מהיר ואמין.\n\nאני דואג לחבילות בדרך טובה - הן מגיעות בטוח ובזמן. הלקוחות שלי מעריכים שאני מקצועי, בזמן וטוען הכל בזהירות. יש לי ואן גדול ויכול לשאת את רוב הדברים.\n\nאני עובד בשעות גמישות, אז אני יכול לעתים קרובות לעשות משלוחים באותו יום. אני ידידותי עם לקוחות ותמיד מעדכן אותם על זמני המסירה. היו לי הרבה לקוחות חוזרים כי הם יודעים שהם יכולים לסמוך עלי.",
-    skills: ["משלוחים מקומיים", "שירות באותו יום", "הובלת רהיטים", "טיפול בחבילות", "ידע בדרכים"],
-    initials: "AN",
-  },
-  {
-    id: "4",
-    firstName: "מרים",
-    lastName: "גולדמן",
-    role: "מעצבת שיער וסטילית",
-    summary: "שירותי חיתוך ועיצוב שיער מקצועיים.",
-    about: "אני עוצבת שיער מקצועית עם 10 שנות ניסיון. אני עושה חיתוכים, עיצוב, צביעה וטיפולים. אני עובדת עם כל סוגי השיער ותמיד אני קשבת למה הלקוחות שלי רוצים.\n\nיש לי סלון קטן בראמת גן ואני יוצרת אווירה ידידותית ורגועה. אני דואגת לנוחות הלקוחות שלי ולוקחת זמן להבין את צרכי העיצוב שלהם. אני משתמשת בתכשירים איכותיים לכל הטיפולים.\n\nהרבה מהלקוחות שלי חוזרים כי הם יודעים שאני עושה עבודה איכותית במחירים הוגנים. אני יכולה גם לעשות שיער לאירועים מיוחדים כמו חתונות וחגיגות. אני לב לאפשר לאנשים להרגיש טוב כיצד הם נראים.",
-    skills: ["חיתוך שיער", "עיצוב וצביעה", "טיפולים", "אירועים מיוחדים", "טיפולים ופרמנטים"],
-    initials: "MG",
-  }
-];
+// --- Empty State Component ---
+function EmptyDirectoryState({ onCreateClick }: { onCreateClick: () => void }) {
+  return (
+    <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
+      <div className="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center mb-6">
+        <Search className="h-12 w-12 text-slate-400" />
+      </div>
+      <h3 className="text-xl font-bold text-slate-900 mb-2 text-right">אין פרופילים עדיין</h3>
+      <p className="text-sm text-slate-500 mb-8 text-right leading-relaxed">
+        היה הראשון ליצור פרופיל ולהצטרף לרשימת בעלי המקצוע!
+      </p>
+      <button
+        onClick={onCreateClick}
+        className="px-8 py-3 text-sm font-semibold text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+        data-testid="button-create-first-profile"
+      >
+        צור פרופיל חדש
+      </button>
+    </div>
+  );
+}
 
 export default function AIProfileApp() {
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  const queryClient = useQueryClient();
+  
   const [activeTab, setActiveTab] = useState<"directory" | "create" | "profile" | "settings">("directory");
   const [activeScreen, setActiveScreen] = useState<Screen>("home");
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
@@ -396,14 +377,44 @@ export default function AIProfileApp() {
   const [searchQuery, setSearchQuery] = useState("");
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [hasProfile, setHasProfile] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasInternet, setHasInternet] = useState(true);
   const [errorState, setErrorState] = useState<"none" | "noInternet" | "serverError">("none");
 
-  // Derived state
-  const filteredProfiles = MOCK_PROFILES.filter((p) => {
+  const { data: profiles = [], isLoading: profilesLoading } = useQuery({
+    queryKey: ["/api/profiles"],
+    queryFn: async () => {
+      const res = await fetch("/api/profiles");
+      if (!res.ok) throw new Error("Failed to fetch profiles");
+      return res.json();
+    },
+  });
+
+  const { data: myProfile, isLoading: myProfileLoading } = useQuery({
+    queryKey: ["/api/my-profile"],
+    queryFn: async () => {
+      const res = await fetch("/api/my-profile");
+      if (res.status === 404) return null;
+      if (!res.ok) throw new Error("Failed to fetch profile");
+      return res.json();
+    },
+    enabled: isAuthenticated,
+  });
+
+  const hasProfile = !!myProfile;
+
+  const normalizedProfiles: Profile[] = (profiles as any[]).map((p: any) => ({
+    id: String(p.id),
+    firstName: p.firstName || "",
+    lastName: p.lastName || "",
+    role: p.role || "",
+    summary: p.summary || (p.aboutText ? p.aboutText.slice(0, 100) + (p.aboutText.length > 100 ? "..." : "") : ""),
+    about: p.aboutText || p.backgroundText || "",
+    skills: p.skills || [],
+    avatarUrl: p.avatarUrl || undefined,
+    initials: p.initials || ((p.firstName?.[0] || "") + (p.lastName?.[0] || "")).toUpperCase() || "?",
+  }));
+
+  const filteredProfiles = normalizedProfiles.filter((p) => {
     const fullName = `${p.firstName} ${p.lastName}`.toLowerCase();
     return fullName.includes(searchTerm.toLowerCase());
   });
@@ -437,11 +448,18 @@ export default function AIProfileApp() {
     }
   };
 
-  // Show auth screen if not authenticated
+  if (authLoading) {
+    return (
+      <div dir="rtl" className="min-h-screen bg-slate-50 flex justify-center items-center font-sans text-slate-900">
+        <LoadingSpinner message="טוען..." />
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <div dir="rtl" className="min-h-screen bg-slate-50 flex justify-center font-sans text-slate-900">
-        <AuthScreen onContinue={() => setIsAuthenticated(true)} />
+        <AuthScreen />
       </div>
     );
   }
@@ -487,9 +505,10 @@ export default function AIProfileApp() {
           {activeTab === "profile" && (
             <MyProfileScreen 
               key="myProfile"
-              demoProfile={MOCK_PROFILES[0]}
+              profile={myProfile}
               hasProfile={hasProfile}
-              onCreateClick={() => setActiveScreen("join")}
+              onCreateClick={() => setActiveTab("create")}
+              onRefresh={() => queryClient.invalidateQueries({ queryKey: ["/api/my-profile"] })}
             />
           )}
 
@@ -517,13 +536,12 @@ export default function AIProfileApp() {
             <JoinScreen 
               key="join"
               onBack={handleBack}
-              onSaveClick={() => {
-                setIsLoading(true);
-                setTimeout(() => {
-                  setIsLoading(false);
-                  setToast({ message: "הפרופיל נשמר בהצלחה", type: "success" });
-                }, 2000);
+              onSuccess={() => {
+                queryClient.invalidateQueries({ queryKey: ["/api/my-profile"] });
+                setToast({ message: "הפרופיל נשמר בהצלחה", type: "success" });
+                setActiveTab("profile");
               }}
+              onError={(msg) => setToast({ message: msg, type: "error" })}
             />
           )}
 
@@ -531,6 +549,7 @@ export default function AIProfileApp() {
             <SearchResultsScreen
               key="searchResults"
               searchQuery={searchQuery}
+              profiles={filteredProfiles}
               onBack={handleBack}
               onProfileClick={handleProfileClick}
             />
@@ -614,10 +633,17 @@ export default function AIProfileApp() {
         <AnimatePresence>
           {showDeleteModal && (
             <DeleteConfirmationModal
-              onConfirm={() => {
+              onConfirm={async () => {
+                if (myProfile?.id) {
+                  try {
+                    await fetch(`/api/profiles/${myProfile.id}`, { method: "DELETE" });
+                    queryClient.invalidateQueries({ queryKey: ["/api/my-profile"] });
+                    setToast({ message: "הפרופיל נמחק בהצלחה", type: "success" });
+                  } catch (error) {
+                    setToast({ message: "שגיאה במחיקת הפרופיל", type: "error" });
+                  }
+                }
                 setShowDeleteModal(false);
-                setToast({ message: "הפרופיל נמחק בהצלחה", type: "success" });
-                setHasProfile(false);
               }}
               onCancel={() => setShowDeleteModal(false)}
             />
@@ -1105,10 +1131,66 @@ function ProfileScreen({
   );
 }
 
-function JoinScreen({ onBack, onSaveClick }: { onBack: () => void; onSaveClick?: () => void; }) {
+function JoinScreen({ onBack, onSuccess, onError }: { 
+  onBack: () => void; 
+  onSuccess?: () => void; 
+  onError?: (msg: string) => void;
+}) {
   const [backgroundNotes, setBackgroundNotes] = useState("");
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [fullName, setFullName] = useState("");
+  const [role, setRole] = useState("");
+  const [workArea, setWorkArea] = useState("");
+  const [businessName, setBusinessName] = useState("");
+  const [skills, setSkills] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!fullName.trim() || !role.trim()) {
+      onError?.("יש למלא שם מלא ותחום עבודה");
+      return;
+    }
+
+    const nameParts = fullName.trim().split(" ");
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.slice(1).join(" ") || "";
+    const initials = (firstName[0] || "") + (lastName[0] || "");
+
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/profiles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          role,
+          workArea: workArea || null,
+          businessName: businessName || null,
+          skills: skills.split(",").map(s => s.trim()).filter(Boolean),
+          backgroundText: backgroundNotes || null,
+          initials: initials.toUpperCase() || "UN",
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || "שגיאה ביצירת הפרופיל");
+      }
+
+      setIsGeneratingAI(true);
+      const aiRes = await fetch("/api/profiles/generate-ai", { method: "POST" });
+      setIsGeneratingAI(false);
+
+      onSuccess?.();
+    } catch (error: any) {
+      onError?.(error.message || "שגיאה ביצירת הפרופיל");
+    } finally {
+      setIsSubmitting(false);
+      setIsGeneratingAI(false);
+    }
+  };
 
   const handlePhotoUpload = (file: File) => {
     const reader = new FileReader();
@@ -1174,6 +1256,8 @@ function JoinScreen({ onBack, onSaveClick }: { onBack: () => void; onSaveClick?:
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700 text-right block">תחום עבודה / תפקיד</label>
               <Input 
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
                 placeholder="לדוגמה: חשמלאי, אינסטלטור, עוזרת בית" 
                 className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                 data-testid="input-join-role"
@@ -1184,6 +1268,8 @@ function JoinScreen({ onBack, onSaveClick }: { onBack: () => void; onSaveClick?:
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700 text-right block">אזור עבודה <span className="text-slate-400 font-normal">(לא חובה)</span></label>
                 <Input 
+                  value={workArea}
+                  onChange={(e) => setWorkArea(e.target.value)}
                   placeholder="לדוגמה: אזור תל אביב" 
                   className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                   data-testid="input-join-location"
@@ -1192,6 +1278,8 @@ function JoinScreen({ onBack, onSaveClick }: { onBack: () => void; onSaveClick?:
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-slate-700 text-right block">שם העסק <span className="text-slate-400 font-normal">(לא חובה)</span></label>
                 <Input 
+                  value={businessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
                   placeholder="לדוגמה: רוני חשמל בע״מ" 
                   className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                   data-testid="input-join-company"
@@ -1202,6 +1290,8 @@ function JoinScreen({ onBack, onSaveClick }: { onBack: () => void; onSaveClick?:
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700 text-right block">שירותים / כישורים</label>
               <Input 
+                value={skills}
+                onChange={(e) => setSkills(e.target.value)}
                 placeholder="לדוגמה: תיקוני חשמל לבית, התקנת מזגנים, טיפול בתקלות חירום" 
                 className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                 data-testid="input-join-skills"
@@ -1260,12 +1350,23 @@ function JoinScreen({ onBack, onSaveClick }: { onBack: () => void; onSaveClick?:
           {/* Bottom CTA */}
           <div className="pt-4 mt-auto space-y-3">
             <Button 
-              className="w-full h-14 text-lg font-semibold rounded-xl shadow-xl shadow-primary/25 hover:shadow-primary/35 transition-all active:scale-[0.99] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-none"
-              type="submit"
+              onClick={handleSubmit}
+              disabled={isSubmitting || isGeneratingAI}
+              className="w-full h-14 text-lg font-semibold rounded-xl shadow-xl shadow-primary/25 hover:shadow-primary/35 transition-all active:scale-[0.99] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-none disabled:opacity-50"
+              type="button"
               data-testid="button-generate-profile"
             >
-              <span className="mr-2 text-xl">✨</span>
-              צור לי פרופיל בעזרת AI
+              {isSubmitting || isGeneratingAI ? (
+                <span className="flex items-center gap-2">
+                  <Loader className="h-5 w-5 animate-spin" />
+                  {isGeneratingAI ? "יוצר פרופיל עם AI..." : "שומר..."}
+                </span>
+              ) : (
+                <>
+                  <span className="mr-2 text-xl">✨</span>
+                  צור לי פרופיל בעזרת AI
+                </>
+              )}
             </Button>
             <p className="text-center text-xs text-slate-400">
               המערכת תיצור עבורך תיאור מקצועי ברור לפי מה שמילאת בטופס.
@@ -1281,15 +1382,17 @@ function SearchResultsScreen({
   searchQuery,
   onBack,
   onProfileClick,
+  profiles,
 }: {
   searchQuery: string;
   onBack: () => void;
   onProfileClick: (profile: Profile) => void;
+  profiles: Profile[];
 }) {
   const [sortBy, setSortBy] = useState("Relevance");
 
   // Filter results by search query
-  const searchResults = MOCK_PROFILES.filter((p) => {
+  const searchResults = profiles.filter((p) => {
     const fullName = `${p.firstName} ${p.lastName}`.toLowerCase();
     return fullName.includes(searchQuery.toLowerCase());
   });
@@ -1389,15 +1492,30 @@ function SearchResultsScreen({
 }
 
 function MyProfileScreen({
-  demoProfile,
+  profile,
   hasProfile,
-  onCreateClick
+  onCreateClick,
+  onRefresh
 }: {
-  demoProfile: Profile;
+  profile: any;
   hasProfile: boolean;
   onCreateClick: () => void;
+  onRefresh?: () => void;
 }) {
   const [expandedAbout, setExpandedAbout] = useState(false);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+
+  const handleRegenerateAI = async () => {
+    setIsGeneratingAI(true);
+    try {
+      await fetch("/api/profiles/generate-ai", { method: "POST" });
+      onRefresh?.();
+    } catch (error) {
+      console.error("Failed to regenerate AI profile");
+    } finally {
+      setIsGeneratingAI(false);
+    }
+  };
 
   return (
     <motion.div
@@ -1438,34 +1556,43 @@ function MyProfileScreen({
         {/* Hero Profile Block */}
         <div className="flex flex-col items-center text-center mb-8">
           <Avatar className="h-28 w-28 mb-5 shadow-xl shadow-slate-200/80">
+            {profile?.avatarUrl ? (
+              <AvatarImage src={profile.avatarUrl} />
+            ) : null}
             <AvatarFallback className="bg-slate-100 text-slate-700 text-3xl font-bold tracking-tight">
-              RL
+              {profile?.initials || "?"}
             </AvatarFallback>
           </Avatar>
           
           <div className="flex items-center justify-center gap-2 mb-2">
             <h2 className="text-2xl font-bold text-slate-900">
-              Roni Levi
+              {profile?.firstName} {profile?.lastName}
             </h2>
           </div>
           
-          <Badge className="mb-3 bg-blue-50 text-blue-700 border-blue-200 text-xs font-medium">
-            ✨ Profile written with AI
-          </Badge>
+          {profile?.aboutText && (
+            <Badge className="mb-3 bg-blue-50 text-blue-700 border-blue-200 text-xs font-medium">
+              ✨ נוצר עם AI
+            </Badge>
+          )}
           
           <p className="text-base text-primary font-medium mb-4">
-            Certified Electrician
+            {profile?.role}
           </p>
 
           <div className="flex flex-col items-center gap-1.5 text-sm text-slate-500">
-            <div className="flex items-center gap-1.5">
-              <span>📍</span>
-              <span>Holon, Israel</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span>💼</span>
-              <span>Roni Electric Services</span>
-            </div>
+            {profile?.workArea && (
+              <div className="flex items-center gap-1.5">
+                <span>📍</span>
+                <span>{profile.workArea}</span>
+              </div>
+            )}
+            {profile?.businessName && (
+              <div className="flex items-center gap-1.5">
+                <span>💼</span>
+                <span>{profile.businessName}</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -1476,20 +1603,22 @@ function MyProfileScreen({
           </h3>
           <div className={`relative rounded-xl border border-slate-100 bg-[#F9FBFF] p-5 overflow-hidden ${!expandedAbout ? 'max-h-40' : ''}`}>
             <div className="space-y-3">
-              <p className="text-sm text-slate-700 leading-relaxed text-left">I've been working as an electrician for 15 years. I handle all types of home electrical repairs, from fixing short circuits to installing new lights and power outlets. I also work with small offices and shops.</p>
-              <p className="text-sm text-slate-700 leading-relaxed text-left">I'm based in Holon and I cover all nearby areas. My customers say I'm reliable, honest, and I always give clear prices before starting any work. I handle emergency calls too if there are any dangerous situations.</p>
-              <p className="text-sm text-slate-700 leading-relaxed text-left">I'm certified and I always follow safety rules. I work carefully and clean up after myself. Whether it's a small repair or a bigger job, I treat every customer the same—with respect and quality work.</p>
+              <p className="text-sm text-slate-700 leading-relaxed text-right">
+                {profile?.aboutText || profile?.backgroundText || "לא נוסף תיאור עדיין"}
+              </p>
             </div>
-            {!expandedAbout && (
+            {!expandedAbout && profile?.aboutText && profile.aboutText.length > 200 && (
               <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#F9FBFF] to-transparent pointer-events-none" />
             )}
           </div>
-          <button
-            onClick={() => setExpandedAbout(!expandedAbout)}
-            className="mt-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-          >
-            {expandedAbout ? "Show less" : "Read more"}
-          </button>
+          {profile?.aboutText && profile.aboutText.length > 200 && (
+            <button
+              onClick={() => setExpandedAbout(!expandedAbout)}
+              className="mt-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            >
+              {expandedAbout ? "הצג פחות" : "קרא עוד"}
+            </button>
+          )}
         </section>
 
         {/* Skills Section */}
@@ -1498,7 +1627,7 @@ function MyProfileScreen({
             שירותים עיקריים
           </h3>
           <div className="flex flex-wrap gap-2">
-            {["Home electrical repairs", "Short-circuit fixing", "Lighting installation", "Electric panel upgrades", "Emergency calls"].map((skill) => (
+            {(profile?.skills || []).map((skill: string) => (
               <span 
                 key={skill} 
                 className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700"
