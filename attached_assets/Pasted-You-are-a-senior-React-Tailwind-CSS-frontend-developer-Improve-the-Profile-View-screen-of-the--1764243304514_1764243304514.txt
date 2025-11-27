@@ -1,0 +1,48 @@
+You are a senior React + Tailwind CSS frontend developer.
+
+Improve the "Profile View" screen of the AI Profile Directory app so that it looks great with a LONG About section (300–400 words, multiple paragraphs).
+
+Tech:
+- React + Tailwind CSS
+- Mobile-first layout (max width around 420–480px, centered)
+- Do NOT use <Link>. Only buttons/divs.
+
+Make the following design updates:
+
+1) About Section Layout
+- Keep the "ABOUT" title as a small uppercase label with tracking-wide and muted gray color.
+- Wrap the About text in a card-like container:
+  - Rounded-xl
+  - Soft background (#F9FBFF or similar very light tint)
+  - Padding: p-4 or p-5
+  - Subtle shadow or border: border border-slate-100
+- Use typography that is comfortable for long reading:
+  - className for the About text: 
+    `text-sm text-slate-700 leading-relaxed`
+- Allow multiple paragraphs:
+  - Use <p> tags with margin-bottom (e.g. `space-y-3` on the container).
+
+2) Read More / Read Less (design + basic interaction)
+- By default, show only the first part of the long About text (approx. 4–6 lines).
+- Visually, the card should show:
+  - The beginning of the text.
+  - A subtle gradient fade at the bottom of the card to suggest more content, using a div with a top-to-bottom white fade (e.g. `bg-gradient-to-t from-white to-transparent`).
+- Below the card, add a centered text button:
+  - Label: “Read more” (when collapsed) and “Show less” (when expanded).
+  - Style: small, blue text button with no heavy border.
+- You can implement this with simple React state, e.g.:
+  - `const [expanded, setExpanded] = useState(false);`
+  - When `expanded` is false: limit the height of the About card with `max-h-40 overflow-hidden`.
+  - When `expanded` is true: remove the max height and gradient overlay.
+
+3) Overall Profile Page Spacing
+- Ensure there is generous spacing between sections:
+  - About section should have `mt-6` or `mt-8` from the metadata (location/company).
+  - Skills section should come after About with `mt-6`.
+- Keep everything scrollable and clean on mobile.
+
+4) Demo Content
+- For now, hard-code a long About text with 3–5 paragraphs so the layout feels like a real long profile.
+- The design should feel polished, calm, and easy to read even for long content.
+
+Only update the Profile View screen. Focus on visual design and small interaction for the long About section.

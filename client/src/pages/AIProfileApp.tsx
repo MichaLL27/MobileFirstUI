@@ -31,7 +31,7 @@ const MOCK_PROFILES: Profile[] = [
     lastName: "Aharonoff",
     role: "Senior Product Designer",
     summary: "Crafting intuitive digital experiences for enterprise SaaS.",
-    about: "I am a product designer with over 10 years of experience in building user-centric interfaces. My passion lies in simplifying complex workflows and creating design systems that scale. Currently leading design at a stealth AI startup.",
+    about: "I am a product designer with over 10 years of experience in building user-centric interfaces. My passion lies in simplifying complex workflows and creating design systems that scale. Currently leading design at a stealth AI startup.\n\nThroughout my career, I've worked with teams at companies like Figma and Stripe, where I learned the art of balancing aesthetic beauty with functional precision. I'm particularly interested in how design systems can empower teams to move faster while maintaining consistency across products. I believe great design is invisible—it should feel natural and intuitive to the user.\n\nOutside of work, I'm passionate about mentoring junior designers and contributing to the design community. I regularly speak at conferences and maintain a design blog where I share my thoughts on emerging trends in product design, accessibility, and design thinking methodologies.",
     skills: ["Product Design", "Figma", "Design Systems", "Prototyping", "UX Research"],
     initials: "DA",
   },
@@ -41,8 +41,8 @@ const MOCK_PROFILES: Profile[] = [
     lastName: "Chen",
     role: "Frontend Engineer",
     summary: "Specializing in React, TypeScript, and performance optimization.",
-    about: "Full-stack developer turned frontend specialist. I love building buttery smooth UIs and obsessing over web performance metrics. Contributor to several open source UI libraries.",
-    skills: ["React", "TypeScript", "Tailwind CSS", "Next.js", "WebGl"],
+    about: "Full-stack developer turned frontend specialist. I love building buttery smooth UIs and obsessing over web performance metrics. Contributor to several open source UI libraries and passionate about accessibility.\n\nI've spent the last 5 years shipping features at scale, learning that great frontend engineering is about more than just writing clean code—it's about understanding user behavior, optimizing for performance, and building with accessibility in mind. My approach combines technical excellence with pragmatism: I believe in shipping quickly but not compromising on quality.\n\nI'm particularly interested in React's future and am actively involved in the React community. I've given talks on performance optimization and web performance best practices. When I'm not coding, I contribute to open source projects and help junior developers navigate their careers in frontend development.",
+    skills: ["React", "TypeScript", "Tailwind CSS", "Next.js", "Web Performance"],
     initials: "SC",
   },
   {
@@ -51,8 +51,8 @@ const MOCK_PROFILES: Profile[] = [
     lastName: "Johnson",
     role: "AI Researcher",
     summary: "Exploring the intersection of LLMs and human-computer interaction.",
-    about: "PhD in Computer Science focused on NLP. I'm working on making AI agents more helpful and reliable for everyday tasks. Excited about the future of generative interfaces.",
-    skills: ["Python", "PyTorch", "NLP", "Machine Learning", "React"],
+    about: "PhD in Computer Science focused on Natural Language Processing. I'm working on making AI agents more helpful and reliable for everyday tasks. Currently focused on improving interpretability and alignment of large language models.\n\nMy research bridges the gap between cutting-edge NLP research and practical applications. I believe AI should augment human capabilities, not replace them. I've published papers on prompt engineering, fine-tuning strategies, and human-AI collaboration patterns that have been adopted by teams at leading AI companies.\n\nI'm excited about the future of generative interfaces and how they'll reshape the way we interact with technology. I'm actively mentoring PhD students and collaborating with industry partners to turn research into real-world solutions. In my spare time, I tinker with new model architectures and explore how AI can be more accessible to developers.",
+    skills: ["Python", "PyTorch", "NLP", "Machine Learning", "LLMs"],
     initials: "MJ",
   },
   {
@@ -61,7 +61,7 @@ const MOCK_PROFILES: Profile[] = [
     lastName: "Rodriguez",
     role: "Marketing Lead",
     summary: "Growth hacking and brand storytelling for tech startups.",
-    about: "I help technical founders translate their complex products into compelling narratives. Experienced in B2B SaaS marketing and community building.",
+    about: "I help technical founders translate their complex products into compelling narratives that resonate with their target audience. With 8+ years of B2B SaaS marketing experience, I've built communities from zero to thousands and led campaigns that drove millions in ARR.\n\nMy approach combines data-driven insights with creative storytelling. I believe the best marketing starts with truly understanding your users—their pain points, aspirations, and language. I specialize in positioning, content strategy, and community building for developer-focused products and enterprise solutions.\n\nI'm passionate about building authentic relationships with customers and creating marketing that doesn't feel like marketing. I've successfully led GTM strategies for multiple successful exits and currently advise several early-stage startups on growth. I love mentoring marketers and sharing what I've learned about building sustainable, human-centered growth.",
     skills: ["Growth Marketing", "Content Strategy", "SEO", "Brand Identity"],
     initials: "ER",
   }
@@ -450,6 +450,8 @@ function ProfileScreen({
   profile: Profile; 
   onBack: () => void; 
 }) {
+  const [expandedAbout, setExpandedAbout] = useState(false);
+
   return (
     <motion.div 
       initial={{ opacity: 0, x: 20 }}
@@ -468,12 +470,12 @@ function ProfileScreen({
           <ArrowLeft className="h-6 w-6" />
         </button>
         <span className="font-semibold text-slate-900">Profile</span>
-        <div className="w-10" /> {/* Spacer to balance the header */}
+        <div className="w-10" />
       </div>
 
       <div className="px-6 pb-8 pt-2">
         {/* Hero Profile Block */}
-        <div className="flex flex-col items-center text-center mb-10">
+        <div className="flex flex-col items-center text-center mb-8">
           <Avatar className="h-28 w-28 mb-5 shadow-xl shadow-slate-200/80">
             <AvatarFallback className="bg-slate-100 text-slate-700 text-3xl font-bold tracking-tight">
               {profile.initials}
@@ -484,7 +486,7 @@ function ProfileScreen({
             {profile.firstName} {profile.lastName}
           </h2>
           
-          <p className="text-base text-primary font-medium mb-3">
+          <p className="text-base text-primary font-medium mb-4">
             {profile.role}
           </p>
 
@@ -502,13 +504,29 @@ function ProfileScreen({
         </div>
 
         {/* About Section */}
-        <section className="mb-10">
+        <section className="mb-8">
           <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4">
             About
           </h3>
-          <p className="text-slate-700 leading-relaxed text-base text-left">
-            {profile.about}
-          </p>
+          <div className={`relative rounded-xl border border-slate-100 bg-[#F9FBFF] p-5 overflow-hidden ${!expandedAbout ? 'max-h-40' : ''}`}>
+            <div className="space-y-3">
+              {profile.about.split('\n').map((paragraph, idx) => (
+                <p key={idx} className="text-sm text-slate-700 leading-relaxed text-left">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+            {!expandedAbout && (
+              <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#F9FBFF] to-transparent pointer-events-none" />
+            )}
+          </div>
+          <button
+            onClick={() => setExpandedAbout(!expandedAbout)}
+            className="mt-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            data-testid="button-toggle-about"
+          >
+            {expandedAbout ? "Show less" : "Read more"}
+          </button>
         </section>
 
         {/* Skills Section */}
