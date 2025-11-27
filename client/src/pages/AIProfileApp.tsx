@@ -612,11 +612,11 @@ function ProfileScreen({
           <div className="flex flex-col items-center gap-1.5 text-sm text-slate-500">
             <div className="flex items-center gap-1.5">
               <span>📍</span>
-              <span>Tel Aviv, Israel</span>
+              <span>חולון, ישראל</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span>💼</span>
-              <span>Independent / Freelance</span>
+              <span>רוני שירותי חשמל</span>
             </div>
           </div>
         </div>
@@ -629,7 +629,7 @@ function ProfileScreen({
           <div className={`relative rounded-xl border border-slate-100 bg-[#F9FBFF] p-5 overflow-hidden ${!expandedAbout ? 'max-h-40' : ''}`}>
             <div className="space-y-3">
               {profile.about.split('\n').map((paragraph, idx) => (
-                <p key={idx} className="text-sm text-slate-700 leading-relaxed text-left">
+                <p key={idx} className="text-sm text-slate-700 leading-relaxed text-right">
                   {paragraph}
                 </p>
               ))}
@@ -643,14 +643,14 @@ function ProfileScreen({
             className="mt-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
             data-testid="button-toggle-about"
           >
-            {expandedAbout ? "Show less" : "Read more"}
+            {expandedAbout ? "הצג פחות" : "קרא עוד"}
           </button>
         </section>
 
         {/* Skills Section */}
         <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4">
-            Skills
+          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right">
+            שירותים עיקריים
           </h3>
           <div className="flex flex-wrap gap-2">
             {profile.skills.map((skill) => (
@@ -670,13 +670,13 @@ function ProfileScreen({
             className="w-full h-12 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
             data-testid="button-share-profile"
           >
-            Share profile
+            שיתוף פרופיל
           </Button>
           <button
             className="w-full h-10 text-sm font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-all"
             data-testid="button-edit-profile"
           >
-            Edit profile
+            עריכת פרופיל
           </button>
         </div>
       </div>
@@ -1076,7 +1076,7 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
         >
           <ArrowLeft className="h-6 w-6" />
         </button>
-        <span className="ml-2 font-medium text-slate-900">Settings</span>
+        <span className="ml-2 font-medium text-slate-900 text-right">הגדרות</span>
       </div>
 
       <div className="px-6 py-6 flex-1 flex flex-col pb-24">
@@ -1092,22 +1092,22 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
                   className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
                   data-testid="button-create-profile"
                 >
-                  Create profile
+                  צור פרופיל
                 </button>
               </div>
-              <p className="text-sm text-slate-600">No profile yet</p>
-              <p className="text-xs text-slate-500 pt-1">Manage your profile and account details.</p>
+              <p className="text-sm text-slate-600 text-right">אין לך עדיין פרופיל</p>
+              <p className="text-xs text-slate-500 pt-1 text-right">נהל את הפרופיל והפרטים של החשבון שלך.</p>
             </div>
           </section>
 
           {/* Section 2: Profile & AI */}
           <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">Profile & AI</h3>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right">פרופיל ו-AI</h3>
             <div className="bg-white rounded-xl border border-slate-100 p-4 space-y-4">
               
               {/* Language Selection */}
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-                <label className="text-sm font-medium text-slate-900">Profile language</label>
+                <label className="text-sm font-medium text-slate-900 text-right">שפת הפרופיל</label>
                 <div className="flex gap-2">
                   <button 
                     onClick={() => setSelectedLanguage("english")}
@@ -1118,7 +1118,7 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
                     }`}
                     data-testid="button-language-english"
                   >
-                    English
+                    אנגלית
                   </button>
                   <button 
                     onClick={() => setSelectedLanguage("hebrew")}
@@ -1129,14 +1129,14 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
                     }`}
                     data-testid="button-language-hebrew"
                   >
-                    Hebrew
+                    עברית
                   </button>
                 </div>
               </div>
 
               {/* Writing Style */}
               <div className="pb-4 border-b border-slate-100">
-                <label className="text-sm font-medium text-slate-900 block mb-3">Profile style</label>
+                <label className="text-sm font-medium text-slate-900 block mb-3 text-right">סגנון הפרופיל</label>
                 <div className="flex gap-2 flex-wrap">
                   <button
                     onClick={() => setSelectedStyle("professional")}
@@ -1147,7 +1147,7 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
                     }`}
                     data-testid="button-style-simple"
                   >
-                    Simple
+                    פשוט
                   </button>
                   <button
                     onClick={() => setSelectedStyle("friendly")}
@@ -1158,7 +1158,7 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
                     }`}
                     data-testid="button-style-detailed"
                   >
-                    More detailed
+                    מפורט יותר
                   </button>
                 </div>
               </div>
@@ -1168,33 +1168,33 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
                 className="w-full px-4 py-2.5 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-blue-50 transition-colors"
                 data-testid="button-regenerate-profile"
               >
-                Regenerate my profile with AI
+                צור מחדש את הפרופיל שלי בעזרת AI
               </button>
             </div>
           </section>
 
           {/* Section 3: Privacy */}
           <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">Privacy & visibility</h3>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right">פרטיות ותצוגה</h3>
             <div className="bg-white rounded-xl border border-slate-100 p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-slate-900">Show my profile in public directory</label>
+                <label className="text-sm font-medium text-slate-900 text-right">הצג את הפרופיל שלי בחיפוש הציבורי</label>
                 <Switch 
                   checked={isPublic}
                   onCheckedChange={setIsPublic}
                   data-testid="toggle-public-profile"
                 />
               </div>
-              <p className="text-xs text-slate-500">When turned off, your profile will not appear in search results.</p>
+              <p className="text-xs text-slate-500 text-right">כשזה כבוי, הפרופיל שלך לא יופיע בתוצאות חיפוש.</p>
             </div>
           </section>
 
           {/* Section 4: Notifications */}
           <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">Notifications</h3>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right">התראות</h3>
             <div className="bg-white rounded-xl border border-slate-100 p-4 space-y-4">
               <div className="flex items-center justify-between py-2">
-                <label className="text-sm font-medium text-slate-900">Email me when someone views my profile</label>
+                <label className="text-sm font-medium text-slate-900 text-right">שלח לי דוא״ל כאשר מישהו צופה בפרופיל שלי</label>
                 <Switch 
                   checked={emailViews}
                   onCheckedChange={setEmailViews}
@@ -1202,7 +1202,7 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
                 />
               </div>
               <div className="flex items-center justify-between py-2 border-t border-slate-100 pt-4">
-                <label className="text-sm font-medium text-slate-900">Send tips to improve my profile</label>
+                <label className="text-sm font-medium text-slate-900 text-right">שלח לי טיפים לשיפור הפרופיל שלי</label>
                 <Switch 
                   checked={emailTips}
                   onCheckedChange={setEmailTips}
@@ -1215,16 +1215,16 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
           {/* Section 5: About the app */}
           <section>
             <div className="bg-slate-50 rounded-xl border border-slate-100 p-4 space-y-3">
-              <h3 className="text-sm font-semibold text-slate-900">About this app</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                This app helps workers in everyday jobs create a simple profile so people can find and contact them.
+              <h3 className="text-sm font-semibold text-slate-900 text-right">על האפליקציה</h3>
+              <p className="text-xs text-slate-600 leading-relaxed text-right">
+                האפליקציה עוזרת לעובדים במקצועות יומיומיים ליצור פרופיל פשוט וברור, כדי שלקוחות יוכלו למצוא אותם בקלות.
               </p>
-              <p className="text-xs text-slate-500">Version 0.1.0</p>
+              <p className="text-xs text-slate-500 text-right">גרסה 0.1.0</p>
               <button 
-                className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+                className="text-xs font-medium text-primary hover:text-primary/80 transition-colors text-right block"
                 data-testid="button-send-feedback"
               >
-                Send feedback
+                שלח משוב
               </button>
             </div>
           </section>
@@ -1235,7 +1235,7 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
               className="text-sm font-medium text-red-600 hover:text-red-700 transition-colors"
               data-testid="button-delete-profile"
             >
-              Delete my profile
+              מחק את הפרופיל שלי
             </button>
           </section>
 
