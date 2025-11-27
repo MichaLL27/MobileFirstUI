@@ -588,6 +588,8 @@ function ProfileScreen({
 }
 
 function JoinScreen({ onBack }: { onBack: () => void }) {
+  const [backgroundNotes, setBackgroundNotes] = useState("");
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -657,10 +659,25 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
                 data-testid="input-join-skills"
               />
             </div>
+
+            {/* Background Notes */}
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-slate-600">Your background (optional)</label>
+              <textarea
+                value={backgroundNotes}
+                onChange={(e) => setBackgroundNotes(e.target.value)}
+                placeholder="Write a few sentences or bullet points about your experience, key achievements, and what you're looking for. The AI will use this to create a richer profile."
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary resize-none min-h-24"
+                data-testid="textarea-join-background"
+              />
+              <p className="text-xs text-slate-500">
+                Optional: Anything you write here will be used by AI to personalize your About section.
+              </p>
+            </div>
           </div>
 
           {/* AI Preview Card */}
-          <div className="mt-8 mb-4">
+          <div className="mt-6 mb-4">
             <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">
               AI-Generated Profile Preview
             </h3>
