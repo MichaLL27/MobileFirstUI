@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ArrowLeft, Share2, UserPlus, CheckCircle2, Filter, X, ChevronDown, Bell, Edit2, AlertCircle, Wifi, WifiOff, AlertTriangle, Loader } from "lucide-react";
+import { Search, ArrowLeft, Share2, UserPlus, Filter, X, ChevronDown, Bell, Edit2, AlertCircle, Wifi, WifiOff, AlertTriangle, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -112,43 +112,27 @@ function AuthScreen({ onLogin }: { onLogin: () => void }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="w-full max-w-[480px] h-screen bg-gradient-to-b from-blue-50 to-white flex flex-col items-center justify-center p-6 text-center pt-12"
+      className="w-full max-w-[480px] h-screen bg-linear-to-b from-blue-50 to-white flex flex-col items-center justify-center p-6 text-center"
     >
-      <div className="flex-1 flex flex-col items-center justify-center space-y-8">
-        {/* Logo / Branding */}
-        <div className="space-y-4">
-          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-            <span className="text-4xl">👥</span>
-          </div>
-          <h1 className="text-3xl font-bold text-slate-900 text-right">פרופילים לעבודה</h1>
-          <p className="text-sm text-slate-600 text-right">
-            מצא עובדים מוכשרים או הציג את הפרופיל שלך
-          </p>
+      {/* Logo / Branding */}
+      <div className="space-y-4 w-full mb-12">
+        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+          <span className="text-4xl">👥</span>
         </div>
-
-        {/* Features List */}
-        <div className="space-y-3 w-full">
-          <div className="flex gap-3 items-start text-right">
-            <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span className="text-sm text-slate-700">חיפוש קל של עובדים בכל תחום</span>
-          </div>
-          <div className="flex gap-3 items-start text-right">
-            <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span className="text-sm text-slate-700">יצירת פרופיל בדקות ספורות</span>
-          </div>
-          <div className="flex gap-3 items-start text-right">
-            <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-            <span className="text-sm text-slate-700">AI עוזר בכתיבת הפרופיל שלך</span>
-          </div>
-        </div>
+        <h1 className="text-2xl font-bold text-slate-900 text-center">
+          התחברות מהירה כדי להתחיל
+        </h1>
+        <p className="text-base text-slate-600 text-center max-w-xs mx-auto leading-relaxed">
+          התחבר כדי ליצור פרופיל עבודה ולהופיע בחיפוש של מעסיקים.
+        </p>
       </div>
 
       {/* CTA Buttons */}
-      <div className="w-full space-y-3 pb-8">
+      <div className="w-full space-y-4">
         <button
           onClick={handleLogin}
           disabled={isLoading}
-          className="w-full py-3 px-4 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 disabled:opacity-50 flex items-center justify-center gap-2"
+          className="w-full py-3.5 px-4 bg-primary text-white font-semibold rounded-xl hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 disabled:opacity-50 flex items-center justify-center gap-2 text-lg"
           data-testid="button-continue-google"
         >
           {isLoading ? (
@@ -168,8 +152,8 @@ function AuthScreen({ onLogin }: { onLogin: () => void }) {
             </>
           )}
         </button>
-        <p className="text-xs text-slate-500 text-right pt-2">
-          בהמשך, אתה מסכים לתנאי השימוש שלנו
+        <p className="text-xs text-slate-400 text-center">
+          בלחיצה על “התחברות”, אתה מאשר את תנאי השימוש שלנו
         </p>
       </div>
     </motion.div>
@@ -340,7 +324,7 @@ function ProfileAvatar({
           className={`${sizeClasses} rounded-full object-cover shrink-0 border-4 border-white shadow-lg`}
         />
       ) : (
-        <div className={`${sizeClasses} rounded-full bg-slate-200 text-slate-600 shadow-md flex items-center justify-center font-semibold flex-shrink-0 border-4 border-white shadow-lg`}>
+        <div className={`${sizeClasses} rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-semibold shrink-0 border-4 border-white shadow-lg`}>
           {initials}
         </div>
       )}
@@ -394,7 +378,7 @@ function EmptyDirectoryState({ onCreateClick }: { onCreateClick: () => void }) {
 
 function ConfigurationErrorScreen() {
   return (
-    <div className="w-full max-w-[480px] h-screen bg-gradient-to-b from-red-50 to-white flex flex-col items-center justify-center p-6 text-center">
+    <div className="w-full max-w-[480px] h-screen bg-linear-to-b from-red-50 to-white flex flex-col items-center justify-center p-6 text-center">
       <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mb-6">
         <AlertTriangle className="h-10 w-10 text-red-500" />
       </div>
@@ -553,7 +537,7 @@ export default function AIProfileApp() {
             className="fixed top-0 left-0 right-0 max-w-[480px] mx-auto bg-red-50 border-b border-red-200 px-4 py-3 flex items-center gap-2 z-50"
             data-testid="banner-no-internet"
           >
-            <WifiOff className="h-5 w-5 text-red-600 flex-shrink-0" />
+            <WifiOff className="h-5 w-5 text-red-600 shrink-0" />
             <span className="text-sm font-medium text-red-700 text-right flex-1">אין חיבור לאינטרנט</span>
           </motion.div>
         )}
@@ -564,7 +548,7 @@ export default function AIProfileApp() {
             className="fixed top-0 left-0 right-0 max-w-[480px] mx-auto bg-yellow-50 border-b border-yellow-200 px-4 py-3 flex items-center gap-2 z-50"
             data-testid="banner-server-error"
           >
-            <AlertTriangle className="h-5 w-5 text-yellow-600 flex-shrink-0" />
+            <AlertTriangle className="h-5 w-5 text-yellow-600 shrink-0" />
             <span className="text-sm font-medium text-yellow-700 text-right flex-1">בעיה בטעינה, נסה שוב</span>
           </motion.div>
         )}
@@ -1525,7 +1509,7 @@ function SearchResultsScreen({
                 data-testid={`card-search-result-${profile.id}`}
               >
                 <div className="flex items-start gap-4">
-                  <Avatar className="h-12 w-12 border-2 border-white shadow-sm flex-shrink-0">
+                  <Avatar className="h-12 w-12 border-2 border-white shadow-sm shrink-0">
                     <AvatarFallback className="bg-slate-100 text-slate-600 font-semibold text-sm">
                       {profile.initials}
                     </AvatarFallback>
