@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ArrowLeft, Share2, UserPlus, CheckCircle2, Filter, X, ChevronDown } from "lucide-react";
+import { Search, ArrowLeft, Share2, UserPlus, CheckCircle2, Filter, X, ChevronDown, Bell, Edit2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,6 +22,50 @@ interface Profile {
   skills: string[];
   avatarUrl?: string;
   initials: string;
+}
+
+// --- AppHeader Component ---
+function AppHeader({ 
+  title, 
+  leftIcon, 
+  leftAction,
+  rightIcon, 
+  rightAction 
+}: { 
+  title: string; 
+  leftIcon?: React.ReactNode; 
+  leftAction?: () => void;
+  rightIcon?: React.ReactNode; 
+  rightAction?: () => void;
+}) {
+  return (
+    <div className="fixed top-0 left-0 right-0 max-w-[480px] mx-auto bg-white border-b border-slate-100 shadow-sm z-30">
+      <div className="flex items-center justify-between px-4 py-4 h-16">
+        {/* Left Icon */}
+        <button
+          onClick={leftAction}
+          className={`p-2 -ml-2 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors ${!leftIcon ? 'invisible' : ''}`}
+          data-testid="button-header-left"
+        >
+          {leftIcon}
+        </button>
+
+        {/* Title */}
+        <h1 className="text-center font-semibold text-slate-900 text-lg flex-1">
+          {title}
+        </h1>
+
+        {/* Right Icon */}
+        <button
+          onClick={rightAction}
+          className={`p-2 -mr-2 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors ${!rightIcon ? 'invisible' : ''}`}
+          data-testid="button-header-right"
+        >
+          {rightIcon}
+        </button>
+      </div>
+    </div>
+  );
 }
 
 // --- ProfileAvatar Component ---
@@ -379,22 +423,15 @@ function HomeScreen({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full p-6 relative"
+      className="flex flex-col h-full pt-20 p-6 relative"
     >
-      {/* Top Bar */}
-      <header className="flex items-center justify-between mb-6 pt-2">
-        <h1 className="text-xl font-bold tracking-tight text-slate-900 text-right">
-          פרופילים לעבודה
-        </h1>
-        <Button 
-          onClick={onJoinClick}
-          size="sm" 
-          className="rounded-full px-4 bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20"
-          data-testid="button-join"
-        >
-          צור פרופיל
-        </Button>
-      </header>
+      <AppHeader
+        title="פרופילים לעבודה"
+        leftIcon={<Bell className="h-5 w-5" />}
+        leftAction={() => {}}
+        rightIcon={<Filter className="h-5 w-5" />}
+        rightAction={() => setShowFilters(true)}
+      />
 
       {/* Search + Filters Row */}
       <div className="flex gap-2 mb-4">
@@ -637,20 +674,15 @@ function ProfileScreen({
       transition={{ duration: 0.2 }}
       className="flex flex-col h-full bg-white overflow-y-auto"
     >
-      {/* Header - Clean, no border */}
-      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md px-4 py-4 flex items-center justify-between">
-        <button 
-          onClick={onBack}
-          className="p-2 -ml-2 rounded-full hover:bg-slate-50 text-slate-600 transition-colors"
-          data-testid="button-back"
-        >
-          <ArrowLeft className="h-6 w-6" />
-        </button>
-        <span className="font-semibold text-slate-900">Profile</span>
-        <div className="w-10" />
-      </div>
+      <AppHeader
+        title="פרופיל"
+        leftIcon={<ArrowLeft className="h-5 w-5" />}
+        leftAction={onBack}
+        rightIcon={<Share2 className="h-5 w-5" />}
+        rightAction={() => {}}
+      />
 
-      <div className="px-6 pb-8 pt-2">
+      <div className="px-6 pb-8 pt-24">
         {/* Hero Profile Block */}
         <div className="flex flex-col items-center text-center mb-8">
           <div className="mb-5">
@@ -784,19 +816,13 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-white overflow-y-auto"
+      className="flex flex-col h-full bg-white overflow-y-auto pt-20"
     >
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center">
-        <button 
-          onClick={onBack}
-          className="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors"
-          data-testid="button-back-join"
-        >
-          <ArrowLeft className="h-6 w-6" />
-        </button>
-        <span className="ml-2 font-medium text-slate-900 text-right">יצירת פרופיל</span>
-      </div>
+      <AppHeader
+        title="יצירת פרופיל"
+        leftIcon={<ArrowLeft className="h-5 w-5" />}
+        leftAction={onBack}
+      />
 
       <div className="px-6 py-8 flex-1 flex flex-col">
         <form className="space-y-6 flex-1 flex flex-col" onSubmit={(e) => e.preventDefault()}>
@@ -952,21 +978,15 @@ function SearchResultsScreen({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-white overflow-y-auto"
+      className="flex flex-col h-full bg-white overflow-y-auto pt-20"
     >
-      {/* Header */}
-      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md px-6 py-4 flex items-center gap-3">
-        <button
-          onClick={onBack}
-          className="p-2 -ml-2 rounded-full hover:bg-slate-50 text-slate-600 transition-colors"
-          data-testid="button-back-search"
-        >
-          <ArrowLeft className="h-6 w-6" />
-        </button>
-        <span className="font-semibold text-slate-900">Search results</span>
-      </div>
+      <AppHeader
+        title="תוצאות חיפוש"
+        leftIcon={<ArrowLeft className="h-5 w-5" />}
+        leftAction={onBack}
+      />
 
-      <div className="px-6 pb-6 flex-1 flex flex-col">
+      <div className="px-6 pb-6 flex-1 flex flex-col pt-2">
         {/* Search Summary */}
         <p className="text-xs text-slate-500 mb-4">
           Showing {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'} for '{searchQuery}'
@@ -1059,8 +1079,15 @@ function MyProfileScreen({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-white overflow-y-auto"
+      className="flex flex-col h-full bg-white overflow-y-auto pt-20"
     >
+      <AppHeader
+        title="הפרופיל שלי"
+        leftIcon={<Share2 className="h-5 w-5" />}
+        leftAction={() => {}}
+        rightIcon={<Edit2 className="h-5 w-5" />}
+        rightAction={() => {}}
+      />
       <div className="px-6 pb-8 pt-6">
         {/* Hero Profile Block */}
         <div className="flex flex-col items-center text-center mb-8">
@@ -1168,21 +1195,15 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-white overflow-y-auto"
+      className="flex flex-col h-full bg-white overflow-y-auto pt-20"
     >
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center">
-        <button 
-          onClick={onBack}
-          className="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors"
-          data-testid="button-back-settings"
-        >
-          <ArrowLeft className="h-6 w-6" />
-        </button>
-        <span className="ml-2 font-medium text-slate-900 text-right">הגדרות</span>
-      </div>
+      <AppHeader
+        title="הגדרות"
+        leftIcon={<ArrowLeft className="h-5 w-5" />}
+        leftAction={onBack}
+      />
 
-      <div className="px-6 py-6 flex-1 flex flex-col pb-24">
+      <div className="px-6 py-6 flex-1 flex flex-col pb-24 pt-2">
         <div className="space-y-6">
           
           {/* Section 1: Account */}
