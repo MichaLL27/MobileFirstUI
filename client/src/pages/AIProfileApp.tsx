@@ -497,9 +497,15 @@ function ProfileScreen({
             </AvatarFallback>
           </Avatar>
           
-          <h2 className="text-2xl font-bold text-slate-900 mb-1" data-testid="text-profile-name">
-            {profile.firstName} {profile.lastName}
-          </h2>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <h2 className="text-2xl font-bold text-slate-900" data-testid="text-profile-name">
+              {profile.firstName} {profile.lastName}
+            </h2>
+          </div>
+          
+          <Badge className="mb-3 bg-blue-50 text-blue-700 border-blue-200 text-xs font-medium">
+            ✨ AI-generated profile
+          </Badge>
           
           <p className="text-base text-primary font-medium mb-4">
             {profile.role}
@@ -545,15 +551,15 @@ function ProfileScreen({
         </section>
 
         {/* Skills Section */}
-        <section className="mb-12">
+        <section className="mb-8">
           <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4">
             Skills
           </h3>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-wrap gap-2">
             {profile.skills.map((skill) => (
               <span 
                 key={skill} 
-                className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium bg-[#F2F4F7] text-slate-700"
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700"
               >
                 {skill}
               </span>
@@ -561,14 +567,20 @@ function ProfileScreen({
           </div>
         </section>
 
-        {/* Action Button */}
-        <div className="mt-auto pt-4">
+        {/* Action Buttons */}
+        <div className="mt-auto pt-6 space-y-3">
           <Button 
             className="w-full h-12 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
             data-testid="button-share-profile"
           >
-            Share Profile
+            Share profile
           </Button>
+          <button
+            className="w-full h-10 text-sm font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-all"
+            data-testid="button-edit-profile"
+          >
+            Edit profile
+          </button>
         </div>
       </div>
     </motion.div>

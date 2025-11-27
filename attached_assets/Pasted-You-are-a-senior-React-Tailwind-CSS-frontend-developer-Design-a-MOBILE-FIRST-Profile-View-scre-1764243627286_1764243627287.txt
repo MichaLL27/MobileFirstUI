@@ -1,0 +1,66 @@
+You are a senior React + Tailwind CSS frontend developer.
+
+Design a MOBILE-FIRST “Profile View” screen for the AI Profile Directory app. 
+This is a detailed public profile page for a single user.
+
+Tech:
+- React + Tailwind CSS
+- Mobile-first layout (max-width around 420–480px, centered)
+- Do NOT use <Link> or React Router. Use buttons/divs with onClick placeholders only.
+
+Layout and design:
+
+1) Top Bar
+- At the very top, add:
+  - A back button on the left (“←”) with onClick placeholder.
+  - A small title on the right: “Profile”.
+- Keep it minimal, no heavy separators.
+
+2) Hero Profile Section
+- Centered circular avatar with initials (e.g. “DA”), large size, with soft shadow.
+- Full name below in large bold text.
+- Role / Title in medium-sized, muted blue text.
+- Under that, show two metadata lines in small gray text:
+  - Location: “📍 Tel Aviv, Israel”
+  - Company: “💼 Independent / Freelance”
+- Add a tiny AI badge under or next to the name:
+  - Example: a small pill with text “AI-generated profile”.
+
+3) About Section (LONG about text)
+- Section title: “ABOUT” in small uppercase, tracking-wide, muted gray color.
+- Below the title, wrap the About text in a soft card:
+  - `rounded-xl`
+  - Light tinted background (e.g. `bg-slate-50` or `bg-[#F9FBFF]`)
+  - `p-4` or `p-5`
+  - `border border-slate-100` or subtle shadow.
+- Use a container with `space-y-3` and multiple `<p>` elements to represent a long text (300–400 words).
+- Text class: `text-sm text-slate-700 leading-relaxed`.
+
+4) Read More / Read Less interaction
+- Implement a simple toggle with React state, e.g. `const [expanded, setExpanded] = useState(false);`.
+- When `expanded` is false:
+  - Limit the About card height with `max-h-40 overflow-hidden relative`.
+  - Add a gradient overlay at the bottom of the card using a div:
+    - `absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent`.
+- When `expanded` is true:
+  - Remove the `max-h-40` and the gradient overlay.
+- Below the card, center a small text button:
+  - Label: “Read more” when collapsed, “Show less” when expanded.
+  - Style: `text-xs text-blue-600 font-medium mt-2`.
+
+5) Skills Section
+- Section title: “SKILLS” styled like ABOUT.
+- Display a flex row that wraps with gap:
+  - Pills: `inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-700`.
+- Use example skills such as: Product Design, Figma, UX Strategy, AI Tools.
+
+6) Bottom Actions
+- At the bottom of the screen, add:
+  - A full-width primary button: “Share profile”
+    - `w-full rounded-xl py-3 text-sm font-semibold text-white bg-blue-600 shadow-sm`
+  - Optional secondary ghost button: “Edit profile” (just as placeholder, smaller text).
+
+General:
+- Keep generous vertical spacing: `mt-6` / `mt-8` between sections.
+- Make sure the whole page scrolls nicely on mobile.
+- Use only demo static data for now.
