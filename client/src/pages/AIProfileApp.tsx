@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import { OnboardingScreen } from "./OnboardingScreen";
 
 // --- Types ---
 type Screen = "home" | "profile" | "join" | "searchResults";
@@ -336,7 +337,7 @@ function ProfileAvatar({
         <img 
           src={imageUrl} 
           alt="Profile" 
-          className={`${sizeClasses} rounded-full object-cover shadow-md flex-shrink-0 border-4 border-white shadow-lg`}
+          className={`${sizeClasses} rounded-full object-cover shrink-0 border-4 border-white shadow-lg`}
         />
       ) : (
         <div className={`${sizeClasses} rounded-full bg-slate-200 text-slate-600 shadow-md flex items-center justify-center font-semibold flex-shrink-0 border-4 border-white shadow-lg`}>
@@ -427,6 +428,14 @@ export default function AIProfileApp() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorState, setErrorState] = useState<"none" | "noInternet" | "serverError">("none");
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
+    if (!hasSeenOnboarding) {
+      setShowOnboarding(true);
+    }
+  }, []);
 
   const { data: profiles = [], isLoading: profilesLoading } = useQuery({
     queryKey: ["/api/profiles"],
@@ -501,6 +510,17 @@ export default function AIProfileApp() {
       <div className="min-h-screen bg-slate-50 flex justify-center items-center font-sans text-slate-900">
         <ConfigurationErrorScreen />
       </div>
+    );
+  }
+
+  if (showOnboarding) {
+    return (
+      <OnboardingScreen
+        onComplete={() => {
+          localStorage.setItem("hasSeenOnboarding", "true");
+          setShowOnboarding(false);
+        }}
+      />
     );
   }
 
@@ -1408,7 +1428,7 @@ function JoinScreen({ onBack, onSuccess, onError }: {
             <Button 
               onClick={handleSubmit}
               disabled={isSubmitting || isGeneratingAI}
-              className="w-full h-14 text-lg font-semibold rounded-xl shadow-xl shadow-primary/25 hover:shadow-primary/35 transition-all active:scale-[0.99] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-none disabled:opacity-50"
+              className="w-full h-14 text-lg font-semibold rounded-xl shadow-xl shadow-primary/25 hover:shadow-primary/35 transition-all active:scale-[0.99] bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 border-none disabled:opacity-50"
               type="button"
               data-testid="button-generate-profile"
             >
