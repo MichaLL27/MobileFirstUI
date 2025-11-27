@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 
 // --- Types ---
 type Screen = "home" | "profile" | "join" | "searchResults";
@@ -158,7 +159,10 @@ export default function AIProfileApp() {
           )}
 
           {activeTab === "settings" && (
-            <SettingsScreen key="settings" />
+            <SettingsScreen 
+              key="settings" 
+              onBack={() => setActiveTab("directory")}
+            />
           )}
         </AnimatePresence>
 
@@ -1049,7 +1053,15 @@ function MyProfileScreen({
   );
 }
 
-function SettingsScreen() {
+function SettingsScreen({ onBack }: { onBack: () => void }) {
+  // State management
+  const [selectedStyle, setSelectedStyle] = useState<"professional" | "friendly" | "short">("professional");
+  const [isPublic, setIsPublic] = useState(true);
+  const [emailViews, setEmailViews] = useState(false);
+  const [emailTips, setEmailTips] = useState(true);
+
+  const styles = ["professional", "friendly", "short"] as const;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -1058,12 +1070,162 @@ function SettingsScreen() {
       transition={{ duration: 0.2 }}
       className="flex flex-col h-full bg-white overflow-y-auto"
     >
-      <div className="px-6 py-8 flex-1 flex flex-col items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4">⚙️</div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Settings</h2>
-          <p className="text-slate-500">Coming soon</p>
-          <p className="text-sm text-slate-400 mt-4">Settings and preferences will be available soon.</p>
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-10 bg-white/80 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center">
+        <button 
+          onClick={onBack}
+          className="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-600 transition-colors"
+          data-testid="button-back-settings"
+        >
+          <ArrowLeft className="h-6 w-6" />
+        </button>
+        <span className="ml-2 font-medium text-slate-900">Settings</span>
+      </div>
+
+      <div className="px-6 py-6 flex-1 flex flex-col pb-8">
+        <div className="space-y-6">
+          
+          {/* Section 1: Account */}
+          <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">Account</h3>
+            <div className="bg-white rounded-xl border border-slate-100 p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-slate-900">Profile status</p>
+                  <p className="text-sm text-slate-600">Profile: Dor Aharonoff</p>
+                </div>
+                <button 
+                  className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                  data-testid="button-view-profile"
+                >
+                  View
+                </button>
+              </div>
+              <p className="text-xs text-slate-500">Manage your profile and account details.</p>
+            </div>
+          </section>
+
+          {/* Section 2: Profile & AI */}
+          <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">Profile & AI</h3>
+            <div className="bg-white rounded-xl border border-slate-100 p-4 space-y-4">
+              
+              {/* Language Selection */}
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <label className="text-sm font-medium text-slate-900">Profile language</label>
+                <div className="flex gap-2">
+                  <button 
+                    className="px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+                    data-testid="button-language-english"
+                  >
+                    English
+                  </button>
+                  <button 
+                    className="px-3 py-1.5 text-xs font-medium rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+                    data-testid="button-language-hebrew"
+                  >
+                    Hebrew
+                  </button>
+                </div>
+              </div>
+
+              {/* AI Writing Style */}
+              <div className="pb-4 border-b border-slate-100">
+                <label className="text-sm font-medium text-slate-900 block mb-3">AI writing style</label>
+                <div className="flex gap-2 flex-wrap">
+                  {styles.map((style) => (
+                    <button
+                      key={style}
+                      onClick={() => setSelectedStyle(style)}
+                      className={`px-3 py-1.5 text-xs font-medium rounded-full transition-colors capitalize ${
+                        selectedStyle === style
+                          ? "bg-primary text-white"
+                          : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                      }`}
+                      data-testid={`button-style-${style}`}
+                    >
+                      {style}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Regenerate Button */}
+              <button 
+                className="w-full px-4 py-2.5 text-sm font-medium text-primary border border-primary rounded-lg hover:bg-blue-50 transition-colors"
+                data-testid="button-regenerate-profile"
+              >
+                Regenerate my profile with AI
+              </button>
+            </div>
+          </section>
+
+          {/* Section 3: Privacy */}
+          <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">Privacy & visibility</h3>
+            <div className="bg-white rounded-xl border border-slate-100 p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-slate-900">Show my profile in public directory</label>
+                <Switch 
+                  checked={isPublic}
+                  onCheckedChange={setIsPublic}
+                  data-testid="toggle-public-profile"
+                />
+              </div>
+              <p className="text-xs text-slate-500">When turned off, your profile will not appear in search results.</p>
+            </div>
+          </section>
+
+          {/* Section 4: Notifications */}
+          <section>
+            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3">Notifications</h3>
+            <div className="bg-white rounded-xl border border-slate-100 p-4 space-y-4">
+              <div className="flex items-center justify-between py-2">
+                <label className="text-sm font-medium text-slate-900">Email me when someone views my profile</label>
+                <Switch 
+                  checked={emailViews}
+                  onCheckedChange={setEmailViews}
+                  data-testid="toggle-email-views"
+                />
+              </div>
+              <div className="flex items-center justify-between py-2 border-t border-slate-100 pt-4">
+                <label className="text-sm font-medium text-slate-900">Send tips to improve my profile</label>
+                <Switch 
+                  checked={emailTips}
+                  onCheckedChange={setEmailTips}
+                  data-testid="toggle-email-tips"
+                />
+              </div>
+            </div>
+          </section>
+
+          {/* Section 5: About */}
+          <section>
+            <div className="bg-slate-50 rounded-xl border border-slate-100 p-4 space-y-3">
+              <h3 className="text-sm font-semibold text-slate-900">About AI Profile Directory</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                An AI-powered directory where professionals create beautiful profiles in seconds.
+              </p>
+              <p className="text-xs text-slate-400">Version 0.1.0</p>
+              <button 
+                className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+                data-testid="button-send-feedback"
+              >
+                Send feedback
+              </button>
+            </div>
+          </section>
+
+          {/* Danger Zone */}
+          <section className="pt-4">
+            <button 
+              className="text-sm font-medium text-red-600 hover:text-red-700 transition-colors"
+              data-testid="button-delete-profile"
+            >
+              Delete my profile
+            </button>
+          </section>
+
         </div>
       </div>
     </motion.div>

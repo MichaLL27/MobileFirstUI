@@ -1,0 +1,65 @@
+You are a senior React + Tailwind CSS frontend developer.
+
+Create a MOBILE-FIRST “Settings” screen for the AI Profile Directory app.
+
+Tech:
+- React + Tailwind CSS
+- Mobile layout (max-width around 420–480px, centered)
+- Do NOT use <Link> or React Router. Only buttons/divs with onClick placeholders.
+
+Design requirements:
+
+1) Top Bar
+- Back button on the left (“←”) with onClick placeholder.
+- Title: “Settings”.
+
+2) Section 1: Account
+- Card-style section with a small title: “Account”.
+- Inside the card:
+  - Row showing profile status:
+    - Label: “Profile status”
+    - Value text: “No profile yet” or “Profile: Dor Aharonoff” (hard-coded demo).
+    - Small text button on the right: “View” or “Create”.
+- Use subtle gray text for helper line under it:
+  - “Manage your profile and account details.”
+
+3) Section 2: Profile & AI
+- Section title: “Profile & AI”.
+- Inside:
+  - Row: “Profile language”
+    - Right side: segmented control / select with “English” and “Hebrew” (UI only).
+  - Row: “AI writing style”
+    - Small pills: “Professional”, “Friendly”, “Short”.
+    - User can tap to select one (use state, highlight selected pill with blue background).
+  - Row with a small button: “Regenerate my profile with AI” (primary outline button, no logic).
+
+4) Section 3: Privacy
+- Section title: “Privacy & visibility”.
+- Row with:
+  - Label: “Show my profile in public directory”.
+  - On the right: a toggle switch (use a simple div styled as a toggle, controlled by state).
+- Small helper text under the row:
+  - “When turned off, your profile will not appear in search results.”
+
+5) Section 4: Notifications (placeholder)
+- Title: “Notifications”.
+- Two rows with switches:
+  - “Email me when someone views my profile”
+  - “Send tips to improve my profile”
+- Toggles are UI only (state-based).
+
+6) Section 5: About
+- Small card at the bottom with:
+  - Title: “About AI Profile Directory”
+  - Text: short description (2 lines).
+  - Small muted line: “Version 0.1.0”
+  - Text button: “Send feedback”.
+
+7) Danger zone (bottom)
+- Centered small red text button: “Delete my profile”.
+- No actual logic, just placeholder.
+
+General styling:
+- Use stacked card layout with `rounded-xl`, `bg-white`, `shadow-sm` or light border.
+- Use `space-y-6` between sections.
+- Ensure the screen scrolls smoothly on mobile and has padding bottom to not hide behind the bottom nav.
