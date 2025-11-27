@@ -1,4 +1,4 @@
-import { adminDb, isFirebaseAdminConfigured } from "./firebaseAdmin";
+import { adminDb, isFirebaseAdminConfigured } from "./firebaseAdmin.js";
 
 export interface Profile {
   id: string;

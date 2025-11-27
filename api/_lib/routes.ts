@@ -1,8 +1,8 @@
 import type { Express, Request, Response, NextFunction, RequestHandler } from "express";
 import type { Server } from "http";
-import { storage } from "./storage";
-import { getUserFromToken } from "./firebaseAdmin";
-import { generateProfileWithAI } from "./openai";
+import { storage } from "./storage.js";
+import { getUserFromToken } from "./firebaseAdmin.js";
+import { generateProfileWithAI } from "./openai.js";
 import { z } from "zod";
 
 declare global {

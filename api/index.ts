@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { createServer } from "http";
 
-import { registerRoutes } from "./_lib/routes";
+import { registerRoutes } from "./_lib/routes.js";
 
 // NOTE: We do NOT import registerRoutes here statically.
 // We import it dynamically inside the handler to prevent top-level crashes
