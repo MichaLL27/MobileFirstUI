@@ -391,8 +391,31 @@ function EmptyDirectoryState({ onCreateClick }: { onCreateClick: () => void }) {
   );
 }
 
+function ConfigurationErrorScreen() {
+  return (
+    <div className="w-full max-w-[480px] h-screen bg-gradient-to-b from-red-50 to-white flex flex-col items-center justify-center p-6 text-center">
+      <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mb-6">
+        <AlertTriangle className="h-10 w-10 text-red-500" />
+      </div>
+      <h1 className="text-2xl font-bold text-slate-900 mb-4">Firebase Not Configured</h1>
+      <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+        This application requires Firebase credentials to run. Please set up the following environment variables:
+      </p>
+      <div className="bg-slate-100 rounded-lg p-4 text-left text-xs font-mono text-slate-700 mb-6 w-full">
+        <p>VITE_FIREBASE_API_KEY</p>
+        <p>VITE_FIREBASE_AUTH_DOMAIN</p>
+        <p>VITE_FIREBASE_PROJECT_ID</p>
+        <p>VITE_FIREBASE_APP_ID</p>
+      </div>
+      <p className="text-xs text-slate-500">
+        See .env.example for the full list of required environment variables.
+      </p>
+    </div>
+  );
+}
+
 export default function AIProfileApp() {
-  const { user, isAuthenticated, isLoading: authLoading, login } = useAuth();
+  const { user, isAuthenticated, isLoading: authLoading, login, isConfigured: firebaseConfigured } = useAuth();
   const queryClient = useQueryClient();
   
   const [activeTab, setActiveTab] = useState<"directory" | "create" | "profile" | "settings">("directory");
@@ -472,6 +495,14 @@ export default function AIProfileApp() {
       setActiveScreen("join");
     }
   };
+
+  if (!firebaseConfigured) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex justify-center items-center font-sans text-slate-900">
+        <ConfigurationErrorScreen />
+      </div>
+    );
+  }
 
   if (authLoading) {
     return (

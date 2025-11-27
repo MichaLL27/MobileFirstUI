@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import { auth, signInWithGoogle, logout, subscribeToAuthState, getIdToken, type User } from "@/lib/firebase";
+import { signInWithGoogle, logout, subscribeToAuthState, getIdToken, isConfigured, type User } from "@/lib/firebase";
 
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isConfigured: boolean;
 }
 
 export function useAuth() {
@@ -12,6 +13,7 @@ export function useAuth() {
     user: null,
     isAuthenticated: false,
     isLoading: true,
+    isConfigured: isConfigured(),
   });
 
   useEffect(() => {
@@ -20,6 +22,7 @@ export function useAuth() {
         user,
         isAuthenticated: !!user,
         isLoading: false,
+        isConfigured: isConfigured(),
       });
     });
 

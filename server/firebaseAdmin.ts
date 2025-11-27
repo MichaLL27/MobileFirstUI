@@ -2,6 +2,8 @@ import admin from "firebase-admin";
 
 const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
 
+let isConfigured = false;
+
 if (!admin.apps.length) {
   if (serviceAccountJson) {
     try {
@@ -9,20 +11,24 @@ if (!admin.apps.length) {
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
       });
+      isConfigured = true;
     } catch (error) {
       console.error("Error parsing Firebase service account:", error);
-      admin.initializeApp();
     }
   } else {
-    console.warn("FIREBASE_SERVICE_ACCOUNT_KEY not set, using default credentials");
-    admin.initializeApp();
+    console.warn("FIREBASE_SERVICE_ACCOUNT_KEY not set. Firebase Admin features are disabled.");
   }
 }
 
-export const adminAuth = admin.auth();
-export const adminDb = admin.firestore();
+export const isFirebaseAdminConfigured = isConfigured;
+export const adminAuth = isConfigured ? admin.auth() : null;
+export const adminDb = isConfigured ? admin.firestore() : null;
 
 export async function verifyIdToken(idToken: string) {
+  if (!adminAuth) {
+    console.warn("Firebase Admin Auth not configured");
+    return null;
+  }
   try {
     const decodedToken = await adminAuth.verifyIdToken(idToken);
     return decodedToken;

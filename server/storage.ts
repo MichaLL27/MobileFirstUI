@@ -1,4 +1,4 @@
-import { adminDb } from "./firebaseAdmin";
+import { adminDb, isFirebaseAdminConfigured } from "./firebaseAdmin";
 
 export interface Profile {
   id: string;
@@ -66,9 +66,54 @@ export interface IStorage {
   updateSettings(userId: string, settings: Partial<InsertSettings>): Promise<Settings | undefined>;
 }
 
+class MockStorage implements IStorage {
+  async getProfileByUserId(_userId: string): Promise<Profile | undefined> {
+    return undefined;
+  }
+
+  async createProfile(_profile: InsertProfile): Promise<Profile> {
+    throw new Error("Firebase not configured");
+  }
+
+  async updateProfile(_userId: string, _profile: Partial<InsertProfile>): Promise<Profile | undefined> {
+    throw new Error("Firebase not configured");
+  }
+
+  async deleteProfile(_userId: string): Promise<boolean> {
+    throw new Error("Firebase not configured");
+  }
+
+  async searchProfiles(_query?: string, _category?: string): Promise<Profile[]> {
+    return [];
+  }
+
+  async getPublicProfiles(): Promise<Profile[]> {
+    return [];
+  }
+
+  async getSettings(_userId: string): Promise<Settings | undefined> {
+    return undefined;
+  }
+
+  async createSettings(_settings: InsertSettings): Promise<Settings> {
+    throw new Error("Firebase not configured");
+  }
+
+  async updateSettings(_userId: string, _settings: Partial<InsertSettings>): Promise<Settings | undefined> {
+    throw new Error("Firebase not configured");
+  }
+}
+
 export class FirestoreStorage implements IStorage {
-  private profilesCollection = adminDb.collection("profiles");
-  private settingsCollection = adminDb.collection("settings");
+  private get profilesCollection() {
+    if (!adminDb) throw new Error("Firebase not configured");
+    return adminDb.collection("profiles");
+  }
+  
+  private get settingsCollection() {
+    if (!adminDb) throw new Error("Firebase not configured");
+    return adminDb.collection("settings");
+  }
 
   async getProfileByUserId(userId: string): Promise<Profile | undefined> {
     const doc = await this.profilesCollection.doc(userId).get();
@@ -236,4 +281,6 @@ export class FirestoreStorage implements IStorage {
   }
 }
 
-export const storage = new FirestoreStorage();
+export const storage: IStorage = isFirebaseAdminConfigured 
+  ? new FirestoreStorage() 
+  : new MockStorage();
