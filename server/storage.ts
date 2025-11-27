@@ -1,21 +1,63 @@
-import { 
-  users, profiles, settings,
-  type User, type UpsertUser,
-  type Profile, type InsertProfile,
-  type Settings, type InsertSettings 
-} from "@shared/schema";
-import { db } from "./db";
-import { eq, ilike, or, and } from "drizzle-orm";
+import { adminDb } from "./firebaseAdmin";
+
+export interface Profile {
+  id: string;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  workArea?: string | null;
+  businessName?: string | null;
+  skills: string[];
+  backgroundText?: string | null;
+  aboutText?: string | null;
+  summary?: string | null;
+  avatarUrl?: string | null;
+  initials: string;
+  isPublic: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Settings {
+  userId: string;
+  profileStyle: "simple" | "detailed";
+  showInPublicSearch: boolean;
+  emailOnProfileView: boolean;
+  emailProfileTips: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface InsertProfile {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  workArea?: string | null;
+  businessName?: string | null;
+  skills?: string[];
+  backgroundText?: string | null;
+  aboutText?: string | null;
+  summary?: string | null;
+  avatarUrl?: string | null;
+  initials?: string;
+  isPublic?: boolean;
+}
+
+export interface InsertSettings {
+  userId: string;
+  profileStyle?: "simple" | "detailed";
+  showInPublicSearch?: boolean;
+  emailOnProfileView?: boolean;
+  emailProfileTips?: boolean;
+}
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  upsertUser(user: UpsertUser): Promise<User>;
-  
-  getProfile(id: string): Promise<Profile | undefined>;
   getProfileByUserId(userId: string): Promise<Profile | undefined>;
   createProfile(profile: InsertProfile): Promise<Profile>;
-  updateProfile(id: string, profile: Partial<InsertProfile>): Promise<Profile | undefined>;
-  deleteProfile(id: string): Promise<boolean>;
+  updateProfile(userId: string, profile: Partial<InsertProfile>): Promise<Profile | undefined>;
+  deleteProfile(userId: string): Promise<boolean>;
   searchProfiles(query?: string, category?: string): Promise<Profile[]>;
   getPublicProfiles(): Promise<Profile[]>;
   
@@ -24,105 +66,174 @@ export interface IStorage {
   updateSettings(userId: string, settings: Partial<InsertSettings>): Promise<Settings | undefined>;
 }
 
-export class DatabaseStorage implements IStorage {
-  async getUser(id: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user || undefined;
-  }
-
-  async upsertUser(userData: UpsertUser): Promise<User> {
-    const [user] = await db
-      .insert(users)
-      .values(userData)
-      .onConflictDoUpdate({
-        target: users.id,
-        set: {
-          ...userData,
-          updatedAt: new Date(),
-        },
-      })
-      .returning();
-    return user;
-  }
-
-  async getProfile(id: string): Promise<Profile | undefined> {
-    const [profile] = await db.select().from(profiles).where(eq(profiles.id, id));
-    return profile || undefined;
-  }
+export class FirestoreStorage implements IStorage {
+  private profilesCollection = adminDb.collection("profiles");
+  private settingsCollection = adminDb.collection("settings");
 
   async getProfileByUserId(userId: string): Promise<Profile | undefined> {
-    const [profile] = await db.select().from(profiles).where(eq(profiles.userId, userId));
-    return profile || undefined;
+    const doc = await this.profilesCollection.doc(userId).get();
+    if (!doc.exists) return undefined;
+    const data = doc.data()!;
+    return {
+      id: doc.id,
+      ...data,
+      createdAt: data.createdAt?.toDate() || new Date(),
+      updatedAt: data.updatedAt?.toDate() || new Date(),
+    } as Profile;
   }
 
   async createProfile(insertProfile: InsertProfile): Promise<Profile> {
-    const [profile] = await db.insert(profiles).values(insertProfile).returning();
-    return profile;
+    const now = new Date();
+    const profileData = {
+      ...insertProfile,
+      skills: insertProfile.skills || [],
+      initials: insertProfile.initials || ((insertProfile.firstName?.[0] || "") + (insertProfile.lastName?.[0] || "")).toUpperCase(),
+      isPublic: insertProfile.isPublic ?? true,
+      createdAt: now,
+      updatedAt: now,
+    };
+    
+    await this.profilesCollection.doc(insertProfile.userId).set(profileData);
+    
+    return {
+      id: insertProfile.userId,
+      ...profileData,
+    } as Profile;
   }
 
-  async updateProfile(id: string, updateData: Partial<InsertProfile>): Promise<Profile | undefined> {
-    const [profile] = await db
-      .update(profiles)
-      .set({ ...updateData, updatedAt: new Date() })
-      .where(eq(profiles.id, id))
-      .returning();
-    return profile || undefined;
+  async updateProfile(userId: string, updateData: Partial<InsertProfile>): Promise<Profile | undefined> {
+    const docRef = this.profilesCollection.doc(userId);
+    const doc = await docRef.get();
+    
+    if (!doc.exists) return undefined;
+    
+    const updatedData = {
+      ...updateData,
+      updatedAt: new Date(),
+    };
+    
+    await docRef.update(updatedData);
+    
+    const updatedDoc = await docRef.get();
+    const data = updatedDoc.data()!;
+    return {
+      id: updatedDoc.id,
+      ...data,
+      createdAt: data.createdAt?.toDate() || new Date(),
+      updatedAt: data.updatedAt?.toDate() || new Date(),
+    } as Profile;
   }
 
-  async deleteProfile(id: string): Promise<boolean> {
-    const result = await db.delete(profiles).where(eq(profiles.id, id)).returning();
-    return result.length > 0;
+  async deleteProfile(userId: string): Promise<boolean> {
+    const docRef = this.profilesCollection.doc(userId);
+    const doc = await docRef.get();
+    
+    if (!doc.exists) return false;
+    
+    await docRef.delete();
+    return true;
   }
 
   async searchProfiles(query?: string, category?: string): Promise<Profile[]> {
-    let conditions: any[] = [eq(profiles.isPublic, true)];
+    let queryRef = this.profilesCollection.where("isPublic", "==", true);
     
+    const snapshot = await queryRef.get();
+    let profiles = snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: data.createdAt?.toDate() || new Date(),
+        updatedAt: data.updatedAt?.toDate() || new Date(),
+      } as Profile;
+    });
+
     if (query) {
-      const searchTerm = `%${query}%`;
-      conditions.push(
-        or(
-          ilike(profiles.firstName, searchTerm),
-          ilike(profiles.lastName, searchTerm),
-          ilike(profiles.role, searchTerm),
-          ilike(profiles.businessName, searchTerm)
-        )
+      const lowerQuery = query.toLowerCase();
+      profiles = profiles.filter(p => 
+        p.firstName.toLowerCase().includes(lowerQuery) ||
+        p.lastName.toLowerCase().includes(lowerQuery) ||
+        p.role.toLowerCase().includes(lowerQuery) ||
+        (p.businessName && p.businessName.toLowerCase().includes(lowerQuery))
       );
     }
-    
+
     if (category) {
-      conditions.push(ilike(profiles.role, `%${category}%`));
+      const lowerCategory = category.toLowerCase();
+      profiles = profiles.filter(p => 
+        p.role.toLowerCase().includes(lowerCategory)
+      );
     }
-    
-    const result = await db
-      .select()
-      .from(profiles)
-      .where(and(...conditions));
-    
-    return result;
+
+    return profiles;
   }
 
   async getPublicProfiles(): Promise<Profile[]> {
-    return db.select().from(profiles).where(eq(profiles.isPublic, true));
+    const snapshot = await this.profilesCollection.where("isPublic", "==", true).get();
+    return snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: data.createdAt?.toDate() || new Date(),
+        updatedAt: data.updatedAt?.toDate() || new Date(),
+      } as Profile;
+    });
   }
 
   async getSettings(userId: string): Promise<Settings | undefined> {
-    const [setting] = await db.select().from(settings).where(eq(settings.userId, userId));
-    return setting || undefined;
+    const doc = await this.settingsCollection.doc(userId).get();
+    if (!doc.exists) return undefined;
+    const data = doc.data()!;
+    return {
+      userId: doc.id,
+      ...data,
+      createdAt: data.createdAt?.toDate() || new Date(),
+      updatedAt: data.updatedAt?.toDate() || new Date(),
+    } as Settings;
   }
 
   async createSettings(insertSettings: InsertSettings): Promise<Settings> {
-    const [setting] = await db.insert(settings).values(insertSettings).returning();
-    return setting;
+    const now = new Date();
+    const settingsData = {
+      profileStyle: insertSettings.profileStyle || "simple",
+      showInPublicSearch: insertSettings.showInPublicSearch ?? true,
+      emailOnProfileView: insertSettings.emailOnProfileView ?? true,
+      emailProfileTips: insertSettings.emailProfileTips ?? true,
+      createdAt: now,
+      updatedAt: now,
+    };
+    
+    await this.settingsCollection.doc(insertSettings.userId).set(settingsData);
+    
+    return {
+      userId: insertSettings.userId,
+      ...settingsData,
+    } as Settings;
   }
 
   async updateSettings(userId: string, updateData: Partial<InsertSettings>): Promise<Settings | undefined> {
-    const [setting] = await db
-      .update(settings)
-      .set({ ...updateData, updatedAt: new Date() })
-      .where(eq(settings.userId, userId))
-      .returning();
-    return setting || undefined;
+    const docRef = this.settingsCollection.doc(userId);
+    const doc = await docRef.get();
+    
+    if (!doc.exists) return undefined;
+    
+    const updatedData = {
+      ...updateData,
+      updatedAt: new Date(),
+    };
+    
+    await docRef.update(updatedData);
+    
+    const updatedDoc = await docRef.get();
+    const data = updatedDoc.data()!;
+    return {
+      userId: updatedDoc.id,
+      ...data,
+      createdAt: data.createdAt?.toDate() || new Date(),
+      updatedAt: data.updatedAt?.toDate() || new Date(),
+    } as Settings;
   }
 }
 
-export const storage = new DatabaseStorage();
+export const storage = new FirestoreStorage();

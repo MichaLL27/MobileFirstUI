@@ -1,22 +1,77 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction, RequestHandler } from "express";
 import type { Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { getUserFromToken } from "./firebaseAdmin";
 import { generateProfileWithAI } from "./openai";
-import { insertProfileSchema, updateProfileSchema, updateSettingsSchema } from "@shared/schema";
 import { z } from "zod";
+
+declare global {
+  namespace Express {
+    interface Request {
+      firebaseUser?: {
+        uid: string;
+        email?: string;
+        name?: string;
+      };
+    }
+  }
+}
+
+const insertProfileSchema = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string(),
+  role: z.string().min(1),
+  workArea: z.string().optional().nullable(),
+  businessName: z.string().optional().nullable(),
+  skills: z.array(z.string()).optional(),
+  backgroundText: z.string().optional().nullable(),
+  initials: z.string().optional(),
+  isPublic: z.boolean().optional(),
+});
+
+const updateProfileSchema = insertProfileSchema.partial();
+
+const updateSettingsSchema = z.object({
+  profileStyle: z.enum(["simple", "detailed"]).optional(),
+  showInPublicSearch: z.boolean().optional(),
+  emailOnProfileView: z.boolean().optional(),
+  emailProfileTips: z.boolean().optional(),
+});
+
+const isAuthenticated: RequestHandler = async (req, res, next) => {
+  try {
+    const decodedToken = await getUserFromToken(req.headers.authorization);
+    
+    if (!decodedToken) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+    
+    req.firebaseUser = {
+      uid: decodedToken.uid,
+      email: decodedToken.email,
+      name: decodedToken.name,
+    };
+    
+    next();
+  } catch (error) {
+    console.error("Auth error:", error);
+    res.status(401).json({ message: "Unauthorized" });
+  }
+};
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  await setupAuth(app);
 
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  app.get('/api/auth/user', isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
+      res.json({
+        uid: req.firebaseUser!.uid,
+        email: req.firebaseUser!.email,
+        name: req.firebaseUser!.name,
+      });
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
@@ -39,7 +94,7 @@ export async function registerRoutes(
 
   app.get("/api/profiles/:id", async (req, res) => {
     try {
-      const profile = await storage.getProfile(req.params.id);
+      const profile = await storage.getProfileByUserId(req.params.id);
       if (!profile) {
         return res.status(404).json({ message: "Profile not found" });
       }
@@ -50,9 +105,9 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/my-profile", isAuthenticated, async (req: any, res) => {
+  app.get("/api/my-profile", isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.firebaseUser!.uid;
       const profile = await storage.getProfileByUserId(userId);
       if (!profile) {
         return res.status(404).json({ message: "Profile not found" });
@@ -64,21 +119,21 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/profiles", isAuthenticated, async (req: any, res) => {
+  app.post("/api/profiles", isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.firebaseUser!.uid;
       
       const existingProfile = await storage.getProfileByUserId(userId);
       if (existingProfile) {
         return res.status(400).json({ message: "Profile already exists" });
       }
 
-      const profileData = insertProfileSchema.parse({
-        ...req.body,
+      const profileData = insertProfileSchema.parse(req.body);
+      
+      const profile = await storage.createProfile({
+        ...profileData,
         userId,
       });
-      
-      const profile = await storage.createProfile(profileData);
       res.status(201).json(profile);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -89,10 +144,10 @@ export async function registerRoutes(
     }
   });
 
-  app.patch("/api/profiles/:id", isAuthenticated, async (req: any, res) => {
+  app.patch("/api/profiles/:id", isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const profile = await storage.getProfile(req.params.id);
+      const userId = req.firebaseUser!.uid;
+      const profile = await storage.getProfileByUserId(req.params.id);
       
       if (!profile) {
         return res.status(404).json({ message: "Profile not found" });
@@ -103,7 +158,7 @@ export async function registerRoutes(
       }
 
       const updateData = updateProfileSchema.parse(req.body);
-      const updatedProfile = await storage.updateProfile(req.params.id, updateData);
+      const updatedProfile = await storage.updateProfile(userId, updateData);
       res.json(updatedProfile);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -114,10 +169,10 @@ export async function registerRoutes(
     }
   });
 
-  app.delete("/api/profiles/:id", isAuthenticated, async (req: any, res) => {
+  app.delete("/api/profiles/:id", isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const profile = await storage.getProfile(req.params.id);
+      const userId = req.firebaseUser!.uid;
+      const profile = await storage.getProfileByUserId(req.params.id);
       
       if (!profile) {
         return res.status(404).json({ message: "Profile not found" });
@@ -127,7 +182,7 @@ export async function registerRoutes(
         return res.status(403).json({ message: "Forbidden" });
       }
 
-      await storage.deleteProfile(req.params.id);
+      await storage.deleteProfile(userId);
       res.status(204).send();
     } catch (error) {
       console.error("Error deleting profile:", error);
@@ -135,9 +190,9 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/profiles/generate-ai", isAuthenticated, async (req: any, res) => {
+  app.post("/api/profiles/generate-ai", isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.firebaseUser!.uid;
       const profile = await storage.getProfileByUserId(userId);
       
       if (!profile) {
@@ -157,7 +212,7 @@ export async function registerRoutes(
         backgroundText: profile.backgroundText || undefined,
       }, style);
 
-      const updatedProfile = await storage.updateProfile(profile.id, {
+      const updatedProfile = await storage.updateProfile(userId, {
         aboutText: generatedContent.aboutText,
         summary: generatedContent.summary,
         skills: generatedContent.skills,
@@ -170,9 +225,9 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/settings", isAuthenticated, async (req: any, res) => {
+  app.get("/api/settings", isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.firebaseUser!.uid;
       let settings = await storage.getSettings(userId);
       
       if (!settings) {
@@ -186,9 +241,9 @@ export async function registerRoutes(
     }
   });
 
-  app.patch("/api/settings", isAuthenticated, async (req: any, res) => {
+  app.patch("/api/settings", isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.firebaseUser!.uid;
       const updateData = updateSettingsSchema.parse(req.body);
       
       let settings = await storage.getSettings(userId);
