@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ArrowLeft, Share2, UserPlus, CheckCircle2, Filter, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,71 @@ interface Profile {
   skills: string[];
   avatarUrl?: string;
   initials: string;
+}
+
+// --- ProfileAvatar Component ---
+function ProfileAvatar({ 
+  initials, 
+  imageUrl, 
+  onChangePhoto,
+  size = "md" 
+}: { 
+  initials: string; 
+  imageUrl?: string; 
+  onChangePhoto?: (file: File) => void;
+  size?: "md" | "lg";
+}) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const sizeClasses = size === "lg" ? "w-28 h-28 text-4xl" : "w-24 h-24 text-xl";
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && onChangePhoto) {
+      onChangePhoto(file);
+    }
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-2">
+      {imageUrl ? (
+        <img 
+          src={imageUrl} 
+          alt="Profile" 
+          className={`${sizeClasses} rounded-full object-cover shadow-md flex-shrink-0 border-4 border-white shadow-lg`}
+        />
+      ) : (
+        <div className={`${sizeClasses} rounded-full bg-slate-200 text-slate-600 shadow-md flex items-center justify-center font-semibold flex-shrink-0 border-4 border-white shadow-lg`}>
+          {initials}
+        </div>
+      )}
+      
+      <p className="text-xs text-slate-600 mt-1 text-center">תמונת פרופיל</p>
+      
+      {onChangePhoto && (
+        <>
+          <button
+            onClick={handleUploadClick}
+            className="text-xs font-medium text-primary hover:text-primary/80 transition-colors mt-1"
+            data-testid="button-change-photo"
+          >
+            {imageUrl ? "שינוי תמונה" : "העלאת תמונה"}
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileSelect}
+            className="hidden"
+            data-testid="input-profile-photo"
+          />
+        </>
+      )}
+    </div>
+  );
 }
 
 // --- Mock Data ---
@@ -588,11 +653,13 @@ function ProfileScreen({
       <div className="px-6 pb-8 pt-2">
         {/* Hero Profile Block */}
         <div className="flex flex-col items-center text-center mb-8">
-          <Avatar className="h-28 w-28 mb-5 shadow-xl shadow-slate-200/80">
-            <AvatarFallback className="bg-slate-100 text-slate-700 text-3xl font-bold tracking-tight">
-              {profile.initials}
-            </AvatarFallback>
-          </Avatar>
+          <div className="mb-5">
+            <ProfileAvatar
+              initials={profile.initials}
+              imageUrl={profile.avatarUrl}
+              size="lg"
+            />
+          </div>
           
           <div className="flex items-center justify-center gap-2 mb-2">
             <h2 className="text-2xl font-bold text-slate-900" data-testid="text-profile-name">
@@ -686,6 +753,30 @@ function ProfileScreen({
 
 function JoinScreen({ onBack }: { onBack: () => void }) {
   const [backgroundNotes, setBackgroundNotes] = useState("");
+  const [photoUrl, setPhotoUrl] = useState<string>("");
+  const [fullName, setFullName] = useState("");
+
+  const handlePhotoUpload = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result;
+      if (typeof result === "string") {
+        setPhotoUrl(result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Extract initials from name
+  const getInitials = () => {
+    return fullName
+      .trim()
+      .split(" ")
+      .map(n => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2) || "UN";
+  };
 
   return (
     <motion.div 
@@ -709,11 +800,23 @@ function JoinScreen({ onBack }: { onBack: () => void }) {
 
       <div className="px-6 py-8 flex-1 flex flex-col">
         <form className="space-y-6 flex-1 flex flex-col" onSubmit={(e) => e.preventDefault()}>
+          {/* Profile Picture Section - At Top */}
+          <div className="flex justify-center pt-4 pb-2">
+            <ProfileAvatar
+              initials={getInitials()}
+              imageUrl={photoUrl}
+              onChangePhoto={handlePhotoUpload}
+              size="md"
+            />
+          </div>
+
           {/* Form Fields */}
           <div className="space-y-5">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700 text-right block">שם מלא</label>
               <Input 
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 placeholder="לדוגמה: רוני לוי" 
                 className="h-12 rounded-xl border-slate-200 focus:border-primary bg-slate-50"
                 data-testid="input-join-name"

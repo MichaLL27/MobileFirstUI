@@ -1,0 +1,68 @@
+You are a senior React + Tailwind CSS frontend developer.
+
+Add a PROFILE PICTURE section (תמונת פרופיל) to my mobile-first Hebrew app
+for low-tech workers. The app is RTL and uses React + Tailwind CSS.
+
+Goal:
+Create a nice UI for a round profile image with fallback initials
+and a simple “upload / change photo” action. Design only – no real upload logic.
+
+Implementation details:
+
+1) General:
+- Use `dir="rtl"` and `text-right` for Hebrew alignment where needed.
+- Do NOT use <Link> or React Router.
+- Use Tailwind for all styling.
+
+2) Where to place it:
+- On the “Create Your Profile” screen:
+  - Add the profile picture block at the TOP of the form,
+    above the “Full Name” field.
+- On the “Profile View” screen:
+  - Reuse the same avatar style (large circular image) in the hero section.
+
+3) Avatar design:
+- Circular avatar in the center:
+  - Size: around 80–96px.
+  - Use an <img> tag if there is an image URL in state, otherwise show initials.
+  - Fallback state:
+    - Gray circle with two Hebrew initials inside (e.g. “רל” as placeholder).
+    - Example Tailwind:
+      `className="flex items-center justify-center w-24 h-24 rounded-full bg-slate-200 text-xl font-semibold text-slate-600 shadow-md"`
+
+4) Below the avatar:
+- Add a small Hebrew label:
+  - Text: “תמונת פרופיל”
+  - Style: `text-xs text-slate-600 mt-2 text-center`
+
+- Add a primary text button under the label:
+  - Text: “העלאת תמונה” when there is no image.
+  - Text: “שינוי תמונה” when an image already exists.
+  - Style:
+    - `text-xs font-medium text-blue-600 mt-1 text-center`
+  - For now, clicking the button can just call a placeholder function or open a hidden file input.
+
+5) Optional file input (design only):
+- Add a hidden `<input type="file" accept="image/*" />`.
+- When the user clicks “העלאת תמונה”, trigger the file input with onClick.
+- You may read the file with FileReader and set a local preview URL in state,
+  but this is optional – the main focus is the UI and layout.
+
+6) Integration with Profile View:
+- On the Profile View screen, use the same avatar component:
+  - If there is an image URL → show it.
+  - If not → show initials.
+- Place it at the top, centered, with a slightly larger size (e.g. w-28 h-28).
+
+7) Styling notes:
+- Keep everything mobile-first, centered horizontally.
+- Use sufficient spacing from the top: `mt-4` or `mt-6`.
+- Maintain the existing clean, rounded, light design.
+
+Create a reusable `ProfileAvatar` component that:
+- Receives props: `name`, `imageUrl`, and `onChangePhoto` (optional).
+- Renders the round avatar + label + “העלאת תמונה / שינוי תמונה” button.
+
+Then use this component on both:
+- CreateYourProfile screen (with upload button active).
+- ProfileView screen (display only, no button or optional smaller “שינוי תמונה”).
