@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ArrowLeft, Share2, UserPlus, CheckCircle2, Filter, X, ChevronDown, Bell, Edit2 } from "lucide-react";
+import { Search, ArrowLeft, Share2, UserPlus, CheckCircle2, Filter, X, ChevronDown, Bell, Edit2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,6 +22,91 @@ interface Profile {
   skills: string[];
   avatarUrl?: string;
   initials: string;
+}
+
+// --- Toast Component ---
+function Toast({ 
+  message, 
+  type = "success" 
+}: { 
+  message: string; 
+  type?: "success" | "error";
+}) {
+  const [isVisible, setIsVisible] = useState(true);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isVisible) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.2 }}
+      className={`fixed bottom-24 left-1/2 transform -translate-x-1/2 max-w-[440px] px-4 py-3 rounded-full text-sm font-medium text-white shadow-lg z-40 ${
+        type === "success" 
+          ? "bg-green-500" 
+          : "bg-red-500"
+      }`}
+      data-testid={`toast-${type}`}
+    >
+      {message}
+    </motion.div>
+  );
+}
+
+// --- DeleteConfirmationModal Component ---
+function DeleteConfirmationModal({ 
+  onConfirm, 
+  onCancel 
+}: { 
+  onConfirm: () => void; 
+  onCancel: () => void;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4"
+      data-testid="modal-delete-confirmation"
+    >
+      <motion.div
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="bg-white rounded-2xl shadow-xl max-w-xs w-full p-6 space-y-4"
+      >
+        <h2 className="text-lg font-bold text-slate-900 text-right">למחוק את הפרופיל?</h2>
+        <p className="text-sm text-slate-600 text-right leading-relaxed">
+          הפעולה לא ניתנת לביטול. אפשר יהיה ליצור פרופיל חדש בכל זמן.
+        </p>
+        
+        <div className="flex gap-3 pt-2">
+          <button
+            onClick={onCancel}
+            className="flex-1 px-4 py-2.5 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors"
+            data-testid="button-cancel-delete"
+          >
+            בטל
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+            data-testid="button-confirm-delete"
+          >
+            מחק פרופיל
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
 }
 
 // --- AppHeader Component ---
@@ -183,6 +268,9 @@ export default function AIProfileApp() {
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [hasProfile, setHasProfile] = useState(true);
 
   // Derived state
   const filteredProfiles = MOCK_PROFILES.filter((p) => {
@@ -229,6 +317,7 @@ export default function AIProfileApp() {
             <SettingsScreen 
               key="settings" 
               onBack={() => setActiveTab("directory")}
+              onDeleteClick={() => setShowDeleteModal(true)}
             />
           )}
 
@@ -236,6 +325,8 @@ export default function AIProfileApp() {
             <MyProfileScreen 
               key="myProfile"
               demoProfile={MOCK_PROFILES[0]}
+              hasProfile={hasProfile}
+              onCreateClick={() => setActiveScreen("join")}
             />
           )}
 
@@ -247,6 +338,7 @@ export default function AIProfileApp() {
               profiles={filteredProfiles}
               onProfileClick={handleProfileClick}
               onJoinClick={handleJoinClick}
+              onClearFilters={() => setSearchTerm("")}
             />
           )}
 
@@ -347,6 +439,27 @@ export default function AIProfileApp() {
             </button>
           </div>
         </div>
+        
+        {/* Delete Confirmation Modal */}
+        <AnimatePresence>
+          {showDeleteModal && (
+            <DeleteConfirmationModal
+              onConfirm={() => {
+                setShowDeleteModal(false);
+                setToast({ message: "הפרופיל נמחק בהצלחה", type: "success" });
+                setHasProfile(false);
+              }}
+              onCancel={() => setShowDeleteModal(false)}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Toast Notification */}
+        <AnimatePresence>
+          {toast && (
+            <Toast message={toast.message} type={toast.type} />
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
@@ -359,13 +472,15 @@ function HomeScreen({
   setSearchTerm, 
   profiles, 
   onProfileClick, 
-  onJoinClick 
+  onJoinClick,
+  onClearFilters
 }: { 
   searchTerm: string;
   setSearchTerm: (s: string) => void;
   profiles: Profile[];
   onProfileClick: (p: Profile) => void;
   onJoinClick: () => void;
+  onClearFilters: () => void;
 }) {
   // Filter state
   const [showFilters, setShowFilters] = useState(false);
@@ -460,6 +575,26 @@ function HomeScreen({
         </button>
       </div>
 
+      {/* Show Empty State if No Profiles */}
+      {profiles.length === 0 ? (
+        <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center">
+          <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-6">
+            <Search className="h-10 w-10 text-slate-400" />
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 mb-2 text-right">לא נמצאו בעלי מקצוע</h3>
+          <p className="text-sm text-slate-500 mb-6 text-right">
+            נסה לשנות את החיפוש או להסיר חלק מהסינונים.
+          </p>
+          <button
+            onClick={onClearFilters}
+            className="px-6 py-2.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors"
+            data-testid="button-clear-filters-empty"
+          >
+            נקה סינונים
+          </button>
+        </div>
+      ) : (
+        <>
       {/* Quick Filter Chips */}
       <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
         {quickFilterCategories.map((category) => (
@@ -653,6 +788,8 @@ function HomeScreen({
           </>
         )}
       </AnimatePresence>
+        </>
+      )}
     </motion.div>
   );
 }
@@ -1068,8 +1205,12 @@ function SearchResultsScreen({
 
 function MyProfileScreen({
   demoProfile,
+  hasProfile,
+  onCreateClick
 }: {
   demoProfile: Profile;
+  hasProfile: boolean;
+  onCreateClick: () => void;
 }) {
   const [expandedAbout, setExpandedAbout] = useState(false);
 
@@ -1088,6 +1229,26 @@ function MyProfileScreen({
         rightIcon={<Edit2 className="h-5 w-5" />}
         rightAction={() => {}}
       />
+
+      {!hasProfile ? (
+        <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
+          <div className="w-24 h-24 rounded-full bg-slate-100 flex items-center justify-center mb-6">
+            <UserPlus className="h-12 w-12 text-slate-400" />
+          </div>
+          <h3 className="text-xl font-bold text-slate-900 mb-2 text-right">עדיין לא יצרת פרופיל</h3>
+          <p className="text-sm text-slate-500 mb-8 text-right leading-relaxed">
+            כדי שיוכלו למצוא אותך, צור פרופיל מקצועי קצר.
+          </p>
+          <button
+            onClick={onCreateClick}
+            className="px-8 py-3 text-sm font-semibold text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+            data-testid="button-create-profile-empty"
+          >
+            צור פרופיל
+          </button>
+        </div>
+      ) : (
+        <>
       <div className="px-6 pb-8 pt-6">
         {/* Hero Profile Block */}
         <div className="flex flex-col items-center text-center mb-8">
@@ -1177,11 +1338,13 @@ function MyProfileScreen({
           </button>
         </div>
       </div>
+      </>
+      )}
     </motion.div>
   );
 }
 
-function SettingsScreen({ onBack }: { onBack: () => void }) {
+function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDeleteClick: () => void; }) {
   // State management
   const [selectedLanguage, setSelectedLanguage] = useState<"english" | "hebrew">("english");
   const [selectedStyle, setSelectedStyle] = useState<"professional" | "friendly">("professional");
@@ -1356,6 +1519,7 @@ function SettingsScreen({ onBack }: { onBack: () => void }) {
           {/* Danger Zone */}
           <section className="pt-4 pb-8 text-center">
             <button 
+              onClick={onDeleteClick}
               className="text-sm font-medium text-red-600 hover:text-red-700 transition-colors"
               data-testid="button-delete-profile"
             >
