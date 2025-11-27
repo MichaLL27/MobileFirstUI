@@ -4,13 +4,17 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
+import AIProfileApp from "@/pages/AIProfileApp";
 
 function Router() {
   return (
     <Switch>
-      {/* Add pages below */}
-      {/* <Route path="/" component={Home}/> */}
-      {/* Fallback to 404 */}
+      {/* 
+        Since the user requested a single-page app-like experience 
+        without React Router logic for the internal navigation,
+        we mount the main app component at the root.
+      */}
+      <Route path="/" component={AIProfileApp} />
       <Route component={NotFound} />
     </Switch>
   );
