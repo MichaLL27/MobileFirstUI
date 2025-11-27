@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ArrowLeft, Share2, UserPlus, Filter, X, ChevronDown, Bell, Edit2, AlertCircle, Wifi, WifiOff, AlertTriangle, Loader } from "lucide-react";
+import { Search, ArrowLeft, ArrowRight, Share2, UserPlus, Filter, X, ChevronDown, Bell, Edit2, AlertCircle, Wifi, WifiOff, AlertTriangle, Loader, Globe, Shield, BellRing, Info, Trash2, User, Sparkles, Eye, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -251,35 +251,39 @@ function AppHeader({
   leftIcon, 
   leftAction,
   rightIcon, 
-  rightAction 
+  rightAction,
+  transparent = false
 }: { 
   title: string; 
   leftIcon?: React.ReactNode; 
   leftAction?: () => void;
   rightIcon?: React.ReactNode; 
   rightAction?: () => void;
+  transparent?: boolean;
 }) {
   return (
-    <div className="fixed top-0 left-0 right-0 max-w-[480px] mx-auto bg-white/90 backdrop-blur-md border-b border-slate-100/50 shadow-sm z-30">
-      <div className="flex items-center justify-between px-4 py-4 h-16">
+    <div className={`fixed top-0 left-0 right-0 max-w-[480px] mx-auto z-30 transition-all duration-200 ${
+      transparent ? 'bg-transparent' : 'bg-white/95 backdrop-blur-sm shadow-sm shadow-slate-200/50'
+    }`}>
+      <div className="flex items-center justify-between px-6 py-4 h-20">
         {/* Left Icon */}
         <button
           onClick={leftAction}
-          className={`p-2 -ml-2 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors ${!leftIcon ? 'invisible' : ''}`}
+          className={`h-12 w-12 rounded-2xl flex items-center justify-center hover:bg-slate-50 text-slate-700 transition-all active:scale-95 ${!leftIcon ? 'invisible' : ''}`}
           data-testid="button-header-left"
         >
           {leftIcon}
         </button>
 
         {/* Title */}
-        <h1 className="text-center font-semibold text-slate-900 text-lg flex-1">
+        <h1 className={`text-center font-extrabold text-slate-900 text-xl flex-1 ${transparent ? 'invisible' : ''}`}>
           {title}
         </h1>
 
         {/* Right Icon */}
         <button
           onClick={rightAction}
-          className={`p-2 -mr-2 rounded-lg hover:bg-slate-50 text-slate-600 transition-colors ${!rightIcon ? 'invisible' : ''}`}
+          className={`h-12 w-12 rounded-2xl flex items-center justify-center hover:bg-slate-50 text-slate-700 transition-all active:scale-95 ${!rightIcon ? 'invisible' : ''}`}
           data-testid="button-header-right"
         >
           {rightIcon}
@@ -817,255 +821,229 @@ function HomeScreen({
 
   return (
     <motion.div 
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      transition={{ duration: 0.2 }}
-      className="flex flex-col h-full pt-20 p-6 relative"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col h-full pt-6 p-6 relative bg-[#F2F7FF]"
     >
-      <AppHeader
-        title="פרופילים לעבודה"
-        leftIcon={<Bell className="h-5 w-5" />}
-        leftAction={() => {}}
-        rightIcon={<Filter className="h-5 w-5" />}
-        rightAction={() => setShowFilters(true)}
-      />
+      {/* Friendly Header */}
+      <div className="mb-6 pt-4">
+        <h1 className="text-3xl font-extrabold text-slate-900 mb-1 text-right">
+          שלום! 👋
+        </h1>
+        <p className="text-lg text-slate-600 text-right font-medium">
+          איזה בעל מקצוע אתם מחפשים היום?
+        </p>
+      </div>
 
-      {/* Search + Filters Row */}
-      <div className="flex gap-2 mb-4">
+      {/* Search Bar - Big & Friendly */}
+      <div className="flex gap-3 mb-6">
         <div className="relative flex-1 group">
-          <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
-            <Search className="h-5 w-5" />
+          <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
+            <Search className="h-6 w-6" />
           </div>
           <Input 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="חיפוש עובד לפי שם מלא"
-            className="pl-10 h-12 rounded-2xl border-slate-200 bg-white shadow-sm focus-visible:ring-primary/20 focus-visible:border-primary text-sm"
+            placeholder="חיפוש (לדוגמה: יוסי חשמלאי)"
+            className="pl-12 h-14 rounded-2xl border-0 bg-white shadow-sm shadow-slate-200/50 focus-visible:ring-2 focus-visible:ring-primary/20 text-base placeholder:text-slate-400"
             data-testid="input-search"
           />
         </div>
         <button
           onClick={() => setShowFilters(true)}
-          className={`p-3 rounded-full border transition-all h-12 w-12 flex items-center justify-center ${
+          className={`h-14 w-14 rounded-2xl flex items-center justify-center transition-all active:scale-95 ${
             hasActiveFilters
-              ? "bg-primary text-white border-primary shadow-lg shadow-primary/20"
-              : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50 shadow-sm"
+              ? "bg-primary text-white shadow-lg shadow-primary/30"
+              : "bg-white text-slate-600 shadow-sm shadow-slate-200/50 hover:bg-slate-50"
           }`}
           data-testid="button-filters"
         >
-          <Filter className="h-5 w-5" />
+          <Filter className="h-6 w-6" />
         </button>
+      </div>
+
+      {/* Quick Filter Chips - Colorful & Friendly */}
+      <div className="flex gap-3 mb-8 overflow-x-auto pb-2 -mx-6 px-6 scrollbar-hide">
+        {quickFilterCategories.map((category, idx) => {
+          const colors = [
+            "bg-blue-50 text-blue-700 border-blue-100",
+            "bg-emerald-50 text-emerald-700 border-emerald-100",
+            "bg-amber-50 text-amber-700 border-amber-100",
+            "bg-purple-50 text-purple-700 border-purple-100"
+          ];
+          const activeColor = "bg-primary text-white border-primary shadow-lg shadow-primary/25";
+          const colorClass = selectedQuickFilters.includes(category) ? activeColor : colors[idx % colors.length];
+
+          return (
+            <button
+              key={category}
+              onClick={() => handleToggleQuickFilter(category)}
+              className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap border ${colorClass}`}
+              data-testid={`chip-filter-${category}`}
+            >
+              {category}
+            </button>
+          );
+        })}
       </div>
 
       {/* Show Empty State if No Profiles */}
       {profiles.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center">
-          <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mb-6 shadow-sm">
-            <Search className="h-10 w-10 text-slate-400" />
+          <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-6 shadow-sm">
+            <Search className="h-10 w-10 text-slate-300" />
           </div>
-          <h3 className="text-xl font-bold text-slate-900 mb-2 text-right">לא נמצאו בעלי מקצוע</h3>
-          <p className="text-sm text-slate-500 mb-6 text-right">
-            נסה לשנות את החיפוש או להסיר חלק מהסינונים.
+          <h3 className="text-xl font-bold text-slate-900 mb-2 text-right">לא מצאנו עדיין...</h3>
+          <p className="text-base text-slate-500 mb-8 text-right">
+            נסו לחפש משהו אחר או לשנות את הסינון.
           </p>
           <button
             onClick={onClearFilters}
-            className="px-6 py-2.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors"
+            className="px-8 py-3.5 text-base font-bold text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 active:scale-95"
             data-testid="button-clear-filters-empty"
           >
-            נקה סינונים
+            נקה הכל
           </button>
         </div>
       ) : (
         <>
-      {/* Quick Filter Chips */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
-        {quickFilterCategories.map((category) => (
-          <button
-            key={category}
-            onClick={() => handleToggleQuickFilter(category)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap shadow-sm ${
-              selectedQuickFilters.includes(category)
-                ? "bg-primary text-white shadow-lg shadow-primary/20"
-                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
-            }`}
-            data-testid={`chip-filter-${category}`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
-
-      {/* Profile List */}
-      <div className="flex-1 overflow-y-auto space-y-4 pb-8 -mx-2 px-2">
-        {profiles.map((profile) => (
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            key={profile.id}
-            onClick={() => onProfileClick(profile)}
-            className="group cursor-pointer bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md hover:border-primary/10 transition-all duration-200 active:scale-[0.98]"
-            data-testid={`card-profile-${profile.id}`}
-          >
-            <div className="flex items-center gap-4">
-              <Avatar className="h-12 w-12 border-2 border-white shadow-sm shrink-0">
-                <AvatarFallback className="bg-slate-100 text-slate-600 font-bold text-base">
-                  {profile.initials}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1 min-w-0">
-                <div className="flex justify-between items-start mb-1">
-                  <h3 className="font-bold text-slate-900 text-lg leading-tight group-hover:text-primary transition-colors">
-                    {profile.firstName} {profile.lastName}
-                  </h3>
+          {/* Profile List */}
+          <div className="flex-1 overflow-y-auto space-y-4 pb-24 -mx-2 px-2">
+            {profiles.map((profile) => (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileTap={{ scale: 0.98 }}
+                key={profile.id}
+                onClick={() => onProfileClick(profile)}
+                className="group cursor-pointer bg-white rounded-3xl p-5 shadow-sm shadow-slate-200/50 border border-white hover:border-primary/20 transition-all duration-200"
+                data-testid={`card-profile-${profile.id}`}
+              >
+                <div className="flex items-center gap-5">
+                  <Avatar className="h-16 w-16 border-4 border-slate-50 shadow-inner shrink-0">
+                    <AvatarFallback className="bg-blue-50 text-blue-600 font-bold text-xl">
+                      {profile.initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0 text-right">
+                    <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-primary transition-colors">
+                      {profile.firstName} {profile.lastName}
+                    </h3>
+                    <div className="flex items-center justify-end gap-2 mb-2">
+                      <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-600 text-xs font-bold">
+                        {profile.role}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed pl-2">
+                      {profile.summary}
+                    </p>
+                  </div>
                 </div>
-                <p className="text-sm font-semibold text-primary mb-1.5">
-                  {profile.role}
-                </p>
-                <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed">
-                  {profile.summary}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-
-        {profiles.length === 0 && (
-          <div className="text-center py-12 text-slate-400">
-            <p>No profiles found matching "{searchTerm}"</p>
+              </motion.div>
+            ))}
           </div>
-        )}
-      </div>
+        </>
+      )}
 
       {/* Filters Bottom Sheet */}
       <AnimatePresence>
         {showFilters && (
           <>
-            {/* Overlay */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/30 z-40"
+              className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40"
               onClick={() => setShowFilters(false)}
               data-testid="filters-overlay"
             />
-            {/* Bottom Sheet */}
             <motion.div
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white rounded-t-3xl shadow-2xl z-50 max-h-[80vh] overflow-y-auto"
+              className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] bg-white rounded-t-[32px] shadow-2xl z-50 max-h-[92vh] min-h-[60vh] overflow-y-auto pb-8"
               data-testid="filters-bottom-sheet"
             >
-              <div className="p-6">
-                {/* Handle Bar */}
-                <div className="flex justify-center mb-4">
-                  <div className="h-1 w-10 rounded-full bg-slate-200" />
+              <div className="p-8 pb-12">
+                <div className="flex justify-center mb-6">
+                  <div className="h-1.5 w-12 rounded-full bg-slate-200" />
                 </div>
 
-                {/* Close Button */}
-                <button
-                  onClick={() => setShowFilters(false)}
-                  className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-600"
-                  data-testid="button-close-filters"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-2xl font-bold text-slate-900">סינון</h2>
+                  <button
+                    onClick={() => setShowFilters(false)}
+                    className="p-2 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
 
-                <h2 className="text-lg font-bold text-slate-900 mb-6 pr-8">Filters</h2>
+                <div className="space-y-8">
+                  <section>
+                    <h3 className="text-base font-bold text-slate-900 mb-4 text-right">תחום עבודה</h3>
+                    <div className="flex flex-wrap gap-2 justify-end">
+                      {roleOptions.map((role) => (
+                        <button
+                          key={role}
+                          onClick={() => handleToggleRole(role)}
+                          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all border ${
+                            selectedRoles.includes(role)
+                              ? "bg-primary text-white border-primary shadow-md shadow-primary/20"
+                              : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
+                          }`}
+                        >
+                          {role}
+                        </button>
+                      ))}
+                    </div>
+                  </section>
 
-                {/* Role Filter */}
-                <section className="mb-6">
-                  <h3 className="text-sm font-semibold text-slate-900 mb-3 text-right">תחום עבודה</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {roleOptions.map((role) => (
-                      <button
-                        key={role}
-                        onClick={() => handleToggleRole(role)}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                          selectedRoles.includes(role)
-                            ? "bg-primary text-white"
-                            : "bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-50"
-                        }`}
-                        data-testid={`filter-role-${role}`}
-                      >
-                        {role}
-                      </button>
-                    ))}
-                  </div>
-                </section>
+                  <section>
+                    <label className="text-base font-bold text-slate-900 mb-4 block text-right">אזור עבודה</label>
+                    <Input
+                      value={filterLocation}
+                      onChange={(e) => setFilterLocation(e.target.value)}
+                      placeholder="לדוגמה: תל אביב"
+                      className="h-12 rounded-xl border-slate-200 bg-slate-50 text-right"
+                    />
+                  </section>
 
-                {/* Location Filter */}
-                <section className="mb-6">
-                  <label className="text-sm font-semibold text-slate-900 mb-2 block text-right">אזור עבודה</label>
-                  <Input
-                    value={filterLocation}
-                    onChange={(e) => setFilterLocation(e.target.value)}
-                    placeholder="לדוגמה: תל אביב, חיפה, דרום הארץ"
-                    className="h-10 rounded-lg border-slate-200 bg-slate-50 text-sm"
-                    data-testid="filter-location"
-                  />
-                </section>
+                  <section>
+                    <h3 className="text-base font-bold text-slate-900 mb-4 text-right">ניסיון</h3>
+                    <div className="flex flex-wrap gap-2 justify-end">
+                      {seniorityOptions.map((level) => (
+                        <button
+                          key={level}
+                          onClick={() => handleToggleSeniority(level)}
+                          className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-all border ${
+                            selectedSeniority === level
+                              ? "bg-primary text-white border-primary shadow-md shadow-primary/20"
+                              : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
+                          }`}
+                        >
+                          {level}
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                </div>
 
-                {/* Seniority Filter */}
-                <section className="mb-6">
-                  <h3 className="text-sm font-semibold text-slate-900 mb-3 text-right">ניסיון</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {seniorityOptions.map((level) => (
-                      <button
-                        key={level}
-                        onClick={() => handleToggleSeniority(level)}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                          selectedSeniority === level
-                            ? "bg-primary text-white"
-                            : "bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-50"
-                        }`}
-                        data-testid={`filter-seniority-${level}`}
-                      >
-                        {level}
-                      </button>
-                    ))}
-                  </div>
-                </section>
-
-                {/* Work Style Filter */}
-                <section className="mb-8">
-                  <h3 className="text-sm font-semibold text-slate-900 mb-3 text-right">אופן עבודה</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {workStyleOptions.map((style) => (
-                      <button
-                        key={style}
-                        onClick={() => handleToggleWorkStyle(style)}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                          selectedWorkStyle.includes(style)
-                            ? "bg-primary text-white"
-                            : "bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-50"
-                        }`}
-                        data-testid={`filter-workstyle-${style}`}
-                      >
-                        {style}
-                      </button>
-                    ))}
-                  </div>
-                </section>
-
-                {/* Bottom Actions */}
-                <div className="flex gap-3 sticky bottom-0 bg-white pt-4 border-t border-slate-100">
+                <div className="flex gap-4 mt-10">
                   <button
                     onClick={handleClearFilters}
-                    className="flex-1 px-4 py-3 rounded-lg text-sm font-semibold text-slate-700 bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-all"
-                    data-testid="button-clear-filters"
+                    className="flex-1 h-14 rounded-2xl text-base font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all"
                   >
                     נקה הכל
                   </button>
                   <button
                     onClick={() => setShowFilters(false)}
-                    className="flex-1 px-4 py-3 rounded-lg text-sm font-semibold bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all"
-                    data-testid="button-apply-filters"
+                    className="flex-[2] h-14 rounded-2xl text-base font-bold bg-primary text-white hover:bg-primary/90 shadow-xl shadow-primary/20 transition-all"
                   >
-                    החלת סינון
+                    הראה תוצאות
                   </button>
                 </div>
               </div>
@@ -1073,8 +1051,6 @@ function HomeScreen({
           </>
         )}
       </AnimatePresence>
-        </>
-      )}
     </motion.div>
   );
 }function ProfileScreen({ 
@@ -1092,20 +1068,30 @@ function HomeScreen({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-[#F2F7FF] overflow-y-auto"
+      className="flex flex-col h-full bg-[#F2F7FF] overflow-y-auto relative"
     >
-      <AppHeader
-        title="פרופיל"
-        leftIcon={<ArrowLeft className="h-5 w-5" />}
-        leftAction={onBack}
-        rightIcon={<Share2 className="h-5 w-5" />}
-        rightAction={() => {}}
-      />
+      {/* Header Image / Gradient */}
+      <div className="h-40 bg-linear-to-b from-blue-600 to-blue-400 relative">
+        <div className="absolute inset-0 bg-black/10" />
+        <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center z-10">
+          <button 
+            onClick={onBack}
+            className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all"
+          >
+            <ArrowRight className="h-6 w-6" />
+          </button>
+          <button 
+            className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all"
+          >
+            <Share2 className="h-5 w-5" />
+          </button>
+        </div>
+      </div>
 
-      <div className="px-6 pb-8 pt-24">
+      <div className="px-6 pb-8 -mt-12 relative z-10">
         {/* Hero Profile Block */}
-        <div className="flex flex-col items-center text-center mb-8 bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-          <div className="mb-5">
+        <div className="flex flex-col items-center text-center mb-6 bg-white rounded-4xl p-6 shadow-xl shadow-slate-200/50">
+          <div className="-mt-16 mb-4 p-1.5 bg-white rounded-full">
             <ProfileAvatar
               initials={profile.initials}
               imageUrl={profile.avatarUrl}
@@ -1113,93 +1099,77 @@ function HomeScreen({
             />
           </div>
           
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <h2 className="text-2xl font-bold text-slate-900" data-testid="text-profile-name">
-              {profile.firstName} {profile.lastName}
-            </h2>
-          </div>
+          <h2 className="text-2xl font-extrabold text-slate-900 mb-1" data-testid="text-profile-name">
+            {profile.firstName} {profile.lastName}
+          </h2>
           
-          <Badge className="mb-3 bg-blue-50 text-blue-700 border-blue-200 text-xs font-medium">
-            ✨ Profile written with AI
-          </Badge>
-          
-          <p className="text-base text-primary font-medium mb-4">
+          <p className="text-lg text-primary font-bold mb-4">
             {profile.role}
           </p>
 
-          {/* Metadata Lines */}
-          <div className="flex flex-col items-center gap-1.5 text-sm text-slate-500">
-            <div className="flex items-center gap-1.5">
+          <div className="flex flex-wrap justify-center gap-3 mb-6">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 text-slate-600 text-sm font-medium">
               <span>📍</span>
               <span>חולון, ישראל</span>
             </div>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 text-slate-600 text-sm font-medium">
               <span>💼</span>
-              <span>רוני שירותי חשמל</span>
+              <span>5 שנות ניסיון</span>
             </div>
+          </div>
+
+          <div className="flex gap-3 w-full">
+            <button className="flex-1 h-12 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/25 hover:bg-primary/90 active:scale-95 transition-all flex items-center justify-center gap-2">
+              <span className="text-xl">📞</span>
+              צור קשר
+            </button>
+            <button className="h-12 w-12 rounded-xl bg-blue-50 text-primary flex items-center justify-center hover:bg-blue-100 active:scale-95 transition-all">
+              <Share2 className="h-5 w-5" />
+            </button>
           </div>
         </div>
 
         {/* About Section */}
-        <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right px-1">
-            עליי
+        <section className="mb-6">
+          <h3 className="text-lg font-bold text-slate-900 mb-3 text-right px-2">
+            אודות
           </h3>
-          <div className={`relative rounded-2xl border border-slate-100 bg-white p-6 overflow-hidden shadow-sm ${!expandedAbout ? 'max-h-48' : ''}`}>
-            <div className="space-y-4">
-              {profile.about.split('\n').map((paragraph, idx) => (
-                <p key={idx} className="text-[15px] text-slate-700 leading-relaxed text-right">
-                  {paragraph}
-                </p>
-              ))}
+          <div className="bg-white rounded-3xl p-6 shadow-sm shadow-slate-200/50">
+            <div className={`relative overflow-hidden ${!expandedAbout ? 'max-h-32' : ''}`}>
+              <p className="text-base text-slate-600 leading-relaxed text-right whitespace-pre-line">
+                {profile.about}
+              </p>
+              {!expandedAbout && (
+                <div className="absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-white to-transparent pointer-events-none" />
+              )}
             </div>
-            {!expandedAbout && (
-              <div className="absolute bottom-0 left-0 right-0 h-20 bg-linear-to-t from-white to-transparent pointer-events-none" />
-            )}
+            <button
+              onClick={() => setExpandedAbout(!expandedAbout)}
+              className="mt-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
+              data-testid="button-toggle-about"
+            >
+              {expandedAbout ? "הצג פחות" : "קרא עוד"}
+              <ChevronDown className={`h-4 w-4 transition-transform ${expandedAbout ? "rotate-180" : ""}`} />
+            </button>
           </div>
-          <button
-            onClick={() => setExpandedAbout(!expandedAbout)}
-            className="mt-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors px-1"
-            data-testid="button-toggle-about"
-          >
-            {expandedAbout ? "הצג פחות" : "קרא עוד"}
-          </button>
         </section>
 
         {/* Skills Section */}
         <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right px-1">
-            שירותים עיקריים
+          <h3 className="text-lg font-bold text-slate-900 mb-3 text-right px-2">
+            תחומי התמחות
           </h3>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-wrap gap-2 justify-end">
             {profile.skills.map((skill) => (
-              <motion.span 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+              <span 
                 key={skill} 
-                className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium bg-white text-slate-800 border border-slate-200 shadow-sm"
+                className="px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-100 shadow-sm"
               >
                 {skill}
-              </motion.span>
+              </span>
             ))}
           </div>
         </section>
-
-        {/* Action Buttons */}
-        <div className="mt-auto pt-6 space-y-3">
-          <Button 
-            className="w-full h-12 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
-            data-testid="button-share-profile"
-          >
-            שיתוף פרופיל
-          </Button>
-          <button
-            className="w-full h-10 text-sm font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-all"
-            data-testid="button-edit-profile"
-          >
-            עריכת פרופיל
-          </button>
-        </div>
       </div>
     </motion.div>
   );
@@ -1211,6 +1181,7 @@ function JoinScreen({ onBack, onSuccess, onError }: {
   onError?: (msg: string) => void;
 }) {
   const { getIdToken } = useAuth();
+  const [step, setStep] = useState(1);
   const [backgroundNotes, setBackgroundNotes] = useState("");
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [fullName, setFullName] = useState("");
@@ -1220,6 +1191,15 @@ function JoinScreen({ onBack, onSuccess, onError }: {
   const [skills, setSkills] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+
+  const handleNext = () => {
+    if (step < 3) setStep(step + 1);
+    else handleSubmit();
+  };
+
+  const handlePrev = () => {
+    if (step > 1) setStep(step - 1);
+  };
 
   const handleSubmit = async () => {
     if (!fullName.trim() || !role.trim()) {
@@ -1301,165 +1281,164 @@ function JoinScreen({ onBack, onSuccess, onError }: {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-[#F2F7FF] overflow-y-auto pt-20"
+      className="flex flex-col h-full bg-[#F2F7FF] relative overflow-hidden"
     >
-      <AppHeader
-        title="יצירת פרופיל"
-        leftIcon={<ArrowLeft className="h-5 w-5" />}
-        leftAction={onBack}
-      />
+      {/* Background Decoration */}
+      <div className="absolute top-0 left-0 right-0 h-64 bg-linear-to-b from-blue-100/50 to-transparent pointer-events-none" />
 
-      <div className="px-6 py-6 flex-1 flex flex-col">
-        <form className="space-y-6 flex-1 flex flex-col" onSubmit={(e) => e.preventDefault()}>
-          {/* Profile Picture Section - At Top */}
-          <div className="flex justify-center pb-2">
-            <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 w-full flex flex-col items-center">
-              <ProfileAvatar
-                initials={getInitials()}
-                imageUrl={photoUrl}
-                onChangePhoto={handlePhotoUpload}
-                size="md"
-              />
-            </div>
-          </div>
+      {/* Header */}
+      <div className="relative z-10 px-6 pt-8 pb-4 flex items-center justify-between">
+        <button 
+          onClick={onBack}
+          className="h-12 w-12 rounded-2xl bg-white shadow-sm shadow-slate-200/50 flex items-center justify-center text-slate-600 hover:bg-slate-50 active:scale-95 transition-all"
+        >
+          <ArrowRight className="h-6 w-6" />
+        </button>
+        <div className="flex gap-2">
+          {[1, 2, 3].map((i) => (
+            <div 
+              key={i}
+              className={`h-2 rounded-full transition-all duration-500 ${
+                i <= step ? "w-8 bg-primary" : "w-2 bg-slate-200"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
 
-          {/* Personal Info Group */}
-          <section className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 text-right">
-              פרטים אישיים
-            </h3>
-            <div className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-700 text-right block">שם מלא</label>
+      <div className="flex-1 overflow-y-auto px-6 pb-8 relative z-10">
+        <div className="mb-8 text-right">
+          <h1 className="text-3xl font-extrabold text-slate-900 mb-3">
+            {step === 1 && "בואו נכיר! 👋"}
+            {step === 2 && "מה אתם עושים? 🛠️"}
+            {step === 3 && "קצת על עצמכם ✍️"}
+          </h1>
+          <p className="text-lg text-slate-600 font-medium">
+            {step === 1 && "כמה פרטים בסיסיים כדי שיוכלו לפנות אליכם"}
+            {step === 2 && "ספרו לנו במה אתם עוסקים ואיפה"}
+            {step === 3 && "כמה מילים שיעזרו לכם לבלוט"}
+          </p>
+        </div>
+
+        <div className="bg-white rounded-4xl p-6 shadow-xl shadow-slate-200/50 space-y-6">
+          {step === 1 && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-6"
+            >
+              <div className="flex justify-center pb-4">
+                <ProfileAvatar
+                  initials={getInitials()}
+                  imageUrl={photoUrl}
+                  onChangePhoto={handlePhotoUpload}
+                  size="lg"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-base font-bold text-slate-900 block text-right">שם מלא</label>
                 <Input 
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="לדוגמה: רוני לוי" 
-                  className="h-11 rounded-xl border-slate-200 focus:border-primary bg-slate-50/50"
-                  data-testid="input-join-name"
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white text-lg text-right"
+                  placeholder="ישראל ישראלי"
                 />
               </div>
+            </motion.div>
+          )}
 
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-700 text-right block">תחום עבודה / תפקיד</label>
+          {step === 2 && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-6"
+            >
+              <div className="space-y-2">
+                <label className="text-base font-bold text-slate-900 block text-right">מקצוע / תפקיד</label>
                 <Input 
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  placeholder="לדוגמה: חשמלאי, אינסטלטור" 
-                  className="h-11 rounded-xl border-slate-200 focus:border-primary bg-slate-50/50"
-                  data-testid="input-join-role"
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white text-lg text-right"
+                  placeholder="לדוגמה: חשמלאי מוסמך"
                 />
               </div>
-            </div>
-          </section>
-
-          {/* Professional Info Group */}
-          <section className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2 text-right">
-              פרטים מקצועיים
-            </h3>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-700 text-right block">אזור עבודה</label>
+              <div className="space-y-2">
+                <label className="text-base font-bold text-slate-900 block text-right">אזור עבודה</label>
                 <Input 
                   value={workArea}
                   onChange={(e) => setWorkArea(e.target.value)}
-                  placeholder="תל אביב והמרכז" 
-                  className="h-11 rounded-xl border-slate-200 focus:border-primary bg-slate-50/50"
-                  data-testid="input-join-location"
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white text-lg text-right"
+                  placeholder="לדוגמה: גוש דן"
                 />
               </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-700 text-right block">שם העסק</label>
+              <div className="space-y-2">
+                <label className="text-base font-bold text-slate-900 block text-right">שם העסק (אופציונלי)</label>
                 <Input 
                   value={businessName}
                   onChange={(e) => setBusinessName(e.target.value)}
-                  placeholder="רוני חשמל" 
-                  className="h-11 rounded-xl border-slate-200 focus:border-primary bg-slate-50/50"
-                  data-testid="input-join-company"
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white text-lg text-right"
+                  placeholder="לדוגמה: רוני חשמל"
                 />
               </div>
-            </div>
+            </motion.div>
+          )}
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700 text-right block">שירותים / כישורים</label>
-              <Input 
-                value={skills}
-                onChange={(e) => setSkills(e.target.value)}
-                placeholder="לדוגמה: תיקוני חשמל, התקנת גופים, איתור תקלות" 
-                className="h-11 rounded-xl border-slate-200 focus:border-primary bg-slate-50/50"
-                data-testid="input-join-skills"
-              />
-            </div>
-          </section>
-
-          {/* AI Section */}
-          <section className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-              <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-100">AI Assistant</Badge>
-              <h3 className="text-sm font-bold text-slate-900 text-right">
-                קצת עליך
-              </h3>
-            </div>
-            
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-slate-600 text-right block">
-                ספר לנו בקצרה על הניסיון שלך, וה-AI יכתוב את השאר
-              </label>
-              <textarea
-                value={backgroundNotes}
-                onChange={(e) => setBackgroundNotes(e.target.value)}
-                placeholder="אני עובד בתחום כבר 10 שנים, מתמחה בתיקונים לבית..."
-                className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-3 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none min-h-[100px]"
-                data-testid="textarea-join-background"
-              />
-            </div>
-
-            {/* AI Preview Card */}
-            <div className="bg-linear-to-br from-slate-50 to-white rounded-2xl p-5 border border-slate-200/60 shadow-sm relative overflow-hidden mt-2">
-               <div className="flex items-center gap-3 mb-4">
-                 <div className="h-10 w-10 rounded-full bg-slate-200/70 animate-pulse" />
-                 <div className="space-y-2">
-                   <div className="h-3 w-24 bg-slate-200/70 rounded animate-pulse" />
-                   <div className="h-2 w-16 bg-slate-200/50 rounded animate-pulse" />
-                 </div>
-               </div>
-               <div className="space-y-2 mb-3">
-                 <div className="h-2 w-full bg-slate-200/50 rounded animate-pulse" />
-                 <div className="h-2 w-[90%] bg-slate-200/50 rounded animate-pulse" />
-               </div>
-               
-               <div className="absolute top-3 right-3">
-                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">AI Preview</span>
-               </div>
-            </div>
-          </section>
-
-          {/* Bottom CTA */}
-          <div className="pt-4 mt-auto space-y-3 pb-8">
-            <motion.button
-              whileTap={{ scale: 0.98 }}
-              onClick={handleSubmit}
-              disabled={isSubmitting || isGeneratingAI}
-              className="w-full h-14 text-lg font-bold text-white rounded-xl shadow-xl shadow-primary/25 hover:shadow-primary/35 transition-all bg-primary disabled:opacity-50 flex items-center justify-center gap-2"
-              type="button"
-              data-testid="button-generate-profile"
+          {step === 3 && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-6"
             >
-              {isSubmitting || isGeneratingAI ? (
-                <>
-                  <Loader className="h-5 w-5 animate-spin" />
-                  {isGeneratingAI ? "יוצר פרופיל..." : "שומר..."}
-                </>
-              ) : (
-                <>
-                  <span className="text-xl">✨</span>
-                  צור פרופיל עם AI
-                </>
-              )}
-            </motion.button>
-          </div>
-        </form>
+              <div className="space-y-2">
+                <label className="text-base font-bold text-slate-900 block text-right">שירותים עיקריים</label>
+                <Input 
+                  value={skills}
+                  onChange={(e) => setSkills(e.target.value)}
+                  className="h-14 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white text-lg text-right"
+                  placeholder="לדוגמה: תיקונים, התקנות..."
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-base font-bold text-slate-900 block text-right">קצת עליי (אופציונלי)</label>
+                <textarea 
+                  value={backgroundNotes}
+                  onChange={(e) => setBackgroundNotes(e.target.value)}
+                  className="w-full h-40 rounded-2xl bg-slate-50 border-slate-100 focus:bg-white text-lg text-right p-4 outline-none focus:ring-2 focus:ring-primary/20 resize-none"
+                  placeholder="אני עובד חרוץ, דייקן..."
+                />
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </div>
+
+      <div className="p-6 bg-white border-t border-slate-100 flex gap-3">
+        {step > 1 && (
+          <button
+            onClick={handlePrev}
+            disabled={isSubmitting || isGeneratingAI}
+            className="h-16 w-16 rounded-2xl bg-slate-100 text-slate-600 text-xl font-bold hover:bg-slate-200 active:scale-[0.98] transition-all flex items-center justify-center disabled:opacity-50"
+          >
+            <ArrowRight className="h-6 w-6" />
+          </button>
+        )}
+        <button
+          onClick={handleNext}
+          disabled={isSubmitting || isGeneratingAI}
+          className="flex-1 h-16 rounded-2xl bg-primary text-white text-xl font-bold shadow-xl shadow-primary/25 hover:bg-primary/90 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+        >
+          {isSubmitting || isGeneratingAI ? (
+            <>
+              <Loader className="h-6 w-6 animate-spin" />
+              {isGeneratingAI ? "יוצר פרופיל..." : "שומר..."}
+            </>
+          ) : (
+            <>
+              {step === 3 ? "סיימתי! 🎉" : "המשך"}
+              {step < 3 && <ArrowLeft className="h-6 w-6" />}
+            </>
+          )}
+        </button>
       </div>
     </motion.div>
   );
@@ -1500,8 +1479,8 @@ function SearchResultsScreen({
 
       <div className="px-6 pb-6 flex-1 flex flex-col pt-2">
         {/* Search Summary */}
-        <p className="text-xs text-slate-500 mb-4 text-right">
-          נמצאו {searchResults.length} תוצאות עבור '{searchQuery}'
+        <p className="text-sm font-medium text-slate-500 mb-4 text-right">
+          נמצאו {searchResults.length} תוצאות עבור <span className="text-slate-900 font-bold">"{searchQuery}"</span>
         </p>
 
         {/* Filter Bar */}
@@ -1509,16 +1488,16 @@ function SearchResultsScreen({
           <div className="flex items-center gap-2">
             <span className="text-xs font-medium text-slate-600">מיון לפי</span>
             <button
-              className="flex items-center gap-1 text-sm text-slate-700 hover:text-slate-900 transition-colors font-medium"
+              className="flex items-center gap-1 text-sm text-slate-900 bg-white px-3 py-1.5 rounded-lg shadow-sm border border-slate-100 font-bold"
               data-testid="button-sort"
             >
               רלוונטיות
-              <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="h-4 w-4 text-slate-400" />
             </button>
           </div>
           <button
             onClick={onBack}
-            className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+            className="text-xs font-bold text-primary bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors"
             data-testid="button-clear-search"
           >
             נקה חיפוש
@@ -1529,47 +1508,45 @@ function SearchResultsScreen({
         {searchResults.length > 0 ? (
           <div className="space-y-4 flex-1">
             {searchResults.map((profile) => (
-              <div
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 key={profile.id}
                 onClick={() => onProfileClick(profile)}
-                className="group cursor-pointer bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md hover:border-primary/10 transition-all duration-200 active:scale-[0.98]"
+                className="group cursor-pointer bg-white rounded-3xl p-5 shadow-sm shadow-slate-200/50 border border-white hover:border-primary/20 transition-all duration-200 active:scale-[0.98]"
                 data-testid={`card-search-result-${profile.id}`}
               >
-                <div className="flex items-start gap-4">
-                  <Avatar className="h-12 w-12 border-2 border-white shadow-sm shrink-0">
-                    <AvatarFallback className="bg-slate-100 text-slate-600 font-bold text-base">
+                <div className="flex items-center gap-5">
+                  <Avatar className="h-14 w-14 border-4 border-slate-50 shadow-inner shrink-0">
+                    <AvatarFallback className="bg-blue-50 text-blue-600 font-bold text-lg">
                       {profile.initials}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-slate-900 text-lg leading-tight group-hover:text-primary transition-colors text-right">
+                  <div className="flex-1 min-w-0 text-right">
+                    <h3 className="font-bold text-slate-900 text-lg mb-1 group-hover:text-primary transition-colors">
                       {profile.firstName} {profile.lastName}
                     </h3>
-                    <p className="text-sm font-medium text-primary mb-1 text-right">
-                      {profile.role}
-                    </p>
-                    <p className="text-sm text-slate-600 mb-2 line-clamp-1 text-right">
+                    <div className="flex items-center justify-end gap-2 mb-2">
+                      <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-600 text-xs font-bold">
+                        {profile.role}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-500 line-clamp-1 leading-relaxed pl-2">
                       {profile.summary}
-                    </p>
-                    <p className="text-xs text-slate-500 flex items-center gap-1 justify-end">
-                      <span>תל אביב, ישראל</span>
-                      <span>📍</span>
                     </p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center py-12 px-4 text-center">
-            <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mb-4 shadow-sm">
-              <Search className="h-8 w-8 text-slate-400" />
+            <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-6 shadow-sm">
+              <Search className="h-10 w-10 text-slate-300" />
             </div>
-            <h3 className="text-lg font-bold text-slate-900 mb-1">
-              לא נמצאו תוצאות
-            </h3>
-            <p className="text-sm text-slate-500">
-              נסה לחפש שם אחר או לשנות את הסינון.
+            <h3 className="text-xl font-bold text-slate-900 mb-2 text-right">לא מצאנו תוצאות</h3>
+            <p className="text-base text-slate-500 mb-8 text-right">
+              נסו לחפש משהו אחר או לשנות את הסינון.
             </p>
           </div>
         )}
@@ -1615,138 +1592,141 @@ function MyProfileScreen({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
-      className="flex flex-col h-full bg-[#F2F7FF] overflow-y-auto pt-20"
+      className="flex flex-col h-full bg-[#F2F7FF] overflow-y-auto relative"
     >
-      <AppHeader
-        title="הפרופיל שלי"
-        leftIcon={<Share2 className="h-5 w-5" />}
-        leftAction={() => {}}
-        rightIcon={<Edit2 className="h-5 w-5" />}
-        rightAction={() => {}}
-      />
-
       {!hasProfile ? (
         <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 text-center">
-          <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-6 shadow-sm">
-            <UserPlus className="h-12 w-12 text-slate-400" />
+          <div className="w-32 h-32 rounded-full bg-white flex items-center justify-center mb-8 shadow-xl shadow-slate-200/50">
+            <UserPlus className="h-16 w-16 text-primary/40" />
           </div>
-          <h3 className="text-xl font-bold text-slate-900 mb-2 text-right">עדיין לא יצרת פרופיל</h3>
-          <p className="text-sm text-slate-500 mb-8 text-right leading-relaxed">
-            כדי שיוכלו למצוא אותך, צור פרופיל מקצועי קצר.
+          <h3 className="text-2xl font-extrabold text-slate-900 mb-3 text-right">עדיין לא יצרת פרופיל</h3>
+          <p className="text-lg text-slate-600 mb-10 text-right leading-relaxed max-w-xs mx-auto">
+            כדי שיוכלו למצוא אותך, צור פרופיל מקצועי קצר. זה לוקח דקה!
           </p>
           <button
             onClick={onCreateClick}
-            className="px-8 py-3 text-sm font-semibold text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+            className="w-full max-w-xs h-14 text-lg font-bold text-white bg-primary rounded-2xl hover:bg-primary/90 transition-all shadow-xl shadow-primary/25 active:scale-95 flex items-center justify-center gap-2"
             data-testid="button-create-profile-empty"
           >
+            <span className="text-xl">✨</span>
             צור פרופיל
           </button>
         </div>
       ) : (
         <>
-      <div className="px-6 pb-8 pt-6">
-        {/* Hero Profile Block */}
-        <div className="flex flex-col items-center text-center mb-8 bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-          <Avatar className="h-28 w-28 mb-5 shadow-xl shadow-slate-200/80">
-            {profile?.avatarUrl ? (
-              <AvatarImage src={profile.avatarUrl} />
-            ) : null}
-            <AvatarFallback className="bg-slate-100 text-slate-700 text-3xl font-bold tracking-tight">
-              {profile?.initials || "?"}
-            </AvatarFallback>
-          </Avatar>
-          
-          <div className="flex items-center justify-center gap-2 mb-2">
-            <h2 className="text-2xl font-bold text-slate-900">
-              {profile?.firstName} {profile?.lastName}
-            </h2>
-          </div>
-          
-          {profile?.aboutText && (
-            <Badge className="mb-3 bg-blue-50 text-blue-700 border-blue-200 text-xs font-medium">
-              ✨ נוצר עם AI
-            </Badge>
-          )}
-          
-          <p className="text-base text-primary font-medium mb-4">
-            {profile?.role}
-          </p>
-
-          <div className="flex flex-col items-center gap-1.5 text-sm text-slate-500">
-            {profile?.workArea && (
-              <div className="flex items-center gap-1.5">
-                <span>📍</span>
-                <span>{profile.workArea}</span>
-              </div>
-            )}
-            {profile?.businessName && (
-              <div className="flex items-center gap-1.5">
-                <span>💼</span>
-                <span>{profile.businessName}</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* About Section */}
-        <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right px-1">
-            עליי
-          </h3>
-          <div className={`relative rounded-2xl border border-slate-100 bg-white p-6 overflow-hidden shadow-sm ${!expandedAbout ? 'max-h-48' : ''}`}>
-            <div className="space-y-4">
-              <p className="text-[15px] text-slate-700 leading-relaxed text-right whitespace-pre-line">
-                {profile?.aboutText || profile?.backgroundText || "לא נוסף תיאור עדיין"}
-              </p>
-            </div>
-            {!expandedAbout && profile?.aboutText && profile.aboutText.length > 200 && (
-              <div className="absolute bottom-0 left-0 right-0 h-20 bg-linear-to-t from-white to-transparent pointer-events-none" />
-            )}
-          </div>
-          {profile?.aboutText && profile.aboutText.length > 200 && (
-            <button
-              onClick={() => setExpandedAbout(!expandedAbout)}
-              className="mt-3 text-sm font-medium text-primary hover:text-primary/80 transition-colors px-1"
-            >
-              {expandedAbout ? "הצג פחות" : "קרא עוד"}
-            </button>
-          )}
-        </section>
-
-        {/* Skills Section */}
-        <section className="mb-8">
-          <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-4 text-right px-1">
-            שירותים עיקריים
-          </h3>
-          <div className="flex flex-wrap gap-2.5">
-            {(profile?.skills || []).map((skill: string) => (
-              <motion.span 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                key={skill} 
-                className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium bg-white text-slate-800 border border-slate-200 shadow-sm"
+          {/* Header Image / Gradient */}
+          <div className="h-40 bg-linear-to-b from-blue-600 to-blue-400 relative">
+            <div className="absolute inset-0 bg-black/10" />
+            <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center z-10">
+              <h1 className="text-white font-bold text-lg drop-shadow-md">הפרופיל שלי</h1>
+              <button 
+                className="h-10 w-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all"
               >
-                {skill}
-              </motion.span>
-            ))}
+                <Edit2 className="h-5 w-5" />
+              </button>
+            </div>
           </div>
-        </section>
 
-        {/* Action Buttons */}
-        <div className="mt-auto pt-6 space-y-3">
-          <Button 
-            className="w-full h-12 text-base font-semibold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all"
-          >
-            Share profile
-          </Button>
-          <button
-            className="w-full h-10 text-sm font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-all"
-          >
-            Edit profile
-          </button>
-        </div>
-      </div>
-      </>
+          <div className="px-6 pb-24 -mt-12 relative z-10">
+            {/* Hero Profile Block */}
+            <div className="flex flex-col items-center text-center mb-6 bg-white rounded-4xl p-6 shadow-xl shadow-slate-200/50">
+              <div className="-mt-16 mb-4 p-1.5 bg-white rounded-full">
+                <Avatar className="h-28 w-28 shadow-inner border-4 border-slate-50">
+                  {profile?.avatarUrl ? (
+                    <AvatarImage src={profile.avatarUrl} />
+                  ) : null}
+                  <AvatarFallback className="bg-blue-50 text-blue-600 text-3xl font-bold tracking-tight">
+                    {profile?.initials || "?"}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+              
+              <h2 className="text-2xl font-extrabold text-slate-900 mb-1">
+                {profile?.firstName} {profile?.lastName}
+              </h2>
+              
+              <p className="text-lg text-primary font-bold mb-4">
+                {profile?.role}
+              </p>
+
+              <div className="flex flex-wrap justify-center gap-3 mb-6">
+                {profile?.workArea && (
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 text-slate-600 text-sm font-medium">
+                    <span>📍</span>
+                    <span>{profile.workArea}</span>
+                  </div>
+                )}
+                {profile?.businessName && (
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 text-slate-600 text-sm font-medium">
+                    <span>💼</span>
+                    <span>{profile.businessName}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex gap-3 w-full">
+                <button className="flex-1 h-12 rounded-xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200 active:scale-95 transition-all">
+                  עריכה
+                </button>
+                <button className="flex-1 h-12 rounded-xl bg-blue-50 text-primary font-bold hover:bg-blue-100 active:scale-95 transition-all flex items-center justify-center gap-2">
+                  <Share2 className="h-5 w-5" />
+                  שיתוף
+                </button>
+              </div>
+            </div>
+
+            {/* About Section */}
+            <section className="mb-6">
+              <div className="flex items-center justify-between mb-3 px-2">
+                <h3 className="text-lg font-bold text-slate-900 text-right">
+                  אודות
+                </h3>
+                {profile?.aboutText && (
+                  <Badge className="bg-blue-50 text-blue-700 border-blue-100 text-xs font-bold px-2 py-0.5">
+                    ✨ AI Generated
+                  </Badge>
+                )}
+              </div>
+              
+              <div className="bg-white rounded-3xl p-6 shadow-sm shadow-slate-200/50">
+                <div className={`relative overflow-hidden ${!expandedAbout ? 'max-h-32' : ''}`}>
+                  <p className="text-base text-slate-600 leading-relaxed text-right whitespace-pre-line">
+                    {profile?.aboutText || profile?.backgroundText || "לא נוסף תיאור עדיין"}
+                  </p>
+                  {!expandedAbout && profile?.aboutText && profile.aboutText.length > 150 && (
+                    <div className="absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-white to-transparent pointer-events-none" />
+                  )}
+                </div>
+                {profile?.aboutText && profile.aboutText.length > 150 && (
+                  <button
+                    onClick={() => setExpandedAbout(!expandedAbout)}
+                    className="mt-2 text-sm font-bold text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
+                  >
+                    {expandedAbout ? "הצג פחות" : "קרא עוד"}
+                    <ChevronDown className={`h-4 w-4 transition-transform ${expandedAbout ? "rotate-180" : ""}`} />
+                  </button>
+                )}
+              </div>
+            </section>
+
+            {/* Skills Section */}
+            <section className="mb-8">
+              <h3 className="text-lg font-bold text-slate-900 mb-3 text-right px-2">
+                תחומי התמחות
+              </h3>
+              <div className="flex flex-wrap gap-2 justify-end">
+                {(profile?.skills || []).map((skill: string) => (
+                  <span 
+                    key={skill} 
+                    className="px-4 py-2 rounded-xl text-sm font-bold bg-white text-slate-700 border border-slate-100 shadow-sm"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </section>
+          </div>
+        </>
       )}
     </motion.div>
   );
@@ -1774,168 +1754,202 @@ function SettingsScreen({ onBack, onDeleteClick }: { onBack: () => void; onDelet
         leftAction={onBack}
       />
 
-      <div className="px-6 py-6 flex-1 flex flex-col pb-24 pt-2">
-        <div className="space-y-6">
-          
-          {/* Section 1: Account */}
-          <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right px-1">חשבון</h3>
-            <div className="bg-white rounded-3xl border border-slate-100 px-6 py-5 space-y-2 shadow-sm">
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-slate-800 font-medium text-right">מצב פרופיל</p>
-                <button 
-                  className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-                  data-testid="button-create-profile"
-                >
-                  צור פרופיל
-                </button>
-              </div>
-              <p className="text-sm text-slate-600 text-right">אין לך עדיין פרופיל</p>
+      <div className="px-6 py-6 flex-1 flex flex-col pb-24 pt-2 space-y-8">
+        
+        {/* Section 1: Account */}
+        <section>
+          <div className="flex items-center gap-2 mb-3 px-2 justify-end">
+            <h3 className="text-sm font-bold text-slate-900">חשבון</h3>
+            <User className="h-4 w-4 text-primary" />
+          </div>
+          <div className="bg-white rounded-3xl border border-white px-6 py-5 space-y-4 shadow-sm shadow-slate-200/50">
+            <div className="flex items-center justify-between">
+              <p className="text-base text-slate-800 font-bold text-right">מצב פרופיל</p>
+              <button 
+                className="text-sm font-bold text-primary bg-blue-50 px-4 py-2 rounded-xl hover:bg-blue-100 transition-colors"
+                data-testid="button-create-profile"
+              >
+                צור פרופיל
+              </button>
+            </div>
+            <div className="bg-slate-50 rounded-xl p-4">
+              <p className="text-sm text-slate-600 text-right font-medium">אין לך עדיין פרופיל</p>
               <p className="text-xs text-slate-500 pt-1 text-right">נהל את הפרופיל והפרטים של החשבון שלך.</p>
             </div>
-          </section>
+          </div>
+        </section>
 
-          {/* Section 2: Profile & AI */}
-          <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right px-1">פרופיל ו-AI</h3>
-            <div className="bg-white rounded-3xl border border-slate-100 p-6 space-y-5 shadow-sm">
-              
-              {/* Language Selection */}
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-                <label className="text-sm font-medium text-slate-900 text-right">שפת הפרופיל</label>
-                <div className="flex gap-2">
-                  <button 
-                    onClick={() => setSelectedLanguage("english")}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
-                      selectedLanguage === "english"
-                        ? "bg-primary text-white shadow-md shadow-primary/20"
-                        : "bg-slate-50 text-slate-700 hover:bg-slate-100"
-                    }`}
-                    data-testid="button-language-english"
-                  >
-                    אנגלית
-                  </button>
-                  <button 
-                    onClick={() => setSelectedLanguage("hebrew")}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
-                      selectedLanguage === "hebrew"
-                        ? "bg-primary text-white shadow-md shadow-primary/20"
-                        : "bg-slate-50 text-slate-700 hover:bg-slate-100"
-                    }`}
-                    data-testid="button-language-hebrew"
-                  >
-                    עברית
-                  </button>
-                </div>
+        {/* Section 2: Profile & AI */}
+        <section>
+          <div className="flex items-center gap-2 mb-3 px-2 justify-end">
+            <h3 className="text-sm font-bold text-slate-900">פרופיל ו-AI</h3>
+            <Sparkles className="h-4 w-4 text-primary" />
+          </div>
+          <div className="bg-white rounded-3xl border border-white p-6 space-y-6 shadow-sm shadow-slate-200/50">
+            
+            {/* Language Selection */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4 text-slate-400" />
+                <label className="text-base font-bold text-slate-900 text-right">שפת הפרופיל</label>
               </div>
-
-              {/* Writing Style */}
-              <div className="pb-4 border-b border-slate-100">
-                <label className="text-sm font-medium text-slate-900 block mb-3 text-right">סגנון הפרופיל</label>
-                <div className="flex gap-2 flex-wrap">
-                  <button
-                    onClick={() => setSelectedStyle("professional")}
-                    className={`px-4 py-2 text-xs font-medium rounded-xl transition-colors ${
-                      selectedStyle === "professional"
-                        ? "bg-primary text-white shadow-md shadow-primary/20"
-                        : "bg-slate-50 text-slate-700 hover:bg-slate-100"
-                    }`}
-                    data-testid="button-style-simple"
-                  >
-                    פשוט
-                  </button>
-                  <button
-                    onClick={() => setSelectedStyle("friendly")}
-                    className={`px-4 py-2 text-xs font-medium rounded-xl transition-colors ${
-                      selectedStyle === "friendly"
-                        ? "bg-primary text-white shadow-md shadow-primary/20"
-                        : "bg-slate-50 text-slate-700 hover:bg-slate-100"
-                    }`}
-                    data-testid="button-style-detailed"
-                  >
-                    מפורט יותר
-                  </button>
-                </div>
-              </div>
-
-              {/* Regenerate Button */}
-              <button 
-                className="w-full px-4 py-3 text-sm font-medium text-primary bg-blue-50/50 border border-blue-100 rounded-xl hover:bg-blue-50 transition-colors"
-                data-testid="button-regenerate-profile"
-              >
-                צור מחדש את הפרופיל שלי בעזרת AI
-              </button>
-            </div>
-          </section>
-
-          {/* Section 3: Privacy */}
-          <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right px-1">פרטיות ותצוגה</h3>
-            <div className="bg-white rounded-3xl border border-slate-100 p-6 space-y-3 shadow-sm">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-slate-900 text-right">הצג את הפרופיל שלי בחיפוש הציבורי</label>
-                <Switch 
-                  checked={isPublic}
-                  onCheckedChange={setIsPublic}
-                  data-testid="toggle-public-profile"
-                />
-              </div>
-              <p className="text-xs text-slate-500 text-right">כשזה כבוי, הפרופיל שלך לא יופיע בתוצאות חיפוש.</p>
-            </div>
-          </section>
-
-          {/* Section 4: Notifications */}
-          <section>
-            <h3 className="text-xs font-bold uppercase tracking-widest text-[#69707A] mb-3 text-right px-1">התראות</h3>
-            <div className="bg-white rounded-3xl border border-slate-100 p-6 space-y-4 shadow-sm">
-              <div className="flex items-center justify-between py-2">
-                <label className="text-sm font-medium text-slate-900 text-right">שלח לי דוא״ל כאשר מישהו צופה בפרופיל שלי</label>
-                <Switch 
-                  checked={emailViews}
-                  onCheckedChange={setEmailViews}
-                  data-testid="toggle-email-views"
-                />
-              </div>
-              <div className="flex items-center justify-between py-2 border-t border-slate-100 pt-4">
-                <label className="text-sm font-medium text-slate-900 text-right">שלח לי טיפים לשיפור הפרופיל שלי</label>
-                <Switch 
-                  checked={emailTips}
-                  onCheckedChange={setEmailTips}
-                  data-testid="toggle-email-tips"
-                />
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => setSelectedLanguage("english")}
+                  className={`px-4 py-2 text-sm font-bold rounded-xl transition-colors ${
+                    selectedLanguage === "english"
+                      ? "bg-primary text-white shadow-lg shadow-primary/20"
+                      : "bg-slate-50 text-slate-600 hover:bg-slate-100"
+                  }`}
+                  data-testid="button-language-english"
+                >
+                  אנגלית
+                </button>
+                <button 
+                  onClick={() => setSelectedLanguage("hebrew")}
+                  className={`px-4 py-2 text-sm font-bold rounded-xl transition-colors ${
+                    selectedLanguage === "hebrew"
+                      ? "bg-primary text-white shadow-lg shadow-primary/20"
+                      : "bg-slate-50 text-slate-600 hover:bg-slate-100"
+                  }`}
+                  data-testid="button-language-hebrew"
+                >
+                  עברית
+                </button>
               </div>
             </div>
-          </section>
 
-          {/* Section 5: About the app */}
-          <section>
-            <div className="bg-slate-50 rounded-3xl border border-slate-100 p-6 space-y-3">
-              <h3 className="text-sm font-semibold text-slate-900 text-right">על האפליקציה</h3>
-              <p className="text-xs text-slate-600 leading-relaxed text-right">
-                האפליקציה עוזרת לעובדים במקצועות יומיומיים ליצור פרופיל פשוט וברור, כדי שלקוחות יוכלו למצוא אותם בקלות.
-              </p>
-              <p className="text-xs text-slate-500 text-right">גרסה 0.1.0</p>
-              <button 
-                className="text-xs font-medium text-primary hover:text-primary/80 transition-colors text-right block"
-                data-testid="button-send-feedback"
-              >
-                שלח משוב
-              </button>
+            {/* Writing Style */}
+            <div className="pb-4 border-b border-slate-100">
+              <div className="flex items-center justify-end gap-2 mb-3">
+                <label className="text-base font-bold text-slate-900 block text-right">סגנון הפרופיל</label>
+                <Edit2 className="h-4 w-4 text-slate-400" />
+              </div>
+              <div className="flex gap-2 flex-wrap justify-end">
+                <button
+                  onClick={() => setSelectedStyle("professional")}
+                  className={`px-4 py-2.5 text-sm font-bold rounded-xl transition-colors ${
+                    selectedStyle === "professional"
+                      ? "bg-primary text-white shadow-lg shadow-primary/20"
+                      : "bg-slate-50 text-slate-600 hover:bg-slate-100"
+                  }`}
+                  data-testid="button-style-simple"
+                >
+                  פשוט
+                </button>
+                <button
+                  onClick={() => setSelectedStyle("friendly")}
+                  className={`px-4 py-2.5 text-sm font-bold rounded-xl transition-colors ${
+                    selectedStyle === "friendly"
+                      ? "bg-primary text-white shadow-lg shadow-primary/20"
+                      : "bg-slate-50 text-slate-600 hover:bg-slate-100"
+                  }`}
+                  data-testid="button-style-detailed"
+                >
+                  מפורט יותר
+                </button>
+              </div>
             </div>
-          </section>
 
-          {/* Danger Zone */}
-          <section className="pt-4 pb-8 text-center">
+            {/* Regenerate Button */}
             <button 
-              onClick={onDeleteClick}
-              className="text-sm font-medium text-red-600 hover:text-red-700 transition-colors bg-red-50 px-6 py-3 rounded-xl"
-              data-testid="button-delete-profile"
+              className="w-full px-4 py-4 text-sm font-bold text-primary bg-blue-50 border border-blue-100 rounded-2xl hover:bg-blue-100 transition-colors flex items-center justify-center gap-2"
+              data-testid="button-regenerate-profile"
             >
-              מחק את הפרופיל שלי
+              <span className="text-lg">✨</span>
+              צור מחדש את הפרופיל שלי בעזרת AI
             </button>
-          </section>
+          </div>
+        </section>
 
-        </div>
+        {/* Section 3: Privacy */}
+        <section>
+          <div className="flex items-center gap-2 mb-3 px-2 justify-end">
+            <h3 className="text-sm font-bold text-slate-900">פרטיות ותצוגה</h3>
+            <Shield className="h-4 w-4 text-primary" />
+          </div>
+          <div className="bg-white rounded-3xl border border-white p-6 space-y-4 shadow-sm shadow-slate-200/50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Eye className="h-4 w-4 text-slate-400" />
+                <label className="text-base font-bold text-slate-900 text-right">הצג בחיפוש הציבורי</label>
+              </div>
+              <Switch 
+                checked={isPublic}
+                onCheckedChange={setIsPublic}
+                data-testid="toggle-public-profile"
+              />
+            </div>
+            <p className="text-sm text-slate-500 text-right bg-slate-50 p-3 rounded-xl leading-relaxed">
+              כשזה כבוי, הפרופיל שלך לא יופיע בתוצאות חיפוש, אבל עדיין תוכל לשתף אותו באופן ישיר.
+            </p>
+          </div>
+        </section>
+
+        {/* Section 4: Notifications */}
+        <section>
+          <div className="flex items-center gap-2 mb-3 px-2 justify-end">
+            <h3 className="text-sm font-bold text-slate-900">התראות</h3>
+            <BellRing className="h-4 w-4 text-primary" />
+          </div>
+          <div className="bg-white rounded-3xl border border-white p-6 space-y-6 shadow-sm shadow-slate-200/50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-slate-400" />
+                <label className="text-base font-bold text-slate-900 text-right">התראות במייל</label>
+              </div>
+              <Switch 
+                checked={emailViews}
+                onCheckedChange={setEmailViews}
+                data-testid="toggle-email-views"
+              />
+            </div>
+            <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-slate-400" />
+                <label className="text-base font-bold text-slate-900 text-right">טיפים לשיפור הפרופיל</label>
+              </div>
+              <Switch 
+                checked={emailTips}
+                onCheckedChange={setEmailTips}
+                data-testid="toggle-email-tips"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Section 5: About the app */}
+        <section>
+          <div className="bg-slate-50 rounded-3xl border border-slate-100 p-6 space-y-3 text-center">
+            <div className="flex justify-center mb-2">
+              <Info className="h-8 w-8 text-slate-300" />
+            </div>
+            <h3 className="text-base font-bold text-slate-900">על האפליקציה</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              האפליקציה עוזרת לעובדים במקצועות יומיומיים ליצור פרופיל פשוט וברור, כדי שלקוחות יוכלו למצוא אותם בקלות.
+            </p>
+            <p className="text-xs text-slate-400 mt-2">גרסה 0.1.0</p>
+            <button 
+              className="text-sm font-bold text-primary hover:text-primary/80 transition-colors mt-2"
+              data-testid="button-send-feedback"
+            >
+              שלח משוב
+            </button>
+          </div>
+        </section>
+
+        {/* Danger Zone */}
+        <section className="pt-4 pb-8 text-center">
+          <button 
+            onClick={onDeleteClick}
+            className="text-sm font-bold text-red-600 hover:text-red-700 transition-colors bg-red-50 px-8 py-4 rounded-2xl w-full flex items-center justify-center gap-2"
+            data-testid="button-delete-profile"
+          >
+            <Trash2 className="h-4 w-4" />
+            מחק את הפרופיל שלי
+          </button>
+        </section>
+
       </div>
     </motion.div>
   );
